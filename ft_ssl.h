@@ -20,5 +20,6 @@
 
 int		get_next_line(const int fd, char **line);
 size_t		ft_strlen(const char *s);
+int		ft_printf(const char *format, ...);
 
 #endif
