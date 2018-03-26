@@ -11,132 +11,118 @@
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
-#include <stdio.h>
+
+void base64_enc(char *buf)
+{
+  char dest[5];
+
+  dest[2] = '=';
+  dest[3] = '=';
+  dest[4] = 0;
+  dest[0] = BASE64_STR[buf[0] >> 2];
+  dest[1] = BASE64_STR[((buf[0] & 3) << 4) + ((buf[1]) >> 4)];
+  if (ft_strlen(buf) > 1)
+    dest[2] = BASE64_STR[((buf[1] & 15) << 2) + ((buf[2]) >> 6)];
+  if (ft_strlen(buf) > 2)
+    dest[3] = BASE64_STR[buf[2] & 63];
+  ft_printf("%s", dest);
+}
 
 int main (int argc, char **argv)
 {
   int fd;
   int ret;
-  char *buf;
+  char buf[4];
   int i;
   //t_argc params;
 
   fd = 0;
-  buf = NULL;
-  i = 1;
+  buf[3] = 0;
+  i = 0;
   if (argc == 1)
   {
     ft_printf("%s\n", "usage: ft_ssl command [command opts] [command args]");
     return (0);
   }
-  /*while (i < argc)
+  if ((ret = read(0, &buf, 3)) > 0)
   {
-    if (i == 1)
-      params.cipher = argv[i];
-
-    i++;
-  }*/
-  //if (ft_strcmp(argv[2], "-i") != 0 && ft_strcmp(argv[3], "-i") != 0)
-  ret = get_next_line(0, &buf);
-  //if (ret < 0)
-  //{
-    if (ft_strcmp(argv[2], "-i") == 0)
+    //ft_printf("%s\n", buf);
+    if (ft_strcmp(argv[1], "base64") == 0)
+      base64_enc(buf);
+    i = 0;
+    while (i < 3)
     {
-      fd = open(argv[3], O_RDONLY);
-      get_next_line(fd, &buf);
+      buf[i] = 0;
+      i++;
     }
-    else if (ft_strcmp(argv[3], "-i") == 0)
+    while ((ret = read(0, &buf, 3)) > 0)
     {
-      fd = open(argv[4], O_RDONLY);
-      //printf("%d\n", fd);
-      get_next_line(fd, &buf);
-      //printf("%s\n", buf);
-    }
-    //else
-      //get_next_line(fd, &buf);
-
-    else
-    {
-      //fd = 0;
-      get_next_line(0, &buf);
-      //get_next_line(1, &buf);
-    }
-  //}
-  printf("%s\n", buf);
-
-  /*int i;
-  int j;
-
-  int ret;
-
-  char dest[5];
-  //int *tmp;
-  int dest_len;
-
-  i = 0;
-  j = 0;
-  dest[4] = 0;
-
-  printf("%d\n", fd);
-  //tmp = (int *)malloc(sizeof(int) * (dest_len + 1));
-  while (get_next_line(1, &buf) == 1)
-  {
-  //  dest_len = ft_strlen(buf) * 8 / 6;
-
-    printf("%s\n", buf);*/
-
-  //dest = (char *)malloc(dest_len + 1);
-  //dest[dest_len] = 0;
-
-  /*  while (j <= ft_strlen(buf))
-    {
-      dest[0] = 0;
-      dest[1] = 0;
-      dest[2] = '=';
-      dest[3] = '=';
-      dest[0] = (unsigned char)base64_str[buf[j] >> 2];
-      dest[1] = (unsigned char)base64_str[((buf[j] & 3) << 4) + ((buf[j + 1] & 240) >> 4)];
-
-      //dest[1] = base64_str[((buf[j] & 3) << 4)];
-    if (buf[j + 1])
-    {
-      dest[2] = (unsigned char)base64_str[((buf[j + 1] & 15) << 2) + ((buf[j + 2] & 192) >> 6)];
-
-    }
-    if (buf[j + 2])
+      //ft_printf("%s\n", buf);
+      if (ft_strcmp(argv[1], "base64") == 0)
+        base64_enc(buf);
+      i = 0;
+      while (i < 3)
       {
-        dest[3] = (unsigned char)base64_str[buf[j + 2] & 63];
-        //dest[3] = '=';
-      }*/
-    /*  dest[0] = base64_str[buf[j] >> 2];
-      dest[1] = (unsigned char)base64_str[((buf[j] & 3) << 4) | (buf[j + 1] >> 4)];
-       if (buf[j + 1])
-       {
-         dest[2] = (unsigned char)base64_str[((buf[j + 1] & 15) << 2) | (buf[j + 2] >> 6)];
-       }
-
-      if (buf[j + 2])
-        dest[3] = (unsigned char)base64_str[buf[j + 2] & 63];*/
-
-    /*if (!buf[j + 1])
-    {
-      dest[2] = '=';
-      dest[3] = '=';
-    }
-    if (!buf[j + 2])
-      dest[3] = '=';*/
-      /*while (i < dest_len)
-      {
-        tmp[i] = buf >> (dest_len - i ) * 6 + buf << i;
+        buf[i] = 0;
         i++;
       }
+    }
+  }
+  else if (ft_strcmp(argv[2], "-i") == 0)
+  {
+    fd = open(argv[3], O_RDONLY);
+    while ((ret = read(fd, &buf, 3)) > 0)
+    {
+      //ft_printf("%s\n", buf);
+      if (ft_strcmp(argv[1], "base64") == 0)
+        base64_enc(buf);
       i = 0;
-      while (i < dest_len)
+      while (i < 3)
       {
-        dest[i] = base64_str[tmp[i]];
+        buf[i] = 0;
         i++;
-      }*/
-    //j += 3;
-    //printf("%s\n", dest);
-  //}
+      }
+    }
+  }
+  else if (ft_strcmp(argv[3], "-i") == 0)
+  {
+    fd = open(argv[4], O_RDONLY);
+    while ((ret = read(fd, &buf, 3)) > 0)
+    {
+      //ft_printf("%s\n", buf);
+      if (ft_strcmp(argv[1], "base64") == 0 && ft_strcmp(argv[2], "-e") == 0)
+        base64_enc(buf);
+      i = 0;
+      while (i < 3)
+      {
+        buf[i] = 0;
+        i++;
+      }
+    }
+  }
+  else if ((ret = read(1, &buf, 3)) > 0)
+  {
+    i = 0;
+    while (i < 3)
+    {
+      buf[i] = 0;
+      i++;
+    }
+      //ft_printf("%s\n", buf);
+      if (ft_strcmp(argv[1], "base64") == 0)
+        base64_enc(buf);
+      while ((ret = read(1, &buf, 3)) > 0)
+      {
+        //ft_printf("%s\n", buf);
+        if (ft_strcmp(argv[1], "base64") == 0)
+          base64_enc(buf);
+        i = 0;
+        while (i < 3)
+        {
+          buf[i] = 0;
+          i++;
+        }
+      }
+  }
+  ft_printf("%s", "\n");
 }
