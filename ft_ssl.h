@@ -23,14 +23,16 @@
 typedef struct		s_argc
 {
 	char	*cipher;
-	char	e_flag[3];
-  char	f_flag[3];
   char *buf;
+	char flags[6];
+	int ifile;
+	int ofile;
 }					t_argc;
 
 int		get_next_line(const int fd, char **line);
 size_t		ft_strlen(const char *s);
 int		ft_printf(const char *format, ...);
 int		ft_strcmp(const char *s1, const char *s2);
+int find_flag(t_argc *params, char flag);
 
 #endif
