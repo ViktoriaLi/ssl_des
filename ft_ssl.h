@@ -34,5 +34,12 @@ size_t		ft_strlen(const char *s);
 int		ft_printf(const char *format, ...);
 int		ft_strcmp(const char *s1, const char *s2);
 int find_symb(char *str, char flag, int len);
+void base64_enc(char *buf, t_argc *params);
+void base64_dec(char *buf, t_argc *params);
+void base64_read(t_argc *params, char **argv, int len);
+void flags_normalize(char *all_flags, t_argc *params, int len);
+int check_ssl_flags(int argc, char **argv, t_argc *params);
+int if_valid_args(int argc, char **argv, t_argc *params);
+void clear_struct(t_argc *params);
 
 #endif
