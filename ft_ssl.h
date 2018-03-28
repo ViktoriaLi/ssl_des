@@ -19,14 +19,15 @@
 # include <pwd.h>
 
 # define BASE64_STR "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
-
+# define FLAG_LEN 6
 typedef struct		s_argc
 {
 	char	*cipher;
   char *buf;
-	char flags[6];
+	char flags[FLAG_LEN];
 	int ifd;
 	int ofd;
+	char *des_key;
 }					t_argc;
 
 int		get_next_line(const int fd, char **line);
@@ -38,8 +39,9 @@ void base64_enc(char *buf, t_argc *params);
 void base64_dec(char *buf, t_argc *params);
 void base64_read(t_argc *params, char **argv, int len);
 void flags_normalize(char *all_flags, t_argc *params, int len);
-int check_ssl_flags(int argc, char **argv, t_argc *params);
+int check_b64_flags(int argc, char **argv, t_argc *params);
 int if_valid_args(int argc, char **argv, t_argc *params);
 void clear_struct(t_argc *params);
+int check_des_flags(int argc, char **argv, t_argc *params);
 
 #endif

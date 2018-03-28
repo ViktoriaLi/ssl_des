@@ -41,7 +41,7 @@ void base64_dec(char *buf, t_argc *params)
     tmp[1] = (dest[1] << 4) + (dest[2] >> 2);
   if (buf[3] != '=')
     tmp[2] = (dest[2] << 6) + dest[3];
-  if ((find_symb((*params).flags, 'o', 5)) >= 0)
+  if ((find_symb((*params).flags, 'o', FLAG_LEN)) >= 0)
     write((*params).ofd, tmp, ft_strlen(tmp));
   else
     write(1, tmp, ft_strlen(tmp));
@@ -60,7 +60,7 @@ void base64_enc(char *buf, t_argc *params)
     dest[2] = BASE64_STR[((buf[1] & 15) << 2) + ((buf[2]) >> 6)];
   if (ft_strlen(buf) > 2)
     dest[3] = BASE64_STR[buf[2] & 63];
-  if ((find_symb((*params).flags, 'o', 5)) >= 0)
+  if ((find_symb((*params).flags, 'o', FLAG_LEN)) >= 0)
     write((*params).ofd, dest, 4);
   else
     write(1, dest, 4);
@@ -74,7 +74,7 @@ void base64_read(t_argc *params, char **argv, int len)
 
   buf[4] = 0;
   ret = 0;
-  if ((find_symb((*params).flags, 'i', 5)) >= 0)
+  if ((find_symb((*params).flags, 'i', FLAG_LEN)) >= 0)
   {
     while ((ret = read((*params).ifd, &buf, len)) > 0)
     {
@@ -159,6 +159,6 @@ void base64_read(t_argc *params, char **argv, int len)
         }
       }
   }
-  if (len == 3 && (find_symb((*params).flags, 'o', 5)) < 0)
+  if (len == 3 && (find_symb((*params).flags, 'o', FLAG_LEN)) < 0)
     ft_printf("%s", "\n");
 }
