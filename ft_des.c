@@ -13,19 +13,46 @@
 #include "ft_ssl.h"
 #include <stdio.h>
 
+void change_8bits(char **key_res)
+{
+  int i;
+  int j;
+  int bits_count;
+  char tmp;
+
+  i = 0;
+  j = 0;
+  tmp = 0;
+  bits_count = 0;
+  while (i < 8)
+  {
+    j = 0;
+    tmp = (*key_res)[i];
+    while (j < 8)
+    {
+      bits_count += tmp & 1;
+      tmp >>= 1;
+      j++;
+    }
+    if (bits_count % 2 == 0)
+      (*key_res)[i] += 1;
+    i++;
+  }
+}
+
 void make_keys(t_argc *params)
 {
   int i;
   int j;
   char *tmp;
-  char key_res[9];
+  char *key_res;
 
   i = 0;
   j = 0;
   tmp = (char *)malloc(17);
+  key_res = (char *)malloc(9);
   tmp[16] = 0;
   key_res[8] = 0;
-
   printf("%s\n", (*params).des_key);
   tmp = ft_strncpy(tmp, (*params).des_key, 16);
   printf("%s\n", tmp);
@@ -50,6 +77,8 @@ void make_keys(t_argc *params)
     i++;
     j += 2;
   }
+  printf("%s\n", key_res);
+  change_8bits(&key_res);
   //printf("%d\n", key_res[0]);
   printf("%s\n", key_res);
 }
