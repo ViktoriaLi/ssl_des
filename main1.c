@@ -111,7 +111,7 @@ int check_des_flags(int argc, char **argv, t_argc *params)
   {
     if (ft_strcmp(argv[i], "-e") == 0 || ft_strcmp(argv[i], "-d") == 0 ||
     ft_strcmp(argv[i], "-i") == 0 || ft_strcmp(argv[i], "-o") == 0 || ft_strcmp(argv[i], "-a") == 0
-    || ft_strcmp(argv[i], "-k") == 0)
+    || ft_strcmp(argv[i], "-k") == 0 || ft_strcmp(argv[i], "-v") == 0)
     {
       all_flags[j] = argv[i][1];
       if (argv[i][1] == 'i')
@@ -124,7 +124,7 @@ int check_des_flags(int argc, char **argv, t_argc *params)
         (*params).ofd = open(argv[i + 1], O_RDWR | O_APPEND);;
         i++;
       }
-      if ((argv[i][1] == 'k'))
+      if (argv[i][1] == 'k')
       {
         (*params).des_key = argv[i + 1];
         i++;
@@ -166,7 +166,9 @@ int if_valid_args(int argc, char **argv, t_argc *params)
     return (0);
   }
   if (ft_strcmp(argv[1], "base64") != 0 && ft_strcmp(argv[1], "des") != 0 &&
-  ft_strcmp(argv[1], "des-ecb") != 0 && ft_strcmp(argv[1], "des-cbc") != 0)
+  ft_strcmp(argv[1], "des-ecb") != 0 && ft_strcmp(argv[1], "des-cbc") != 0
+  && ft_strcmp(argv[1], "des3") != 0 && ft_strcmp(argv[1], "des3-ecb") != 0
+  && ft_strcmp(argv[1], "des3-cbc") != 0)
   {
     ft_printf("ft_ssl: Error: %s is an invalid command.\n\n", argv[1]);
     ft_printf("%s\n", "Standard commands:\n\nMessage Digest commands:\n\nCipher commands:");
@@ -204,14 +206,16 @@ int main (int argc, char **argv)
   clear_struct(&params);
   if (!if_valid_args(argc, argv, &params))
     return (0);
-  if ((ft_strcmp(argv[1], "base64") == 0 || ((ft_strcmp(argv[1], "des") == 0 &&
-  find_symb(params.flags, 'a', FLAG_LEN)) >= 0)) && (find_symb(params.flags, 'd', FLAG_LEN)) < 0)
+  if ((ft_strcmp(argv[1], "base64") == 0 || (ft_strcmp(argv[1], "des") == 0 &&
+  find_symb(params.flags, 'a', FLAG_LEN) >= 0)) && find_symb(params.flags, 'd', FLAG_LEN) < 0)
     base64_read(&params, argv, 3);
   else if ((ft_strcmp(argv[1], "base64") == 0 || (ft_strcmp(argv[1], "des") == 0 &&
-  find_symb(params.flags, 'a', FLAG_LEN)) >= 0)) && (find_symb(params.flags, 'd', FLAG_LEN)) >= 0)
+  find_symb(params.flags, 'a', FLAG_LEN) >= 0)) && find_symb(params.flags, 'd', FLAG_LEN) >= 0)
     base64_read(&params, argv, 4);
-  if ((*params).ifd > 1)
-    close((*params).ifd);
-  if ((*params).ofd > 1)
-    close((*params).ofd);
+  else
+    des_read(&params, argv);
+  if (params.ifd > 1)
+    close(params.ifd);
+  if (params.ofd > 1)
+    close(params.ofd);
 }
