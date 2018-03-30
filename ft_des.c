@@ -91,6 +91,10 @@ void des_dec(char *buf, t_argc *params)
 void des_enc(char *buf, t_argc *params)
 {
   make_keys(params);
+  char first_shift[64];
+  char left[4];
+  char right[4];
+  
 }
 
 void des_read(t_argc *params, char **argv)
