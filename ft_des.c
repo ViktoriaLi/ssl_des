@@ -13,82 +13,172 @@
 #include "ft_ssl.h"
 #include <stdio.h>
 
-void change_8bits(char **key_res)
+void finish_key_shift(char *key_res[])
+{
+   int i;
+  int j;
+  char key_48[6];
+  
+
+  i = 0;
+  j = 0; 
+  while (i < 6)
+  {
+    key_48[i] = 0;
+    i++;
+  }
+  i = 0;
+  while (i < 6)
+  {
+    j = 7;
+    while (j >= 0)
+    {
+      key_48[i] |= ((1 << (KEY_FINISH[i] % 8) - 1 ) & 
+        key_res[(KKEY_FINISH[i] - KEY_FINISH[i] % 8) / 8]) << j;
+      j--
+    }
+    i++;
+  }
+
+
+}
+
+void two_bit_shift(char *key_res[])
+{
+  int bit0;
+  int bit1;
+
+  bit0 = 0;
+  bit1 = 0;
+  bit0 = *key_res[0] >> 7;
+  bit1 = (*key_res[0] << 1) + (*key_res[0] >> 6);
+  *key_res[0] = ((*key_res[0] & 252) << 2) + (*key_res[1] >> 6);
+  *key_res[1] = ((*key_res[1] & 252) << 2) + (*key_res[2] >> 6);
+  *key_res[2] = ((*key_res[2] & 252) << 2) + (*key_res[3] >> 6);
+  *key_res[3] = ((*key_res[3] & 252) << 2);
+  if (bit0 == 1)
+    *key_res[3] |= (1 << 6);
+  else
+    *key_res[3] &= ~(1 << 6);
+  if (bit1 == 1)
+    *key_res[3] |= (1 << 5);
+  else
+    *key_res[3] &= ~(1 << 5);
+  bit = ( key_res[3] >> 3 ) + (*key_res[3] << 4);
+  *key_res[4] = ((*key_res[4] & 252) << 2) + (*key_res[5] >> 6);
+  *key_res[5] = ((*key_res[5] & 252) << 2) + (*key_res[6] >> 6);
+  *key_res[6] = ((*key_res[6] & 252) << 2);
+  if (bit == 1)
+    *key_res[6] |= (1 << 1);
+  else
+    *key_res[6] &= ~(1 << 1);
+  if (bit1 == 1)
+    *key_res[6] |= (1 << 0);
+  else
+    *key_res[6] &= ~(1 << 0);
+}
+
+void one_bit_shift(char *key_res[])
+{
+  int bit;
+
+  bit = 0;
+  bit = *key_res[0] >> 7;
+  *key_res[0] = ((*key_res[0] & 254) << 1) + (*key_res[1] >> 7);
+  *key_res[1] = ((*key_res[1] & 254) << 1) + (*key_res[2] >> 7);
+  *key_res[2] = ((*key_res[2] & 254) << 1) + (*key_res[3] >> 7);
+  *key_res[3] = ((*key_res[3] & 254) << 1);
+  if (bit == 1)
+    *key_res[3] |= (1 << 5);
+  else
+    *key_res[3] &= ~(1 << 5);
+  bit =( key_res[3] >> 3 ) + (*key_res[3] << 4);
+  *key_res[4] = ((*key_res[4] & 254) << 1) + (*key_res[5] >> 7);
+  *key_res[5] = ((*key_res[5] & 254) << 1) + (*key_res[6] >> 7);
+  *key_res[6] = ((*key_res[6] & 254) << 1);
+  if (bit == 1)
+    *key_res[6] |= (1 << 0);
+  else
+    *key_res[6] &= ~(1 << 0);
+}
+
+void remove_8bits(char key_res[])
 {
   int i;
   int j;
-  int bits_count;
-  char tmp;
+  char key_56[7];
+  
 
   i = 0;
   j = 0;
-  tmp = 0;
-  bits_count = 0;
-  while (i < 8)
+  
+  while (i < 7)
   {
-    j = 0;
-    tmp = (*key_res)[i];
-    while (j < 8)
-    {
-      bits_count += tmp & 1;
-      tmp >>= 1;
-      j++;
-    }
-    if (bits_count % 2 == 0)
-      (*key_res)[i] += 1;
+    key_56[i] = 0;
     i++;
   }
+  i = 0;
+  /*key_56[0] = ((key_res[0] & 254) << 1) + (key_res[1] >> 7);
+  key_56[1] = ((key_res[1] & (254 << 2)) << 1) + (key_res[2] >> 6);
+  key_56[2] = ((key_res[2] & (254 << 3)) << 2) + (key_res[3] >> 5);
+  key_56[3] = ((key_res[3] & (254 << 4)) << 3) + (key_res[4] >> 4);
+  key_56[4] = ((key_res[4] & (254 << 5)) << 4) + (key_res[5] >> 3);
+  key_56[5] = ((key_res[5] & (254 << 6)) << 5) + (key_res[6] >> 2);
+  key_56[6] = ((key_res[6] & (254 << 7)) << 6) + (key_res[7] >> 1);*/
+  while (i < 7)
+  {
+    j = 7;
+    while (j >= 0)
+    {
+      key_56[i] |= ((1 << (KEY_START[i] % 8) - 1 ) & 
+        key_res[(KEY_START[i] - KEY_START[i] % 8) / 8]) << j;
+      j--
+    }
+    i++;
+  }
+  one_bit_shift(&key_res);
+ // first_key_shift(key_56);
 }
 
 void make_keys(t_argc *params)
 {
   int i;
   int j;
-  char *tmp;
-  char *key_res;
+  char key_res[8];
 
   i = 0;
   j = 0;
-  tmp = (char *)malloc(17);
-  key_res = (char *)malloc(9);
-  tmp[16] = 0;
-  key_res[8] = 0;
   printf("%s\n", (*params).des_key);
-  tmp = ft_strncpy(tmp, (*params).des_key, 16);
-  printf("%s\n", tmp);
   while (i < 8)
-  {
-    if (tmp[i] >= 65 && tmp[i] <= 70)
-    {
-      tmp[i] = tmp[i] + 32 - 49;
-    }
-    else if (tmp[i] >= 97 && tmp[i] <= 102)
-    {
-      tmp[i] = tmp[i] - 49;
-    }
-    i++;
-  }
-  printf("%s\n", tmp);
+    key_res[i++] = 0;
   //key_res[0] = ( * 16) + (tmp[1] - '0');
   i = 0;
-  while (i < 8)
+  while (i < 8 && (*params).des_key[j])
   {
-    key_res[i] = ((tmp[j] - '0') * 16) + (tmp[j + 1] - '0');
+    if ((*params).des_key[j] >= 65 && (*params).des_key[j] <= 70)
+    {
+      (*params).des_key[j] = (*params).des_key[j] + 32 - 49;
+    }
+    else if ((*params).des_key[j] >= 97 && (*params).des_key[j] <= 102)
+    {
+      (*params).des_key[j] = (*params).des_key[j] - 49;
+    }
+    key_res[i] = (((*params).des_key[j] - '0') * 16) + ((*params).des_key[j + 1] - '0');
     i++;
     j += 2;
   }
   printf("%s\n", key_res);
-  change_8bits(&key_res);
+  remove_8bits(key_res);
   //printf("%d\n", key_res[0]);
   printf("%s\n", key_res);
 }
 
-void des_dec(char *buf, t_argc *params)
+void des_dec(char buf[], t_argc *params)
 {
 
 }
 
-void des_enc(char *buf, t_argc *params)
+void des_enc(char buf[], t_argc *params)
 {
   make_keys(params);
   char first_shift[64];
@@ -101,9 +191,8 @@ void des_read(t_argc *params, char **argv)
 {
   int i;
   int ret;
-  char buf[9];
+  char buf[8];
 
-  buf[8] = 0;
   ret = 0;
   if ((find_symb((*params).flags, 'i', FLAG_LEN)) >= 0)
   {

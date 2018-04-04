@@ -1,3 +1,5 @@
 1. Считывание инпута - сделать с новой строки каждый ввод
 2. OpenSSL base64 puts a newline character after every 64 characters.
 You must be able to parse the whitespace.  Recreating it is optional.
+если нет ключа, а есть другой флаг, надо его отклонять?
+дописать в бейс64  & 254
