@@ -27,7 +27,7 @@ int find_symb(char *str, char flag, int len)
   return (-1);
 }
 
-void flags_normalize(char *all_flags, t_argc *params, int len)
+void flags_normalize(char *all_flags, t_args *params, int len)
 {
   int i;
   int j;
@@ -45,7 +45,7 @@ void flags_normalize(char *all_flags, t_argc *params, int len)
   }
 }
 
-int check_b64_flags(int argc, char **argv, t_argc *params)
+int check_b64_flags(int argc, char **argv, t_args *params)
 {
   int i;
   int j;
@@ -97,7 +97,7 @@ int check_b64_flags(int argc, char **argv, t_argc *params)
   return (0);
 }
 
-int check_des_flags(int argc, char **argv, t_argc *params)
+int check_des_flags(int argc, char **argv, t_args *params)
 {
   int i;
   int j;
@@ -126,7 +126,7 @@ int check_des_flags(int argc, char **argv, t_argc *params)
       }
       if (argv[i][1] == 'k')
       {
-        (*params).des_key = argv[i + 1];
+        (*params).des_key = (unsigned char *)argv[i + 1];
         i++;
       }
       j++;
@@ -155,7 +155,7 @@ int check_des_flags(int argc, char **argv, t_argc *params)
   return (0);
 }
 
-int if_valid_args(int argc, char **argv, t_argc *params)
+int if_valid_args(int argc, char **argv, t_args *params)
 {
   int res;
 
@@ -182,13 +182,12 @@ int if_valid_args(int argc, char **argv, t_argc *params)
   return (1);
 }
 
-void clear_struct(t_argc *params)
+void clear_struct(t_args *params)
 {
   int i;
 
   i = 0;
   (*params).cipher = NULL;
-  (*params).buf = NULL;
   while (i < FLAG_LEN)
   {
     (*params).flags[i] = 0;
@@ -201,7 +200,7 @@ void clear_struct(t_argc *params)
 
 int main (int argc, char **argv)
 {
-  t_argc params;
+  t_args params;
 
   clear_struct(&params);
   if (!if_valid_args(argc, argv, &params))

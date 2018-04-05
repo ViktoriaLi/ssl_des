@@ -21,7 +21,9 @@
 # define BASE64_STR "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 # define FLAG_LEN 7
 # define DES_BLOCK 8
-# define KEY_START {57, 49, 41, 33, 25, 17, 9, 1, 58, 50, 42, 34, 26, 18, 10, 2,\
+# define KEY_LEN 8
+
+/*# define KEY_START {57, 49, 41, 33, 25, 17, 9, 1, 58, 50, 42, 34, 26, 18, 10, 2,\
 	59, 51, 43, 35, 27,	19, 11, 3, 60, 52, 44, 36, 63, 55, 47, 39, 31, 23, 15, 7,\
 	62, 54, 46, 38, 30, 22, 14, 6, 61, 53, 45, 37, 29, 21, 13, 5, 28, 20, 12, 4}
 
@@ -83,37 +85,58 @@
 	10, 2, 8, 24, 14, 32, 27, 3, 9, 19, 13, 30, 6, 22, 11, 4, 25}
 
 # define P_SHIFT {16,	7, 20, 21, 29, 12, 28, 17, 1, 15,	23,	26,	5, 18, 31, 10,\
-	2, 8, 24, 14, 32,	27,	3, 9, 19,	13,	30,	6, 22, 11, 4,	25}
+	2, 8, 24, 14, 32,	27,	3, 9, 19,	13,	30,	6, 22, 11, 4,	25}*/
 
-typedef struct		s_argc
+typedef struct		s_args
 {
 	char	*cipher;
-  char buf[8];
+  unsigned char buf[DES_BLOCK];
 	char flags[FLAG_LEN];
 	int ifd;
 	int ofd;
-	char *des_key;
-	char key_res[6];
-}					t_argc;
+	unsigned char *des_key;
+	unsigned char key_res[6];
+}					t_args;
+
+/*typedef struct		s_des_tables
+{
+	int m_start[64];
+	int m_end[64];
+	int r_to_48[48];
+	int key_start[56];
+	int shift_table_e[16];
+	int shift_table_d[16];
+	int key_finish[48];
+	int s_1[64];
+	int s_2[64];
+	int s_3[64];
+	int s_4[64];
+	int s_5[64];
+	int s_6[64];
+	int s_7[64];
+	int s_8[64];
+	int shift_32bits[32];
+	int p_shift[32];
+}					t_des_tables;*/
 
 int		get_next_line(const int fd, char **line);
 size_t		ft_strlen(const char *s);
 int		ft_printf(const char *format, ...);
 int		ft_strcmp(const char *s1, const char *s2);
 int find_symb(char *str, char flag, int len);
-void base64_enc(char *buf, t_argc *params);
-void base64_dec(char *buf, t_argc *params);
-void base64_read(t_argc *params, char **argv, int len);
+void base64_enc(unsigned char *buf, t_args *params);
+void base64_dec(unsigned char *buf, t_args *params);
+void base64_read(t_args *params, char **argv, int len);
 
-void des_read(t_argc *params, char **argv);
-void flags_normalize(char *all_flags, t_argc *params, int len);
-int check_b64_flags(int argc, char **argv, t_argc *params);
-int if_valid_args(int argc, char **argv, t_argc *params);
-void clear_struct(t_argc *params);
-int check_des_flags(int argc, char **argv, t_argc *params);
+void des_read(t_args *params, char **argv);
+void flags_normalize(char *all_flags, t_args *params, int len);
+int check_b64_flags(int argc, char **argv, t_args *params);
+int if_valid_args(int argc, char **argv, t_args *params);
+void clear_struct(t_args *params);
+int check_des_flags(int argc, char **argv, t_args *params);
 
-void des_dec(t_argc *params);
-void des_enc(t_argc *params);
+void des_dec(t_args *params);
+void des_enc(t_args *params);
 char	*ft_strncpy(char *dst, const char *src, size_t len);
 
 #endif
