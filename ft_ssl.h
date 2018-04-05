@@ -88,12 +88,12 @@
 typedef struct		s_argc
 {
 	char	*cipher;
-  char *buf;
+  char buf[8];
 	char flags[FLAG_LEN];
 	int ifd;
 	int ofd;
 	char *des_key;
-	char *des_key_res;
+	char key_res[6];
 }					t_argc;
 
 int		get_next_line(const int fd, char **line);
@@ -104,6 +104,7 @@ int find_symb(char *str, char flag, int len);
 void base64_enc(char *buf, t_argc *params);
 void base64_dec(char *buf, t_argc *params);
 void base64_read(t_argc *params, char **argv, int len);
+
 void des_read(t_argc *params, char **argv);
 void flags_normalize(char *all_flags, t_argc *params, int len);
 int check_b64_flags(int argc, char **argv, t_argc *params);
@@ -111,8 +112,8 @@ int if_valid_args(int argc, char **argv, t_argc *params);
 void clear_struct(t_argc *params);
 int check_des_flags(int argc, char **argv, t_argc *params);
 
-void des_dec(char *buf, t_argc *params);
-void des_enc(char *buf, t_argc *params);
+void des_dec(t_argc *params);
+void des_enc(t_argc *params);
 char	*ft_strncpy(char *dst, const char *src, size_t len);
 
 #endif

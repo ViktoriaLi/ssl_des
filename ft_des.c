@@ -13,7 +13,7 @@
 #include "ft_ssl.h"
 #include <stdio.h>
 
-void finish_key_shift(char *key_res[])
+void finish_key_shift(char *key_res[], t_argc *params)
 {
    int i;
   int j;
@@ -34,16 +34,20 @@ void finish_key_shift(char *key_res[])
     while (j >= 0)
     {
       key_48[i] |= ((1 << (KEY_FINISH[i] % 8) - 1 ) & 
-        key_res[(KKEY_FINISH[i] - KEY_FINISH[i] % 8) / 8]) << j;
+        key_res[(KEY_FINISH[i] - KEY_FINISH[i] % 8) / 8]) << j;
       j--
     }
     i++;
   }
-
-
+  i = 0;
+  while (i < 6)
+  {
+    (*params).key_res[i] = key_48[i];
+    i++;
+  }
 }
 
-void two_bit_shift(char *key_res[])
+void two_bit_shift(char *key_res[], t_argc *params)
 {
   int bit0;
   int bit1;
@@ -76,9 +80,10 @@ void two_bit_shift(char *key_res[])
     *key_res[6] |= (1 << 0);
   else
     *key_res[6] &= ~(1 << 0);
+  finish_key_shift(key_res, params);
 }
 
-void one_bit_shift(char *key_res[])
+void one_bit_shift(char *key_res[], t_argc *params)
 {
   int bit;
 
@@ -100,9 +105,10 @@ void one_bit_shift(char *key_res[])
     *key_res[6] |= (1 << 0);
   else
     *key_res[6] &= ~(1 << 0);
+  finish_key_shift(key_res, params);
 }
 
-void remove_8bits(char key_res[])
+void remove_8bits(char key_res[], t_argc *params)
 {
   int i;
   int j;
@@ -136,7 +142,7 @@ void remove_8bits(char key_res[])
     }
     i++;
   }
-  one_bit_shift(&key_res);
+  one_bit_shift(&key_res, params);
  // first_key_shift(key_56);
 }
 
@@ -168,58 +174,137 @@ void make_keys(t_argc *params)
     j += 2;
   }
   printf("%s\n", key_res);
-  remove_8bits(key_res);
+  remove_8bits(key_res, params);
   //printf("%d\n", key_res[0]);
   printf("%s\n", key_res);
 }
 
-void des_dec(char buf[], t_argc *params)
+void message_first_shift(t_argc *params)
+{
+  int i;
+  int j;
+  char buf_res[8];
+  
+
+  i = 0;
+  j = 0;
+  
+  while (i < 8)
+  {
+    buf_res[i] = 0;
+    i++;
+  }
+  i = 0;
+  while (i < 8)
+  {
+    j = 7;
+    while (j >= 0)
+    {
+      buf_res[i] |= ((1 << (M_START[i] % 8) - 1 ) & 
+        (*params).buf[(M_START[i] - M_START[i] % 8) / 8]) << j;
+      j--
+    }
+    i++;
+  }
+  i = 0;
+  while (i < 8)
+  {
+    (*params).buf[i] = buf_res[i];
+    i++;
+  }
+}
+
+void des_dec(t_argc *params)
 {
 
 }
 
-void des_enc(char buf[], t_argc *params)
+
+
+void des_enc(t_argc *params)
 {
-  make_keys(params);
-  char first_shift[64];
+  int i;
+  int j;
+  message_first_shift(params->buf);
   char left[4];
   char right[4];
+  char right48[6];
   
+  i = 0;
+  j = 0;
+  while (i < 4)
+  {
+    left[i] = (*params).buf[j];
+    i++;
+    j++;
+  }
+  i = 0;
+  while (i < 4)
+  {
+    left[i] = (*params).buf[j];
+    i++;
+    j++;
+  }
+  i = 0;
+  j = 0;  
+  while (i < 6)
+  {
+    right48[i] = 0;
+    i++;
+  }
+  i = 0;
+  while (i < 6)
+  {
+    j = 7;
+    while (j >= 0)
+    {
+      right48[i] |= ((1 << (R_TO_48[i] % 8) - 1 ) & 
+        right[(R_TO_48[i] - R_TO_48[i] % 8) / 8]) << j;
+      j--
+    }
+    i++;
+  }
+  make_keys(params);
+  i = 0;
+  while (i < 6)
+  {
+    right48[i] ^= (*params).key_res[i];
+    i++;
+  }
 }
 
 void des_read(t_argc *params, char **argv)
 {
   int i;
   int ret;
-  char buf[8];
 
   ret = 0;
   if ((find_symb((*params).flags, 'i', FLAG_LEN)) >= 0)
   {
-    while ((ret = read((*params).ifd, &buf, DES_BLOCK)) > 0)
+    while ((ret = read((*params).ifd, params->buf, DES_BLOCK)) > 0)
     {
-      ft_printf("%s\n", buf);
+      ft_printf("%s\n", (*params).buf);
       if ((find_symb((*params).flags, 'd', FLAG_LEN)) >= 0)
-        des_dec(buf, params);
+        des_dec(params);
       else
-        des_enc(buf, params);
+        des_enc(params);
       if (ret < DES_BLOCK)
         break;
       i = 0;
       while (i < DES_BLOCK)
       {
-        buf[i] = 0;
+        (*params).buf[i] = 0;
         i++;
       }
     }
   }
-  else if ((ret = read(0, &buf, DES_BLOCK)) > 0)
+  else if ((ret = read(0, params->buf, DES_BLOCK)) > 0)
   {
-    ft_printf("%s\n", buf);
+    ft_printf("%s\n", (*params).buf);
     if ((find_symb((*params).flags, 'd', FLAG_LEN)) >= 0)
-      des_dec(buf, params);
+      des_dec((*params).buf, params);
     else
-      des_enc(buf, params);
+      des_enc((*params).buf, params);
     /*else if (ft_strcmp(argv[1], "des") == 0)
       des_enc(buf);
     else if (ft_strcmp(argv[1], "des-ecb") == 0)
@@ -229,52 +314,52 @@ void des_read(t_argc *params, char **argv)
     i = 0;
     while (i < DES_BLOCK)
     {
-      buf[i] = 0;
+      (*params).buf[i] = 0;
       i++;
     }
     while ((ret = read(0, &buf, DES_BLOCK)) > 0)
     {
-      ft_printf("%s\n", buf);
+      ft_printf("%s\n", (*params).buf);
       if ((find_symb((*params).flags, 'd', FLAG_LEN)) >= 0)
-        des_dec(buf, params);
+        des_dec((*params).buf, params);
       else
-        des_enc(buf, params);
+        des_enc((*params).buf, params);
       if (ret < DES_BLOCK)
         break;
       i = 0;
       while (i < DES_BLOCK)
       {
-        buf[i] = 0;
+        (*params).buf[i] = 0;
         i++;
       }
     }
   }
-  else if ((ret = read(1, &buf, DES_BLOCK)) > 0)
+  else if ((ret = read(1, params->buf, DES_BLOCK)) > 0)
   {
-      ft_printf("%s\n", buf);
+      ft_printf("%s\n", (*params).buf);
       if ((find_symb((*params).flags, 'd', FLAG_LEN)) >= 0)
-        des_dec(buf, params);
+        des_dec((*params).buf, params);
       else
-        des_enc(buf, params);
+        des_enc((*params).buf, params);
       i = 0;
       while (i < DES_BLOCK)
       {
-        buf[i] = 0;
+        (*params).buf[i] = 0;
         i++;
       }
-      while ((ret = read(1, &buf, DES_BLOCK)) > 0)
+      while ((ret = read(1, params->buf, DES_BLOCK)) > 0)
       {
-        ft_printf("%s\n", buf);
+        ft_printf("%s\n", (*params).buf);
         if ((find_symb((*params).flags, 'd', FLAG_LEN)) >= 0)
-          des_dec(buf, params);
+          des_dec((*params).buf, params);
         else
-          des_enc(buf, params);
+          des_enc((*params).buf, params);
         if (ret < DES_BLOCK)
           break;
         i = 0;
         while (i < DES_BLOCK)
         {
-          buf[i] = 0;
+          (*params).buf[i] = 0;
           i++;
         }
       }
