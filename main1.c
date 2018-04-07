@@ -187,7 +187,7 @@ void clear_struct(t_args *params)
   int i;
 
   i = 0;
-  (*params).cipher = NULL;
+  //(*params).cipher = NULL;
   while (i < FLAG_LEN)
   {
     (*params).flags[i] = 0;
@@ -196,6 +196,7 @@ void clear_struct(t_args *params)
 	(*params).ifd = 0;
 	(*params).ofd = 0;
   (*params).des_key = NULL;
+
 }
 
 int main (int argc, char **argv)

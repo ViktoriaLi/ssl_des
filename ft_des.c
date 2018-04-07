@@ -210,8 +210,13 @@ void remove_8bits(unsigned char key_res[], t_args *params, int rounds)
     j = 7;
     while (j >= 0)
     {
-      key_56[i] |= ((1 << ((key_start[k] % 8) - 1))  &
+			if (((1 << (8 - (key_start[k] % 8)))  &
+      key_res[(key_start[k] - (key_start[k] % 8)) / 8]))
+      	key_56[i] |= ((1 << (8 - (key_start[k] % 8)))  &
         key_res[(key_start[k] - (key_start[k] % 8)) / 8]) << j;
+			else
+			key_56[i] &= (~(1 << (8 - (key_start[k] % 8)))  &
+			key_res[(key_start[k] - (key_start[k] % 8)) / 8]) << j;
       k++;
       j--;
     }
@@ -238,9 +243,8 @@ void make_keys(t_args *params, int rounds)
   printf("Original key%s\n", (*params).des_key);
   while (i < KEY_LEN)
     key_res[i++] = 0;
-  //key_res[0] = ( * 16) + (tmp[1] - '0');
   i = 0;
-  while (i < KEY_LEN && (*params).des_key[j])
+  while (i < KEY_LEN)
   {
     if ((*params).des_key[j] >= 65 && (*params).des_key[j] <= 70)
     {
@@ -293,12 +297,12 @@ void message_first_shift(t_args *params)
     {
       //printf("d%d\n", ((m_start[k] % 8) - 1));
       //printf("c%d\n", (*params).buf[(m_start[k] - (m_start[k] % 8)) / 8]);
-      if ((1 << ((m_start[k] % 8) - 1)) &
+      if ((1 << (8 - (m_start[k] % 8))) &
       (*params).buf[(m_start[k] - (m_start[k] % 8)) / 8])
         buf_res[i] |= ((1 << ((m_start[k] % 8) - 1)) &
         (*params).buf[(m_start[k] - (m_start[k] % 8)) / 8]) << j;
       else
-        buf_res[i] &= (~(1 << ((m_start[k] % 8) - 1)) &
+        buf_res[i] &= (~(1 << (8 - (m_start[k] % 8))) &
         (*params).buf[(m_start[k] - (m_start[k] % 8)) / 8]) << j;
       k++;
       j--;
@@ -500,6 +504,7 @@ void des_enc(t_args *params)
     j++;
   }
 	i = 0;
+	j = 4;
   while (i < 4)
   {
   tmp[i] = (*params).buf[j];
@@ -513,17 +518,19 @@ void des_enc(t_args *params)
     right48[i] = 0;
     i++;
   }
+	i = 0;
 	//start cycle with 16 rounds for message encryption (f-function)
 	while (rounds < 16)
   {
 		i = 0;
 	//Step 3. Make expansion of right part to 48 bits
+	k = 0;
   while (i < 6)
   {
     j = 7;
     while (j >= 0)
     {
-      right48[i] |= ((1 << ((r_to_48[k] % 8) - 1)) &
+      right48[i] |= ((1 << (8 - (r_to_48[k] % 8))) &
         right[(r_to_48[k] - (r_to_48[k] % 8)) / 8]) << j;
       k++;
       j--;

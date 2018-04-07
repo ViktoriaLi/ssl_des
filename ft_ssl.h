@@ -25,7 +25,7 @@
 
 typedef struct		s_args
 {
-	char	*cipher;
+	//char	*cipher;
   unsigned char buf[DES_BLOCK];
 	char flags[FLAG_LEN];
 	int ifd;
