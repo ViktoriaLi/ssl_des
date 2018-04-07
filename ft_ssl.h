@@ -31,7 +31,8 @@ typedef struct		s_args
 	int ifd;
 	int ofd;
 	unsigned char *des_key;
-	unsigned char key_res[6];
+	unsigned char key_res48[6];
+	unsigned char key_res56[7];
 	unsigned char des_output[8];
 }					t_args;
 

@@ -83,10 +83,11 @@ int main()
 {
   int *res;
   res = NULL;
+	int test = 255;
+	printf("%d\n", test >> 1);
+  //to_binary(&res, 6, 2);
 
-  to_binary(&res, 6, 2);
-
-  printf("%d %d %d %d\n", res[0], res[1], res[2], res[3]);
+  //printf("%d %d %d %d\n", res[0], res[1], res[2], res[3]);
   /*unsigned char byte = 254;
   unsigned char res = 0;
   if ((1 << 0)  &  res)

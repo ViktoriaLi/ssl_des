@@ -56,7 +56,6 @@ void	to_binary(int **res, int nbr, unsigned int base)
   }
 }
 
-//Step 6.3 Final key bits permutation
 void finish_key_shift(unsigned char key_56[], t_args *params)
 {
   int i;
@@ -91,20 +90,18 @@ void finish_key_shift(unsigned char key_56[], t_args *params)
   i = 0;
   while (i < 6)
   {
-    (*params).key_res48[i] = key_48[i];
+    (*params).key_res[i] = key_48[i];
     i++;
   }
-  printf("finish key%s\n", (*params).key_res48);
+  printf("finish key%s\n", (*params).key_res);
 }
 
 void two_bit_shift(unsigned char key_56[], t_args *params)
 {
-	int i;
   int bit0;
   int bit1;
   unsigned char key_res[7];
 
-	i = 0;
   bit0 = 0;
   bit1 = 0;
   bit0 = key_56[0] >> 7;
@@ -134,22 +131,14 @@ void two_bit_shift(unsigned char key_56[], t_args *params)
     key_res[6] |= (1 << 0);
   else
     key_res[6] &= ~(1 << 0);
-	i = 0;
-	 while (i < 7)
-	 {
-	   (*params).key_res56[i] = key_res[i];
-	   i++;
-	 }
   finish_key_shift(key_res, params);
 }
 
 void one_bit_shift(unsigned char key_56[], t_args *params)
 {
-	int i;
   int bit;
   unsigned char key_res[7];
 
-	i = 0;
   bit = 0;
   bit = key_56[0] >> 7;
   key_res[0] = ((key_56[0] & 254) << 1) + (key_56[1] >> 7);
@@ -169,16 +158,9 @@ void one_bit_shift(unsigned char key_56[], t_args *params)
   else
     key_res[6] &= ~(1 << 0);
   printf("KEY after 1 bit shift%s\n", key_res);
-	i = 0;
-	 while (i < 7)
-	 {
-	   (*params).key_res56[i] = key_res[i];
-	   i++;
-	 }
   finish_key_shift(key_res, params);
 }
 
-//Step 6.2 Make 56 bits key (remove each 8 bit)
 void remove_8bits(unsigned char key_res[], t_args *params, int rounds)
 {
   int i;
@@ -218,7 +200,6 @@ void remove_8bits(unsigned char key_res[], t_args *params, int rounds)
     i++;
   }
   printf("KEY 56 bits%s\n", key_56);
-	//Step 6.3 Key cycle shift
 	if (shift_table_e[rounds] == 1)
   	one_bit_shift(key_56, params);
 	if (shift_table_e[rounds] == 2)
@@ -226,7 +207,6 @@ void remove_8bits(unsigned char key_res[], t_args *params, int rounds)
  // first_key_shift(key_56);
 }
 
-//Step 6.1 Receive binary representation for hrxadecimal key and cut or lengthen to 64 bits
 void make_keys(t_args *params, int rounds)
 {
   int i;
@@ -381,7 +361,6 @@ void des_enc(t_args *params)
   unsigned char left[4];
   unsigned char right[4];
 	unsigned char right_f[4];
-	unsigned char tmp[4];
   unsigned char right48[6];
 	unsigned char exp_for_s[8];
 	char string[2];
@@ -395,11 +374,10 @@ void des_enc(t_args *params)
 	m = 0;
 	four_bits = NULL;
   printf("1BUF%s\n", (*params).buf);
-	//table for right part rotation
   const int r_to_48[48] = {32,	1, 2,	3, 4,	5, 4,	5, 6,	7, 8,	9, 8,	9, 10, 11, 12, 13,\
   12,	13,	14,	15,	16,	17, 16,	17,	18,	19,	20,	21, 20,	21,	22,	23,	24,	25, 24,\
   25,	26,	27,	28,	29, 28,	29,	30,	31,	32,	1};
-	//8 s-blocks
+
   const int s_1[4][16] = {{14, 4, 13, 1, 2, 15, 11, 8, 3, 10, 6, 12, 5, 9, 0, 7},
     {0, 15, 7, 4,	14, 2, 13, 1, 10, 6, 12, 11, 9, 5, 3, 8},
     {4, 1, 14, 8, 13, 6, 2, 11, 15, 12,	9, 7, 3, 10, 5, 0},
@@ -471,7 +449,6 @@ void des_enc(t_args *params)
   {7, 11, 4, 1, 9, 12, 14, 2, 0, 6, 10, 13, 15, 3, 5, 8},
   {2, 1, 14, 7, 4, 10, 8, 13, 15, 12, 9, 0, 3, 5, 6, 11}}};*/
 
-	//final right partshifting
 	const int p_shift[32] = {16,	7, 20, 21, 29, 12, 28, 17, 1, 15,	23,	26,	5, 18, 31, 10,\
   	2, 8, 24, 14, 32,	27,	3, 9, 19,	13,	30,	6, 22, 11, 4,	25};
   //t_des_tables des_base;
@@ -482,10 +459,8 @@ void des_enc(t_args *params)
   k = 0;
 	rounds = 0;
   s_output = 0;
-	//Step 1. Make first bit permutation for message (8 bytes)
   message_first_shift(params);
   printf("M after first shift%s\n", (*params).buf);
-	//Step 2. Message division into 2 parts
   while (i < 4)
   {
     left[i] = (*params).buf[j];
@@ -495,14 +470,7 @@ void des_enc(t_args *params)
   i = 0;
   while (i < 4)
   {
-  right[i] = (*params).buf[j];
-    i++;
-    j++;
-  }
-	i = 0;
-  while (i < 4)
-  {
-  tmp[i] = (*params).buf[j];
+    left[i] = (*params).buf[j];
     i++;
     j++;
   }
@@ -513,11 +481,9 @@ void des_enc(t_args *params)
     right48[i] = 0;
     i++;
   }
-	//start cycle with 16 rounds for message encryption (f-function)
 	while (rounds < 16)
   {
 		i = 0;
-	//Step 3. Make expansion of right part to 48 bits
   while (i < 6)
   {
     j = 7;
@@ -531,25 +497,16 @@ void des_enc(t_args *params)
     i++;
   }
   printf("Right to 48%s\n", right48);
-	//Step 4. One key generation for current round
-	if (rounds == 0)
-  	make_keys(params, rounds);
-	else if (rounds == 1)
-	  one_bit_shift((*params).key_res56, params);
-	else if (rounds == 2)
-		two_bit_shift((*params).key_res56, params);
-	//Step 5. XOR key and right part
+  make_keys(params, rounds);
   i = 0;
   while (i < 6)
   {
-    right48[i] ^= (*params).key_res48[i];
+    right48[i] ^= (*params).key_res[i];
     i++;
   }
-	//Step 6. Make bits permutation with s-blocks
   printf("Right after XOR%s\n", right48);
   //string[0] = right48[0] >> 7;
   //string[1] = ((right48[0] << 5) + (right48[0] >> 2));
-	//Step 6.1 Make 8 grops per 6 main bits
 	exp_for_s[0] = (right48[0] >> 2) & 255;
 	exp_for_s[1] = ((right48[0] << 6) & 255) + (right48[1] >> 4);
 	exp_for_s[2] = ((right48[1] << 4) & 255) + (right48[2] >> 6);
@@ -564,7 +521,6 @@ void des_enc(t_args *params)
   //column[2] = (right48[0] << 3) + (right48[0] >> 4);
   //column[3] = (right48[0] << 4) + (right48[0] >> 3);
 	k = 0;
-	//Step 6.2 Receive string and column numbers
 	while (k < 8)
 	{
 		/*str_col[k][0] = ((exp_for_s[k] << 7) - '0') * 2 + (((exp_for_s[k] << 5) + (exp_for_s[k] >> 2)) - '0');
@@ -595,30 +551,23 @@ void des_enc(t_args *params)
 	}
 	i = 0;
 	k = 0;
-	m = 0;
-	//Step 6.3 Make s-blocks permutation
   while (i < 4)
   {
-
     j = 7;
     while (j >= 0)
     {
-			// Receive new value 4 bits instead 6 bits
-			if (i == 0)
+			//if (i == 0)
 				s_output = s_1[str_col[m][0]][str_col[m][1]];
-			else if (i == 2)
+			/*else if (i == 2)
 				s_output = s_3[str_col[m][0]][str_col[m][1]];
 			else if (i == 4)
 				s_output = s_5[str_col[m][0]][str_col[m][1]];
 			else if (i == 6)
-				s_output = s_7[str_col[m][0]][str_col[m][1]];
-			m++;
+				s_output = s_7[str_col[m][0]][str_col[m][1]];*/
 			//printf("%d\n", s_output);
-			//Receive binary representation
 			to_binary(&four_bits, s_output, 2);
 			//s_output1 = s_1[str_col[0]][str_col[1]];
 			k = 0;
-			//assign new value to right block
 			while (k < 4)
 			{
 				if (four_bits[k])
@@ -628,16 +577,14 @@ void des_enc(t_args *params)
 				k++;
 				j--;
 			}
-			//repeat the same for next 4 bits
-			if (i == 1)
-				s_output = s_2[str_col[m][0]][str_col[m][1]];
-			else if (i == 3)
-				s_output = s_4[str_col[m][0]][str_col[m][1]];
+			//if (i == 1)
+				s_output = s_2[str_col[m + 1][0]][str_col[m + 1][1]];
+			/*else if (i == 3)
+				s_output = s_4[str_col[m + 1][0]][str_col[m + 1][1]];
 			else if (i == 5)
-				s_output = s_6[str_col[m][0]][str_col[m][1]];
+				s_output = s_6[str_col[m + 1][0]][str_col[m + 1][1]];
 			else if (i == 7)
-				s_output = s_8[str_col[m][0]][str_col[m][1]];
-			m++;
+				s_output = s_8[str_col[m + 1][0]][str_col[m + 1][1]];*/
 			to_binary(&four_bits, s_output, 2);
 			//s_output1 = s_1[str_col[0]][str_col[1]];
 			k = 0;
@@ -651,6 +598,7 @@ void des_enc(t_args *params)
 				j--;
 			}
     }
+		m += 2;
     i++;
   }
 		printf("right%s\n", right);
@@ -661,7 +609,6 @@ void des_enc(t_args *params)
 	right48[4] = ((exp_for_s[5] << 2) & 255) + (exp_for_s[5] >> 2) + (exp_for_s[6] >> 4);
 	right48[5] = ((exp_for_s[6] << 4) & 255) + (exp_for_s[5] >> 2) + (exp_for_s[7] >> 2);*/
 	i = 0;
-	//Step 7. Final bits permutation for right part
   while (i < 4)
   {
     j = 7;
@@ -676,31 +623,21 @@ void des_enc(t_args *params)
   }
 	printf("right_f%s\n", right_f);
 	i = 0;
-	//Step 8. XOR between left part and f_function result
-	while (i < 4)
-  {
-    left[i] ^= right_f[i];
-    i++;
-  }
-	i = 0;
-	//Step 9. Right part becomes new right part
 	while (i < 4)
 	{
 		right[i] = left[i];
 		i++;
 	}
 	i = 0;
-	//Step 10. Right part becomes new left part
 	while (i < 4)
-	{
-		left[i] = tmp[i];
-		i++;
-	}
+  {
+    left[i] ^= right_f[i];
+    i++;
+  }
 	rounds++;
 }
 	printf("new right%s\n", right);
 	printf("new left%s\n", left);
-	//Step 11. Make final encrypted output for message
 i = 0;
 while (i < 4)
 {
