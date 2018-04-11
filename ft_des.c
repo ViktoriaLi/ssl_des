@@ -140,35 +140,80 @@ void two_bit_shift(unsigned char key_56[], t_args *params)
 	   (*params).key_res56[i] = key_res[i];
 	   i++;
 	 }
+	printf("CODE KEY after 2 bit shift%d %d %d %d %d %d %d \n", key_res[0], key_res[1], key_res[2],
+ 	key_res[3], key_res[4], key_res[5], key_res[6]);
   finish_key_shift(key_res, params);
 }
+
+void set_middle_byte(unsigned char *midbyte, int bit1, char src, char add)
+{
+	if ((1 << 6) & src)
+		*midbyte |= (1 << 7);
+	else
+		*midbyte &= ~(1 << 7);
+	if ((1 << 5) & src)
+		*midbyte |= (1 << 6);
+	else
+		*midbyte &= ~(1 << 6);
+	if (bit1)
+		*midbyte |= (1 << 5);
+	else
+		*midbyte &= ~(1 << 5);
+	if ((1 << 3) & src)
+		*midbyte |= (1 << 4);
+	else
+		*midbyte &= ~(1 << 4);
+	if ((1 << 2) & src)
+		*midbyte |= (1 << 3);
+	else
+		*midbyte &= ~(1 << 3);
+	if ((1 << 1) & src)
+		*midbyte |= (1 << 2);
+	else
+		*midbyte &= ~(1 << 2);
+	if ((1 << 0) & src)
+		*midbyte |= (1 << 1);
+	else
+		*midbyte &= ~(1 << 1);
+	if ((1 << 7) & add)
+		*midbyte |= (1 << 0);
+	else
+		*midbyte &= ~(1 << 0);
+
+}
+
 
 void one_bit_shift(unsigned char key_56[], t_args *params)
 {
 	int i;
-  int bit;
+  int bit1;
+	int bit2;
   unsigned char key_res[7];
-
 	i = 0;
-  bit = 0;
-  bit = key_56[0] >> 7;
-  key_res[0] = ((key_56[0] & 254) << 1) + (key_56[1] >> 7);
-  key_res[1] = ((key_56[1] & 254) << 1) + (key_56[2] >> 7);
-  key_res[2] = ((key_56[2] & 254) << 1) + (key_56[3] >> 7);
-  key_res[3] = ((key_56[3] & 254) << 1);
-  if (bit == 1)
-    key_res[3] |= (1 << 5);
-  else
-    key_res[3] &= ~(1 << 5);
-  bit =( key_56[3] >> 3 ) + (key_56[3] << 4);
-  key_res[4] = ((key_56[4] & 254) << 1) + (key_56[5] >> 7);
-  key_res[5] = ((key_56[5] & 254) << 1) + (key_56[6] >> 7);
-  key_res[6] = ((key_56[6] & 254) << 1);
-  if (bit == 1)
+  bit1 = 0;
+	bit2 = 0;
+  bit1 = (1 << 7) & key_56[0];
+	bit2 = (1 << 3) & key_56[3];
+  key_res[0] = ((key_56[0] & 255) << 1) + (key_56[1] >> 7);
+  key_res[1] = ((key_56[1] & 255) << 1) + (key_56[2] >> 7);
+	key_res[2] = ((key_56[2] & 255) << 1) + (key_56[3] >> 7);
+	//set_middle_byte(&key_res[3], bit1, key_56[3], key_56[4]);
+  key_res[3] = ((key_56[3] & 255) << 1) + (key_56[4] >> 7);
+	if (bit1)
+		key_res[3] |= (1 << 4);
+	else
+		key_res[3] &= ~(1 << 4);
+	//key_res[3] = key_res[3] + (key_56[4] >> 7);
+  key_res[4] = ((key_56[4] & 255) << 1) + (key_56[5] >> 7);
+  key_res[5] = ((key_56[5] & 255) << 1) + (key_56[6] >> 7);
+  key_res[6] = ((key_56[6] & 255) << 1);
+  if (bit2)
     key_res[6] |= (1 << 0);
   else
     key_res[6] &= ~(1 << 0);
   printf("KEY after 1 bit shift%s\n", key_res);
+	printf("CODE KEY after 1 bit shift%d %d %d %d %d %d %d \n", key_res[0], key_res[1], key_res[2],
+	key_res[3], key_res[4], key_res[5], key_res[6]);
 	i = 0;
 	 while (i < 7)
 	 {
@@ -192,11 +237,11 @@ void remove_8bits(unsigned char key_res[], t_args *params, int rounds)
   i = 0;
   j = 0;
   k = 0;
-  while (i < 7)
+  /*while (i < 7)
   {
     key_56[i] = 0;
     i++;
-  }
+  }*/
   i = 0;
   /*key_56[0] = ((key_res[0] & 254) << 1) + (key_res[1] >> 7);
   key_56[1] = ((key_res[1] & (254 << 2)) << 1) + (key_res[2] >> 6);
@@ -210,19 +255,20 @@ void remove_8bits(unsigned char key_res[], t_args *params, int rounds)
     j = 7;
     while (j >= 0)
     {
+			printf("bits %d %d %d %d\n", ((1 << (8 - (key_start[k] % 8))) & key_res[key_start[k] / 8]), j, (8 - (key_start[k] % 8)), (key_res[key_start[k] / 8]));
 			if (((1 << (8 - (key_start[k] % 8)))  &
-      key_res[(key_start[k] - (key_start[k] % 8)) / 8]))
-      	key_56[i] |= ((1 << (8 - (key_start[k] % 8)))  &
-        key_res[(key_start[k] - (key_start[k] % 8)) / 8]) << j;
+      key_res[key_start[k] / 8]))
+      	key_56[i] |= (1 << j);
 			else
-			key_56[i] &= (~(1 << (8 - (key_start[k] % 8)))  &
-			key_res[(key_start[k] - (key_start[k] % 8)) / 8]) << j;
+			key_56[i] &= ~(1 << j);
       k++;
       j--;
     }
     i++;
   }
   printf("KEY 56 bits%s\n", key_56);
+	printf("CODE KEY 56 bits%d %d %d %d %d %d %d\n", key_56[0], key_56[1], key_56[2], key_56[3],
+key_56[4], key_56[5], key_56[6]);
 	//Step 6.3 Key cycle shift
 	if (shift_table_e[rounds] == 1)
   	one_bit_shift(key_56, params);
@@ -267,6 +313,8 @@ void make_keys(t_args *params, int rounds)
     j += 2;
   }
   printf("64 bits key%s\n", key_res);
+	printf("CODE 64 bits key%d %d %d %d %d %d %d %d\n", key_res[0], key_res[1], key_res[2], key_res[3],
+key_res[4], key_res[5], key_res[6], key_res[7]);
   remove_8bits(key_res, params, rounds);
   //printf("%d\n", key_res[0]);
 }
@@ -299,11 +347,9 @@ void message_first_shift(t_args *params)
       //printf("c%d\n", (*params).buf[(m_start[k] - (m_start[k] % 8)) / 8]);
       if ((1 << (8 - (m_start[k] % 8))) &
       (*params).buf[(m_start[k] - (m_start[k] % 8)) / 8])
-        buf_res[i] |= ((1 << ((m_start[k] % 8) - 1)) &
-        (*params).buf[(m_start[k] - (m_start[k] % 8)) / 8]) << j;
+        buf_res[i] |= (1 << j);
       else
-        buf_res[i] &= (~(1 << (8 - (m_start[k] % 8))) &
-        (*params).buf[(m_start[k] - (m_start[k] % 8)) / 8]) << j;
+        buf_res[i] &= ~(1 << j);
       k++;
       j--;
     }
@@ -586,7 +632,7 @@ void des_enc(t_args *params)
 		column[2] = (exp_for_s[k] << 3) + (exp_for_s[k] >> 4);
 		column[3] = (exp_for_s[k] << 4) + (exp_for_s[k] >> 3);
 		str_col[k][1] = (column[0] - '0') * 8 + (column[1] - '0') * 4 + (column[2] - '0') * 2 + (column[3] - '0');
-		printf("str%d col %d\n", str_col[k][0], str_col[k][1]);
+		//printf("str%d col %d\n", str_col[k][0], str_col[k][1]);
 		/*i = 0;
 		j = 6;
 		while (i < 4)

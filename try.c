@@ -85,6 +85,7 @@ int main()
   res = NULL;
 	int test = 255;
 	printf("%d\n", test >> 1);
+	printf("%d\n", 63 / 8);
   //to_binary(&res, 6, 2);
 
   //printf("%d %d %d %d\n", res[0], res[1], res[2], res[3]);
