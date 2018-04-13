@@ -107,30 +107,30 @@ void two_bit_shift(unsigned char key_56[], t_args *params)
 	i = 0;
   bit0 = 0;
   bit1 = 0;
-  bit0 = key_56[0] >> 7;
-  bit1 = (key_56[0] << 1) + (key_56[0] >> 6);
-  key_res[0] = ((key_56[0] & 252) << 2) + (key_56[1] >> 6);
-  key_res[1] = ((key_56[1] & 252) << 2) + (key_56[2] >> 6);
-  key_res[2] = ((key_56[2] & 252) << 2) + (key_56[3] >> 6);
-  key_res[3] = ((key_56[3] & 252) << 2);
-  if (bit0 == 1)
-    key_res[3] |= (1 << 6);
-  else
-    key_res[3] &= ~(1 << 6);
-  if (bit1 == 1)
+  bit0 = (1 << 7) & key_56[0];
+  bit1 = (1 << 6) & key_56[0];
+  key_res[0] = ((key_56[0] & 255) << 2) + (key_56[1] >> 6);
+  key_res[1] = ((key_56[1] & 255) << 2) + (key_56[2] >> 6);
+  key_res[2] = ((key_56[2] & 255) << 2) + (key_56[3] >> 6);
+  key_res[3] = ((key_56[3] & 255) << 2) + (key_56[4] >> 6);
+  if (bit0)
     key_res[3] |= (1 << 5);
   else
     key_res[3] &= ~(1 << 5);
-  bit0 = ( key_56[3] >> 3 ) + (key_56[3] << 4);
-  bit1 = ( key_56[3] >> 2 ) + (key_56[3] << 5);
-  key_res[4] = ((key_56[4] & 252) << 2) + (key_56[5] >> 6);
-  key_res[5] = ((key_56[5] & 252) << 2) + (key_56[6] >> 6);
-  key_res[6] = ((key_56[6] & 252) << 2);
-  if (bit0 == 1)
+  if (bit1)
+    key_res[3] |= (1 << 4);
+  else
+    key_res[3] &= ~(1 << 4);
+	bit0 = (1 << 3) & key_56[3];
+	bit1 = (1 << 2) & key_56[3];
+  key_res[4] = ((key_56[4] & 255) << 2) + (key_56[5] >> 6);
+  key_res[5] = ((key_56[5] & 255) << 2) + (key_56[6] >> 6);
+  key_res[6] = ((key_56[6] & 255) << 2);
+  if (bit0)
     key_res[6] |= (1 << 1);
   else
     key_res[6] &= ~(1 << 1);
-  if (bit1 == 1)
+  if (bit1)
     key_res[6] |= (1 << 0);
   else
     key_res[6] &= ~(1 << 0);
@@ -145,7 +145,7 @@ void two_bit_shift(unsigned char key_56[], t_args *params)
   finish_key_shift(key_res, params);
 }
 
-void set_middle_byte(unsigned char *midbyte, int bit1, char src, char add)
+/*void set_middle_byte(unsigned char *midbyte, int bit1, char src, char add)
 {
 	if ((1 << 6) & src)
 		*midbyte |= (1 << 7);
@@ -179,8 +179,7 @@ void set_middle_byte(unsigned char *midbyte, int bit1, char src, char add)
 		*midbyte |= (1 << 0);
 	else
 		*midbyte &= ~(1 << 0);
-
-}
+}*/
 
 
 void one_bit_shift(unsigned char key_56[], t_args *params)
