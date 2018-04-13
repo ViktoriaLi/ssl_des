@@ -257,11 +257,11 @@ void remove_8bits(unsigned char key_res[], t_args *params, int rounds)
   i = 0;
   j = 0;
   k = 0;
-  /*while (i < 7)
+  while (i < 7)
   {
     key_56[i] = 0;
     i++;
-  }*/
+  }
   i = 0;
   /*key_56[0] = ((key_res[0] & 254) << 1) + (key_res[1] >> 7);
   key_56[1] = ((key_res[1] & (254 << 2)) << 1) + (key_res[2] >> 6);
@@ -364,9 +364,9 @@ void message_first_shift(t_args *params)
   i = 0;
   j = 0;
   k = 0;
-  /*while (i < DES_BLOCK)
+  while (i < DES_BLOCK)
     buf_res[i++] = 0;
-  i = 0;*/
+  i = 0;
   while (i < DES_BLOCK)
   {
     j = 7;
@@ -669,15 +669,24 @@ void des_enc(t_args *params)
   //string[0] = right48[0] >> 7;
   //string[1] = ((right48[0] << 5) + (right48[0] >> 2));
 	//Step 6.1 Make 8 grops per 6 main bits
-	exp_for_s[0] = (right48[0] >> 2) & 255;
-	exp_for_s[1] = ((right48[0] << 6) & 255) + (right48[1] >> 4);
-	exp_for_s[2] = ((right48[1] << 4) & 255) + (right48[2] >> 6);
-	exp_for_s[3] = (right48[2] << 2) & 255;
-	exp_for_s[4] = (right48[3] >> 2) & 255;
-	exp_for_s[5] = ((right48[3] << 6) & 255) + (right48[4] >> 4);
-	exp_for_s[6] = ((right48[4] << 4) & 255) + (right48[5] >> 6);
-	exp_for_s[7] = (right48[5] << 2) & 255;
+	i = 0;
+	while (i < 8)
+	{
+		exp_for_s[i] = 0;
+		i++;
+	}
+	i = 0;
+	exp_for_s[0] = ((right48[0] & 255) >> 2);
+	exp_for_s[1] = (((right48[0] & 255) << 6) + (right48[1] >> 2)) >> 2;
+	exp_for_s[2] = ((right48[1] & 255) << 4) + (right48[2] >> 6);
+	exp_for_s[3] = ((right48[2] & 255) << 2);
+	exp_for_s[4] = ((right48[3] & 255) >> 2);
+	exp_for_s[5] = ((right48[3] & 255) << 6) + (right48[4] >> 4);
+	exp_for_s[6] = ((right48[4] & 255) << 4) + (right48[5] >> 6);
+	exp_for_s[7] = ((right48[5] & 255) << 2);
 	printf("right made to 8 bits%s\n", exp_for_s);
+	printf("CODE right made to 8 bits%d %d %d %d %d %d %d %d \n", exp_for_s[0], exp_for_s[1], exp_for_s[2],
+	exp_for_s[3], exp_for_s[4], exp_for_s[5], exp_for_s[6], exp_for_s[7]);
   //column[0] = (right48[0] << 1) + (right48[0] >> 6);
   //column[1] = (right48[0] << 2) + (right48[0] >> 5);
   //column[2] = (right48[0] << 3) + (right48[0] >> 4);
@@ -698,7 +707,7 @@ void des_enc(t_args *params)
 		column[2] = (exp_for_s[k] << 3) + (exp_for_s[k] >> 4);
 		column[3] = (exp_for_s[k] << 4) + (exp_for_s[k] >> 3);
 		str_col[k][1] = (column[0] - '0') * 8 + (column[1] - '0') * 4 + (column[2] - '0') * 2 + (column[3] - '0');
-		//printf("str%d col %d\n", str_col[k][0], str_col[k][1]);
+		printf("str%d col %d\n", str_col[k][0], str_col[k][1]);
 		/*i = 0;
 		j = 6;
 		while (i < 4)
@@ -718,7 +727,6 @@ void des_enc(t_args *params)
 	//Step 6.3 Make s-blocks permutation
   while (i < 4)
   {
-
     j = 7;
     while (j >= 0)
     {
@@ -772,7 +780,8 @@ void des_enc(t_args *params)
     }
     i++;
   }
-		printf("right%s\n", right);
+	printf("right%s\n", right);
+	printf("CODE right after S-blocks%d %d %d %d\n", right[0], right[1], right[2], right[3]);
 	/*right48[0] = ((exp_for_s[0] >> 2) & 255) + (exp_for_s[1] >> 6);
 	right48[1] = ((exp_for_s[1] << 2) & 255) + (exp_for_s[1] >> 2) + (exp_for_s[2] >> 4);
 	right48[2] = ((exp_for_s[2] << 4) & 255) + (exp_for_s[2] >> 2) + (exp_for_s[3] >> 2);
@@ -786,8 +795,21 @@ void des_enc(t_args *params)
     j = 7;
     while (j >= 0)
     {
-      right_f[i] |= ((1 << ((p_shift[k] % 8) - 1)) &
-        right[(p_shift[k] - (p_shift[k] % 8)) / 8]) << j;
+			if ((p_shift[k] % 8) > 0)
+			{
+				if (((1 << (8 - (p_shift[k] % 8))) &
+	        right[p_shift[k] / 8]))
+	    		right_f[i] |= (1 << j);
+				else
+					right_f[i] &= ~(1 << j);
+			}
+			else
+			{
+				if (((1 << 0) & right[p_shift[k] / 8]))
+	    		right_f[i] |= (1 << j);
+				else
+					right_f[i] &= ~(1 << j);
+			}
       k++;
       j--;
     }
