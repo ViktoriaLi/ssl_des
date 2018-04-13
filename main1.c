@@ -213,7 +213,19 @@ int main (int argc, char **argv)
   find_symb(params.flags, 'a', FLAG_LEN) >= 0)) && find_symb(params.flags, 'd', FLAG_LEN) >= 0)
     base64_read(&params, argv, 4);
   else
-    des_read(&params, argv);
+  {
+    //des_read(&params, argv);
+    params.buf[0] = 1;
+    params.buf[1] = 35;
+    params.buf[2] = 69;
+    params.buf[3] = 103;
+    params.buf[4] = 137;
+    params.buf[5] = 171;
+    params.buf[6] = 205;
+    params.buf[7] = 239;
+    des_enc(&params);
+  }
+
   if (params.ifd > 1)
     close(params.ifd);
   if (params.ofd > 1)
