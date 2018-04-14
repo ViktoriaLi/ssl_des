@@ -193,6 +193,31 @@ void clear_struct(t_args *params)
     (*params).flags[i] = 0;
     i++;
   }
+  i = 0;
+  while (i < DES_BLOCK)
+  {
+    (*params).buf[i] = 0;
+    i++;
+  }
+  i = 0;
+  while (i < 6)
+  {
+    (*params).key_res48[i] = 0;
+    i++;
+  }
+  i = 0;
+  while (i < 7)
+  {
+    (*params).key_res56[i] = 0;
+    i++;
+  }
+  i = 0;
+  while (i < 8)
+  {
+    (*params).des_output[i] = 0;
+    i++;
+  }
+  i = 0;
 	(*params).ifd = 0;
 	(*params).ofd = 0;
   (*params).des_key = NULL;

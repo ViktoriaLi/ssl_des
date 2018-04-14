@@ -66,15 +66,22 @@ void base64_enc(unsigned char *buf, t_args *params);
 void base64_dec(unsigned char *buf, t_args *params);
 void base64_read(t_args *params, char **argv, int len);
 
-void des_read(t_args *params, char **argv);
 void flags_normalize(char *all_flags, t_args *params, int len);
 int check_b64_flags(int argc, char **argv, t_args *params);
 int if_valid_args(int argc, char **argv, t_args *params);
 void clear_struct(t_args *params);
 int check_des_flags(int argc, char **argv, t_args *params);
 
+void des_read(t_args *params, char **argv);
 void des_dec(t_args *params);
 void des_enc(t_args *params);
+void	to_binary(int **res, int nbr, unsigned int base);
+void finish_key_shift(unsigned char key_56[], t_args *params);
+void remove_8bits(unsigned char key_res[], t_args *params, int rounds);
+
+void one_bit_shift(unsigned char key_56[], t_args *params);
+void two_bit_shift(unsigned char key_56[], t_args *params);
+
 char	*ft_strncpy(char *dst, const char *src, size_t len);
 
 #endif
