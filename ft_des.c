@@ -676,14 +676,19 @@ void des_enc(t_args *params)
 		i++;
 	}
 	i = 0;
-	exp_for_s[0] = ((right48[0] & 255) >> 2);
+	exp_for_s[0] = (right48[0] & 255) >> 2;
 	exp_for_s[1] = (((right48[0] & 255) << 6) + (right48[1] >> 2)) >> 2;
-	exp_for_s[2] = ((right48[1] & 255) << 4) + (right48[2] >> 6);
-	exp_for_s[3] = ((right48[2] & 255) << 2);
-	exp_for_s[4] = ((right48[3] & 255) >> 2);
-	exp_for_s[5] = ((right48[3] & 255) << 6) + (right48[4] >> 4);
-	exp_for_s[6] = ((right48[4] & 255) << 4) + (right48[5] >> 6);
+	exp_for_s[2] = ((right48[1] & 255) << 4) + (right48[2] >> 4);
+	exp_for_s[2] >>= 2;
+	exp_for_s[3] = (right48[2] & 255) << 2;
+	exp_for_s[3] >>= 2;
+	exp_for_s[4] = (right48[3] & 255) >> 2;
+	exp_for_s[5] = ((right48[3] & 255) << 6) + (right48[4] >> 2);
+	exp_for_s[5] >>= 2;
+	exp_for_s[6] = ((right48[4] & 255) << 4) + (right48[5] >> 4);
+	exp_for_s[6] >>= 2;
 	exp_for_s[7] = ((right48[5] & 255) << 2);
+	exp_for_s[7] >>= 2;
 	printf("right made to 8 bits%s\n", exp_for_s);
 	printf("CODE right made to 8 bits%d %d %d %d %d %d %d %d \n", exp_for_s[0], exp_for_s[1], exp_for_s[2],
 	exp_for_s[3], exp_for_s[4], exp_for_s[5], exp_for_s[6], exp_for_s[7]);
