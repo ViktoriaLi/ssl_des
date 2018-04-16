@@ -232,7 +232,7 @@ void remove_8bits(unsigned char key_res[], t_args *params, int rounds)
 			}
 			else
 			{
-				if (((1 << 0) & key_res[key_start[k] / 8]))
+				if (((1 << 0) & key_res[key_start[k] / 8 - 1]))
 	      	key_56[i] |= (1 << j);
 				else
 				key_56[i] &= ~(1 << j);
@@ -329,7 +329,7 @@ void message_first_shift(t_args *params)
 			}
 			else
 			{
-				if (((1 << 0) & (*params).buf[m_start[k] / 8]))
+				if (((1 << 0) & (*params).buf[m_start[k] / 8 - 1]))
 	        buf_res[i] |= (1 << j);
 	      else
 	        buf_res[i] &= ~(1 << j);
@@ -481,6 +481,10 @@ void des_enc(t_args *params)
   	2, 8, 24, 14, 32,	27,	3, 9, 19,	13,	30,	6, 22, 11, 4,	25};
   //t_des_tables des_base;
 	const int shift_table_e[16] = {1, 1, 2, 2,	2, 2,	2, 2, 1, 2, 2, 2, 2, 2, 2, 1};
+	const int m_end[64] = {40, 8, 48, 16, 56, 24, 64, 32, 39, 7, 47, 15, 55, 23, 63, 31, \
+  38, 6, 46, 14, 54, 22, 62, 30, 37, 5, 45, 13, 53, 21, 61, 29, 36, 4, 44, 12, \
+  52, 20, 60, 28, 35, 3, 43, 11, 51, 19, 59, 27, 34, 2, 42, 10, 50, 18, 58, 26, \
+  33, 1, 41, 9, 49, 17, 57, 25};
   //fill_des_tables(&des_base);
   i = 0;
   j = 0;
@@ -545,7 +549,7 @@ void des_enc(t_args *params)
 			}
 			else
 			{
-				if ((1 << 0) & right[r_to_48[k] / 8])
+				if ((1 << 0) & right[r_to_48[k] / 8 - 1])
 	      	right48[i] |= (1 << j);
 				else
 					right48[i] &= ~(1 << j);
@@ -732,22 +736,21 @@ void des_enc(t_args *params)
 	//Step 8. XOR between left part and f_function result
 	while (i < 4)
   {
-    left[i] ^= right_f[i];
+    right[i] = left[i] ^ right_f[i];
     i++;
   }
-	printf("left after XOR %s\n", left);
-	printf("CODE left after XOR%d %d %d %d\n", left[0], left[1], left[2], left[3]);
-	i = 0;
-	printf("new right%s\n", right);
-	printf("CODE new right%d %d %d %d \n", right[0], right[1], right[2], right[3]);
+	printf("right = left after XOR%s\n", right);
+	printf("CODE right = left after XOR%d %d %d %d \n", right[0], right[1], right[2], right[3]);
 	//Step 9. Right part becomes new right part
-	while (i < 4)
+
+	//Step 9. Right part becomes new right part
+	/*while (i < 4)
 	{
 		right[i] = left[i];
 		i++;
-	}
-	printf("new left%s\n", left);
-	printf("CODE new left%d %d %d %d \n", left[0], left[1], left[2], left[3]);
+	}*/
+	//printf("new left%s\n", left);
+	//printf("CODE new left%d %d %d %d \n", left[0], left[1], left[2], left[3]);
 	i = 0;
 	//Step 10. Right part becomes new left part
 	while (i < 4)
@@ -755,33 +758,90 @@ void des_enc(t_args *params)
 		left[i] = tmp[i];
 		i++;
 	}
+
 	i = 0;
-	printf("new right%s\n", right);
-	printf("CODE new right%d %d %d %d \n", right[0], right[1], right[2], right[3]);
-	printf("new left%s\n", left);
-	printf("CODE new left%d %d %d %d \n", left[0], left[1], left[2], left[3]);
+	printf("left = right prev%s\n", left);
+	printf("CODE left = right prev%d %d %d %d \n", left[0], left[1], left[2], left[3]);
 	//Step 10. Right part becomes new left part
 	while (i < 4)
 	{
 		tmp[i] = right[i];
 		i++;
 	}
+	printf("tmp saved right%s\n", right);
+	printf("CODE right = left%d %d %d %d \n", right[0], right[1], right[2], right[3]);
 	rounds++;
 }
 	//Step 11. Make final encrypted output for message
 i = 0;
+j = 0;
 while (i < 4)
 {
-	(*params).des_output[i] = left[i];
+	exp_for_s[j] = right[i];
+	j++;
 	i++;
 }
 i = 0;
 while (i < 4)
 {
-	(*params).des_output[i] = right[i];
+	exp_for_s[j] = left[i];
+	j++;
 	i++;
 }
+i = 0;
+k = 0;
+while (i < 8)
+{
+	j = 7;
+	while (j >= 0)
+	{
+		if ((m_end[k] % 8) > 0)
+		{
+			if (((1 << (8 - (m_end[k] % 8))) & exp_for_s[m_end[k] / 8]))
+				(*params).des_output[i] |= (1 << j);
+			else
+				(*params).des_output[i] &= ~(1 << j);
+		}
+		else
+		{
+			if (((1 << 0) & exp_for_s[m_end[k] / 8 - 1]))
+				(*params).des_output[i] |= (1 << j);
+			else
+				(*params).des_output[i] &= ~(1 << j);
+		}
+		k++;
+		j--;
+	}
+	i++;
+}
+/*i = 4;
+while (i < 8)
+{
+	j = 7;
+	while (j >= 0)
+	{
+		if ((m_end[k] % 8) > 0)
+		{
+			if (((1 << (8 - (m_end[k] % 8))) & left[m_end[k] / 8]))
+				(*params).des_output[i] |= (1 << j);
+			else
+				(*params).des_output[i] &= ~(1 << j);
+		}
+		else
+		{
+			if (((1 << 0) & left[m_end[k] / 8 - 1]))
+				(*params).des_output[i] |= (1 << j);
+			else
+				(*params).des_output[i] &= ~(1 << j);
+		}
+		k++;
+		j--;
+	}
+	i++;
+}*/
 printf("%s\n", (*params).des_output);
+printf("CODE 64 bits m output%d %d %d %d %d %d %d %d\n", (*params).des_output[0], (*params).des_output[1], (*params).des_output[2],
+(*params).des_output[3], (*params).des_output[4], (*params).des_output[5], (*params).des_output[6], (*params).des_output[7]);
 }
 
 void des_read(t_args *params, char **argv)

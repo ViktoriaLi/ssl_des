@@ -240,14 +240,22 @@ int main (int argc, char **argv)
   else
   {
     //des_read(&params, argv);
-    params.buf[0] = 1;
+    /*params.buf[0] = 1;
     params.buf[1] = 35;
     params.buf[2] = 69;
     params.buf[3] = 103;
     params.buf[4] = 137;
     params.buf[5] = 171;
     params.buf[6] = 205;
-    params.buf[7] = 239;
+    params.buf[7] = 239;*/
+    params.buf[0] = 18;
+    params.buf[1] = 52;
+    params.buf[2] = 86;
+    params.buf[3] = 171;
+    params.buf[4] = 205;
+    params.buf[5] = 19;
+    params.buf[6] = 37;
+    params.buf[7] = 54;
     des_enc(&params);
   }
 
