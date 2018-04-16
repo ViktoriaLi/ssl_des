@@ -26,6 +26,7 @@
 typedef struct		s_args
 {
 	//char	*cipher;
+  unsigned char b64_buf[4];
   unsigned char buf[DES_BLOCK];
 	char flags[FLAG_LEN];
 	int ifd;
@@ -35,27 +36,6 @@ typedef struct		s_args
 	unsigned char key_res56[7];
 	unsigned char des_output[8];
 }					t_args;
-
-/*typedef struct		s_des_tables
-{
-	int m_start[64];
-	int m_end[64];
-	int r_to_48[48];
-	int key_start[56];
-	int shift_table_e[16];
-	int shift_table_d[16];
-	int key_finish[48];
-	int s_1[64];
-	int s_2[64];
-	int s_3[64];
-	int s_4[64];
-	int s_5[64];
-	int s_6[64];
-	int s_7[64];
-	int s_8[64];
-	int shift_32bits[32];
-	int p_shift[32];
-}					t_des_tables;*/
 
 int		get_next_line(const int fd, char **line);
 size_t		ft_strlen(const char *s);

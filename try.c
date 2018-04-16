@@ -36,7 +36,7 @@ void	print_hex(char **res, int nbr, unsigned int base)
 	}
 }
 
-void	to_binary(int **res, int nbr, unsigned int base)
+/*void	to_binary(int **res, int nbr, unsigned int base)
 {
 	int i;
 	int			len;
@@ -79,7 +79,46 @@ void	to_binary(int **res, int nbr, unsigned int base)
 		d--;
     }
   }
+}*/
+
+/*
+void	to_binary(int **res, int nbr, unsigned int base)
+{
+	int i;
+	int	len;
+	int	d;
+  int *tmp;
+
+  d = nbr;
+	len = 0;
+	i = 0;
+	while (d > base - 1)
+	{
+		d = d / base;
+		len++;
+	}
+	i = len;
+	if (!(tmp = (int *)malloc(sizeof(int) * len)))
+		return ;
+  if (!((*res) = (int *)malloc(sizeof(int) * 4)))
+  		return ;
+	while (len >= 0)
+	{
+		if ((nbr % base) < 10)
+			tmp[len--] = (nbr % base);
+		nbr = nbr / base;
+	}
+  if (i < 4)
+  {
+		len = i;
+    d = 3;
+    while (len >= 0)
+      (*res)[d--] = tmp[len--];
+    while (d >= 0)
+  		(*res)[d--] = 0;
+  }
 }
+*/
 
 int main()
 {

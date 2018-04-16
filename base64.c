@@ -70,36 +70,36 @@ void base64_read(t_args *params, char **argv, int len)
 {
   int i;
   int ret;
-  unsigned char buf[5];
+  //unsigned char buf[4];
 
-  buf[4] = 0;
+  //buf[4] = 0;
   ret = 0;
   if ((find_symb((*params).flags, 'i', FLAG_LEN)) >= 0)
   {
-    while ((ret = read((*params).ifd, &buf, len)) > 0)
+    while ((ret = read((*params).ifd, &params->b64_buf, len)) > 0)
     {
       //ft_printf("%s\n", buf);
       if (len == 4)
-        base64_dec(buf, params);
+        base64_dec((*params).b64_buf, params);
       else
-        base64_enc(buf, params);
-      if ((len == 4 && buf[3] == '=') || (len == 3 && ret < 3))
+        base64_enc((*params).b64_buf, params);
+      if ((len == 4 && (*params).b64_buf[3] == '=') || (len == 3 && ret < 3))
         break;
       i = 0;
       while (i < len)
       {
-        buf[i] = 0;
+        (*params).b64_buf[i] = 0;
         i++;
       }
     }
   }
-  else if ((ret = read(0, &buf, len)) > 0)
+  else if ((ret = read(0, &params->b64_buf, len)) > 0)
   {
     //ft_printf("%s\n", buf);
     if (len == 4)
-      base64_dec(buf, params);
+      base64_dec((*params).b64_buf, params);
     else
-      base64_enc(buf, params);
+      base64_enc((*params).b64_buf, params);
     /*else if (ft_strcmp(argv[1], "des") == 0)
       des_enc(buf);
     else if (ft_strcmp(argv[1], "des-ecb") == 0)
@@ -109,52 +109,52 @@ void base64_read(t_args *params, char **argv, int len)
     i = 0;
     while (i < len)
     {
-      buf[i] = 0;
+      (*params).b64_buf[i] = 0;
       i++;
     }
-    while ((ret = read(0, &buf, len)) > 0)
+    while ((ret = read(0, &params->b64_buf, len)) > 0)
     {
       //ft_printf("%s\n", buf);
       if (len == 4)
-        base64_dec(buf, params);
+        base64_dec((*params).b64_buf, params);
       else
-        base64_enc(buf, params);
-      if ((len == 4 && buf[3] == '=') || (len == 3 && ret < 3))
+        base64_enc((*params).b64_buf, params);
+      if ((len == 4 && (*params).b64_buf[3] == '=') || (len == 3 && ret < 3))
         break;
       i = 0;
       while (i < len)
       {
-        buf[i] = 0;
+        (*params).b64_buf[i] = 0;
         i++;
       }
     }
   }
-  else if ((ret = read(1, &buf, len)) > 0)
+  else if ((ret = read(1, &params->b64_buf, len)) > 0)
   {
       //ft_printf("%s\n", buf);
       if (len == 4)
-        base64_dec(buf, params);
+        base64_dec((*params).b64_buf, params);
       else
-        base64_enc(buf, params);
+        base64_enc((*params).b64_buf, params);
       i = 0;
       while (i < len)
       {
-        buf[i] = 0;
+        (*params).b64_buf[i] = 0;
         i++;
       }
-      while ((ret = read(1, &buf, len)) > 0)
+      while ((ret = read(1, &params->b64_buf, len)) > 0)
       {
         //ft_printf("%s\n", buf);
         if (len == 4)
-          base64_dec(buf, params);
+          base64_dec((*params).b64_buf, params);
         else
-          base64_enc(buf, params);
-        if ((len == 4 && buf[3] == '=') || (len == 3 && ret < 3))
+          base64_enc((*params).b64_buf, params);
+        if ((len == 4 && (*params).b64_buf[3] == '=') || (len == 3 && ret < 3))
           break;
         i = 0;
         while (i < len)
         {
-          buf[i] = 0;
+          (*params).b64_buf[i] = 0;
           i++;
         }
       }

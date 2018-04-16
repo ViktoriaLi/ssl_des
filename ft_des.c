@@ -15,39 +15,19 @@
 
 void	to_binary(int **res, int nbr, unsigned int base)
 {
-	int i;
 	int	len;
-	int	d;
-  int *tmp;
 
-  d = nbr;
-	len = 0;
-	i = 0;
-	while (d > base - 1)
-	{
-		d = d / base;
-		len++;
-	}
-	i = len;
-	if (!(tmp = (int *)malloc(sizeof(int) * len)))
-		return ;
+	len = 3;
   if (!((*res) = (int *)malloc(sizeof(int) * 4)))
   		return ;
-	while (len >= 0)
+	while (nbr > base - 2)
 	{
 		if ((nbr % base) < 10)
-			tmp[len--] = (nbr % base);
+			(*res)[len--] = (nbr % base);
 		nbr = nbr / base;
 	}
-  if (i < 4)
-  {
-		len = i;
-    d = 3;
-    while (len >= 0)
-      (*res)[d--] = tmp[len--];
-    while (d >= 0)
-  		(*res)[d--] = 0;
-  }
+  while (len >= 0)
+    (*res)[len--] = 0;
 }
 
 //Step 6.3 Final key bits permutation
@@ -56,7 +36,6 @@ void finish_key_shift(unsigned char key_56[], t_args *params)
   int i;
   int j;
   int k;
-  unsigned char key_48[6];
   const int key_finish[48] = {14,	17,	11,	24,	1,	5,	3,	28,	15,	6,	21,	10,	23,	19,	12,\
   	4, 26,	8,	16,	7,	27,	20,	13,	2,	41,	52,	31,	37,	47,	55,	30,	40,\
   	51,	45,	33,	48,	44,	49,	39, 56, 34, 53, 46, 42, 50, 36, 29, 32};
@@ -65,9 +44,6 @@ void finish_key_shift(unsigned char key_56[], t_args *params)
   j = 0;
   k = 0;
   while (i < 6)
-    key_48[i++] = 0;
-  i = 0;
-  while (i < 6)
   {
     j = 7;
     while (j >= 0)
@@ -75,34 +51,28 @@ void finish_key_shift(unsigned char key_56[], t_args *params)
 			if ((key_finish[k] % 8) > 0)
 			{
 				if (((1 << (8 - (key_finish[k] % 8))) & key_56[key_finish[k] / 8]))
-	      	key_48[i] |= (1 << j);
+	      	(*params).key_res48[i] |= (1 << j);
 				else
-					key_48[i] &= ~(1 << j);
+					(*params).key_res48[i] &= ~(1 << j);
 					k++;
 		      j--;
 			}
 			else
 			{
 				if (((1 << 0) & key_56[key_finish[k] / 8 - 1]))
-	      	key_48[i] |= (1 << j);
+	      	(*params).key_res48[i] |= (1 << j);
 				else
-					key_48[i] &= ~(1 << j);
+					(*params).key_res48[i] &= ~(1 << j);
 				k++;
 		    j--;
 			}
     }
     i++;
   }
-  i = 0;
-  while (i < 6)
-  {
-    (*params).key_res48[i] = key_48[i];
-    i++;
-  }
-  printf("finish key%s\n", (*params).key_res48);
-	printf("CODE finish key%d %d %d %d %d %d \n", key_48[0], key_48[1], key_48[2], key_48[3], key_48[4], key_48[5]);
-	printf("CODE finish key%d %d %d %d %d %d \n", (*params).key_res48[0], (*params).key_res48[1], (*params).key_res48[2],
-	(*params).key_res48[3], (*params).key_res48[4], (*params).key_res48[5]);
+  //printf("finish key%s\n", (*params).key_res48);
+	//printf("CODE finish key%d %d %d %d %d %d \n", key_48[0], key_48[1], key_48[2], key_48[3], key_48[4], key_48[5]);
+	//printf("CODE finish key%d %d %d %d %d %d \n", (*params).key_res48[0], (*params).key_res48[1], (*params).key_res48[2],
+	//(*params).key_res48[3], (*params).key_res48[4], (*params).key_res48[5]);
 }
 
 void two_bit_shift(unsigned char key_56[], t_args *params)
@@ -113,8 +83,6 @@ void two_bit_shift(unsigned char key_56[], t_args *params)
   unsigned char key_res[7];
 
 	i = 0;
-  bit0 = 0;
-  bit1 = 0;
   bit0 = (1 << 7) & key_56[0];
   bit1 = (1 << 6) & key_56[0];
   key_res[0] = ((key_56[0] & 255) << 2) + (key_56[1] >> 6);
@@ -148,10 +116,10 @@ void two_bit_shift(unsigned char key_56[], t_args *params)
 	   (*params).key_res56[i] = key_res[i];
 	   i++;
 	 }
-	printf("CODE KEY after 2 bit shift%d %d %d %d %d %d %d \n", key_res[0], key_res[1], key_res[2],
- 	key_res[3], key_res[4], key_res[5], key_res[6]);
-	printf("CODE KEY after 2 bit shift%d %d %d %d %d %d %d \n", (*params).key_res56[0], (*params).key_res56[1], (*params).key_res56[2],
- 	(*params).key_res56[3], (*params).key_res56[4], (*params).key_res56[5], (*params).key_res56[6]);
+	//printf("CODE KEY after 2 bit shift%d %d %d %d %d %d %d \n", key_res[0], key_res[1], key_res[2],
+ 	//key_res[3], key_res[4], key_res[5], key_res[6]);
+	//printf("CODE KEY after 2 bit shift%d %d %d %d %d %d %d \n", (*params).key_res56[0], (*params).key_res56[1], (*params).key_res56[2],
+ 	//(*params).key_res56[3], (*params).key_res56[4], (*params).key_res56[5], (*params).key_res56[6]);
   finish_key_shift(key_res, params);
 }
 
@@ -161,15 +129,13 @@ void one_bit_shift(unsigned char key_56[], t_args *params)
   int bit1;
 	int bit2;
   unsigned char key_res[7];
+
 	i = 0;
-  bit1 = 0;
-	bit2 = 0;
   bit1 = (1 << 7) & key_56[0];
 	bit2 = (1 << 3) & key_56[3];
   key_res[0] = ((key_56[0] & 255) << 1) + (key_56[1] >> 7);
   key_res[1] = ((key_56[1] & 255) << 1) + (key_56[2] >> 7);
 	key_res[2] = ((key_56[2] & 255) << 1) + (key_56[3] >> 7);
-	//set_middle_byte(&key_res[3], bit1, key_56[3], key_56[4]);
   key_res[3] = ((key_56[3] & 255) << 1) + (key_56[4] >> 7);
 	if (bit1)
 		key_res[3] |= (1 << 4);
@@ -182,18 +148,58 @@ void one_bit_shift(unsigned char key_56[], t_args *params)
     key_res[6] |= (1 << 0);
   else
     key_res[6] &= ~(1 << 0);
-  printf("KEY after 1 bit shift%s\n", key_res);
-	printf("CODE KEY after 1 bit shift%d %d %d %d %d %d %d \n", key_res[0], key_res[1], key_res[2],
-	key_res[3], key_res[4], key_res[5], key_res[6]);
+  //printf("KEY after 1 bit shift%s\n", key_res);
+	//printf("CODE KEY after 1 bit shift%d %d %d %d %d %d %d \n", key_res[0], key_res[1], key_res[2],
+	//key_res[3], key_res[4], key_res[5], key_res[6]);
 	i = 0;
 	 while (i < 7)
 	 {
 	   (*params).key_res56[i] = key_res[i];
 	   i++;
 	 }
-	 printf("CODE KEY after 1 bit shift%d %d %d %d %d %d %d \n", (*params).key_res56[0], (*params).key_res56[1], (*params).key_res56[2],
- (*params).key_res56[3], (*params).key_res56[4], (*params).key_res56[5], (*params).key_res56[6]);
+	 //printf("CODE KEY after 1 bit shift%d %d %d %d %d %d %d \n", (*params).key_res56[0], (*params).key_res56[1], (*params).key_res56[2],
+ //(*params).key_res56[3], (*params).key_res56[4], (*params).key_res56[5], (*params).key_res56[6]);
   finish_key_shift(key_res, params);
+}
+
+void bit_permutations(int max, const int table[], unsigned char *dest[], unsigned char *src)
+{
+	int i;
+  int j;
+  int k;
+
+	i = 0;
+  j = 0;
+  k = 0;
+	while (i < max)
+    dest[i++] = 0;
+  i = 0;
+  while (i < max)
+  {
+    j = 7;
+    while (j >= 0)
+    {
+			//printf("bits %d %d %d %d\n", ((1 << (8 - (key_start[k] % 8))) & key_res[key_start[k] / 8]), j, (8 - (key_start[k] % 8)), (key_res[key_start[k] / 8]));
+			if((table[k] % 8) > 0)
+			{
+				if (((1 << (8 - (table[k] % 8)))  &
+	      src[table[k] / 8]))
+	      	*dest[i] |= (1 << j);
+				else
+					*dest[i] &= ~(1 << j);
+			}
+			else
+			{
+				if (((1 << 0) & src[table[k] / 8 - 1]))
+	      	*dest[i] |= (1 << j);
+				else
+				*dest[i] &= ~(1 << j);
+			}
+      k++;
+      j--;
+    }
+    i++;
+  }
 }
 
 //Step 6.2 Make 56 bits key (remove each 8 bit)
@@ -207,28 +213,27 @@ void remove_8bits(unsigned char key_res[], t_args *params, int rounds)
   	59, 51, 43, 35, 27,	19, 11, 3, 60, 52, 44, 36, 63, 55, 47, 39, 31, 23, 15, 7,\
   	62, 54, 46, 38, 30, 22, 14, 6, 61, 53, 45, 37, 29, 21, 13, 5, 28, 20, 12, 4};
 	const int shift_table_e[16] = {1, 1, 2, 2,	2, 2,	2, 2, 1, 2, 2, 2, 2, 2, 2, 1};
+
   i = 0;
   j = 0;
   k = 0;
-  while (i < 7)
-  {
-    key_56[i] = 0;
-    i++;
-  }
+	bit_permutations(7, key_start, &key_56, key_res);
+  /*while (i < 7)
+    key_56[i++] = 0;
   i = 0;
   while (i < 7)
   {
     j = 7;
     while (j >= 0)
     {
-			printf("bits %d %d %d %d\n", ((1 << (8 - (key_start[k] % 8))) & key_res[key_start[k] / 8]), j, (8 - (key_start[k] % 8)), (key_res[key_start[k] / 8]));
+			//printf("bits %d %d %d %d\n", ((1 << (8 - (key_start[k] % 8))) & key_res[key_start[k] / 8]), j, (8 - (key_start[k] % 8)), (key_res[key_start[k] / 8]));
 			if((key_start[k] % 8) > 0)
 			{
 				if (((1 << (8 - (key_start[k] % 8)))  &
 	      key_res[key_start[k] / 8]))
 	      	key_56[i] |= (1 << j);
 				else
-				key_56[i] &= ~(1 << j);
+					key_56[i] &= ~(1 << j);
 			}
 			else
 			{
@@ -241,10 +246,10 @@ void remove_8bits(unsigned char key_res[], t_args *params, int rounds)
       j--;
     }
     i++;
-  }
-  printf("KEY 56 bits%s\n", key_56);
-	printf("CODE KEY 56 bits%d %d %d %d %d %d %d\n", key_56[0], key_56[1], key_56[2], key_56[3],
-key_56[4], key_56[5], key_56[6]);
+  }*/
+  //printf("KEY 56 bits%s\n", key_56);
+	//printf("CODE KEY 56 bits%d %d %d %d %d %d %d\n", key_56[0], key_56[1], key_56[2], key_56[3],
+//key_56[4], key_56[5], key_56[6]);
 	//Step 6.3 Key cycle shift
 	if (shift_table_e[rounds] == 1)
   	one_bit_shift(key_56, params);
@@ -261,37 +266,28 @@ void make_keys(t_args *params, int rounds)
 
   i = 0;
   j = 0;
-  printf("Original key%s\n", (*params).des_key);
+  //printf("Original key%s\n", (*params).des_key);
   while (i < KEY_LEN)
     key_res[i++] = 0;
   i = 0;
-  while (i < KEY_LEN)
+  while ((*params).des_key[j] && i < KEY_LEN)
   {
     if ((*params).des_key[j] >= 65 && (*params).des_key[j] <= 70)
-    {
       (*params).des_key[j] = (*params).des_key[j] - 7;
-    }
     else if ((*params).des_key[j] >= 97 && (*params).des_key[j] <= 102)
-    {
       (*params).des_key[j] = (*params).des_key[j] - 49;
-    }
     if ((*params).des_key[j + 1] >= 65 && (*params).des_key[j + 1] <= 70)
-    {
       (*params).des_key[j + 1] = (*params).des_key[j + 1] - 7;
-    }
     else if ((*params).des_key[j + 1] >= 97 && (*params).des_key[j + 1] <= 102)
-    {
       (*params).des_key[j + 1] = (*params).des_key[j + 1] - 49;
-    }
     key_res[i] = (((*params).des_key[j] - '0') * 16) + ((*params).des_key[j + 1] - '0');
     i++;
     j += 2;
   }
-  printf("64 bits key%s\n", key_res);
+  /*printf("64 bits key%s\n", key_res);
 	printf("CODE 64 bits key%d %d %d %d %d %d %d %d\n", key_res[0], key_res[1], key_res[2], key_res[3],
-key_res[4], key_res[5], key_res[6], key_res[7]);
+key_res[4], key_res[5], key_res[6], key_res[7]);*/
   remove_8bits(key_res, params, rounds);
-  //printf("%d\n", key_res[0]);
 }
 
 /*initial bit permutation*/
@@ -336,14 +332,13 @@ void message_first_shift(t_args *params)
 	      k++;
 	      j--;
 			}
-
     }
     i++;
   }
 	//printf("CODE FSHIFT%d %d %d %d %d %d %d %d\n", buf_res[0], buf_res[1], buf_res[2], buf_res[3],
 	//buf_res[4], buf_res[5], buf_res[6], buf_res[7]);
   i = 0;
-  printf("first shift%s\n", buf_res);
+  //printf("first shift%s\n", buf_res);
   while (i < 8)
   {
     (*params).buf[i] = buf_res[i];
@@ -430,6 +425,8 @@ void des_enc(t_args *params)
 	m = 0;
 	four_bits = NULL;
   printf("1BUF%s\n", (*params).buf);
+	printf("1BUF%d %d %d %d %d %d %d %d\n", (*params).buf[0], (*params).buf[1], (*params).buf[2],
+(*params).buf[3], (*params).buf[4], (*params).buf[5], (*params).buf[6], (*params).buf[7]);
 	m = 0;
 	while (m < 8)
 	{
@@ -437,8 +434,8 @@ void des_enc(t_args *params)
 		str_col[m][1] = 0;
 		m++;
 	}
-	printf("CODE 1BUF%d %d %d %d %d %d %d %d\n", (*params).buf[0], (*params).buf[1], (*params).buf[2], (*params).buf[3],
-	(*params).buf[4], (*params).buf[5], (*params).buf[6], (*params).buf[7]);
+	//printf("CODE 1BUF%d %d %d %d %d %d %d %d\n", (*params).buf[0], (*params).buf[1], (*params).buf[2], (*params).buf[3],
+	//(*params).buf[4], (*params).buf[5], (*params).buf[6], (*params).buf[7]);
 	//table for right part rotation
   const int r_to_48[48] = {32,	1, 2,	3, 4,	5, 4,	5, 6,	7, 8,	9, 8,	9, 10, 11, 12, 13,\
   12,	13,	14,	15,	16,	17, 16,	17,	18,	19,	20,	21, 20,	21,	22,	23,	24,	25, 24,\
@@ -493,9 +490,9 @@ void des_enc(t_args *params)
   s_output = 0;
 	//Step 1. Make first bit permutation for message (8 bytes)
   message_first_shift(params);
-  printf("M after first shift%s\n", (*params).buf);
-	printf("CODE M after first shift%d %d %d %d %d %d %d %d\n", (*params).buf[0], (*params).buf[1], (*params).buf[2], (*params).buf[3],
-	(*params).buf[4], (*params).buf[5], (*params).buf[6], (*params).buf[7]);
+  //printf("M after first shift%s\n", (*params).buf);
+	//printf("CODE M after first shift%d %d %d %d %d %d %d %d\n", (*params).buf[0], (*params).buf[1], (*params).buf[2], (*params).buf[3],
+	//(*params).buf[4], (*params).buf[5], (*params).buf[6], (*params).buf[7]);
 	//Step 2. Message division into 2 parts
   while (i < 4)
   {
@@ -511,8 +508,8 @@ void des_enc(t_args *params)
     j++;
   }
 	i = 0;
-	printf("CODE left start%d %d %d %d\n", left[0], left[1], left[2], left[3]);
-	printf("CODE right start%d %d %d %d\n", right[0], right[1], right[2], right[3]);
+	//printf("CODE left start%d %d %d %d\n", left[0], left[1], left[2], left[3]);
+	//printf("CODE right start%d %d %d %d\n", right[0], right[1], right[2], right[3]);
   while (i < 4)
   {
 			tmp[i] = right[i];
@@ -520,7 +517,7 @@ void des_enc(t_args *params)
   }
   i = 0;
   j = 0;
-	printf("CODE tmp start%d %d %d %d\n", tmp[0], tmp[1], tmp[2], tmp[3]);
+	//printf("CODE tmp start%d %d %d %d\n", tmp[0], tmp[1], tmp[2], tmp[3]);
   while (i < 6)
   {
     right48[i] = 0;
@@ -559,9 +556,9 @@ void des_enc(t_args *params)
     }
     i++;
   }
-  printf("Right to 48%s\n", right48);
-	printf("CODE Right to 48 %d %d %d %d %d %d \n", right48[0], right48[1], right48[2],
-	right48[3], right48[4], right48[5]);
+  //printf("Right to 48%s\n", right48);
+	//printf("CODE Right to 48 %d %d %d %d %d %d \n", right48[0], right48[1], right48[2],
+	//right48[3], right48[4], right48[5]);
 	//Step 4. One key generation for current round
 	if (rounds == 0)
   	make_keys(params, rounds);
@@ -577,8 +574,8 @@ void des_enc(t_args *params)
     i++;
   }
 	//Step 6. Make bits permutation with s-blocks
-  printf("Right after XOR%s\n", right48);
-	printf("CODE Right after XOR%d %d %d %d %d %d\n", right48[0], right48[1], right48[2], right48[3], right48[4], right48[5]);
+  //printf("Right after XOR%s\n", right48);
+	//printf("CODE Right after XOR%d %d %d %d %d %d\n", right48[0], right48[1], right48[2], right48[3], right48[4], right48[5]);
 	//Step 6.1 Make 8 grops per 6 main bits
 	i = 0;
 	while (i < 8)
@@ -600,9 +597,9 @@ void des_enc(t_args *params)
 	exp_for_s[6] >>= 2;
 	exp_for_s[7] = ((right48[5] & 255) << 2);
 	exp_for_s[7] >>= 2;
-	printf("right made to 8 bits%s\n", exp_for_s);
-	printf("CODE right made to 8 bits%d %d %d %d %d %d %d %d \n", exp_for_s[0], exp_for_s[1], exp_for_s[2],
-	exp_for_s[3], exp_for_s[4], exp_for_s[5], exp_for_s[6], exp_for_s[7]);
+	//printf("right made to 8 bits%s\n", exp_for_s);
+	//printf("CODE right made to 8 bits%d %d %d %d %d %d %d %d \n", exp_for_s[0], exp_for_s[1], exp_for_s[2],
+	//exp_for_s[3], exp_for_s[4], exp_for_s[5], exp_for_s[6], exp_for_s[7]);
 	//Step 6.2 Receive string and column numbers
 	k = 0;
 	while (k < 8)
@@ -633,8 +630,8 @@ void des_enc(t_args *params)
 			column[3] = 0;
 		str_col[k][0] = string[0] * 2 + string[1];
 		str_col[k][1] = column[0] * 8 + column[1] * 4 + column[2] * 2 + column[3];
-		printf("CODE check binary%d %d %d %d %d %d\n", string[0], string[1], column[0], column[1], column[2], column[3]);
-		printf("str%d col %d\n", str_col[k][0], str_col[k][1]);
+		//printf("CODE check binary%d %d %d %d %d %d\n", string[0], string[1], column[0], column[1], column[2], column[3]);
+		//printf("str%d col %d\n", str_col[k][0], str_col[k][1]);
 		k++;
 	}
 	i = 0;
@@ -654,10 +651,10 @@ void des_enc(t_args *params)
 			else if (i == 6)
 				s_output = s_7[str_col[i][0]][str_col[i][1]];
 			i++;
-			printf("%d\n", s_output);
+			//printf("%d\n", s_output);
 			//Receive binary representation
 			to_binary(&four_bits, s_output, 2);
-			printf("%d %d %d %d\n", four_bits[0], four_bits[1], four_bits[2], four_bits[3]);
+			//printf("%d %d %d %d\n", four_bits[0], four_bits[1], four_bits[2], four_bits[3]);
 			k = 0;
 			//assign new value to right block
 			j = 7;
@@ -680,9 +677,9 @@ void des_enc(t_args *params)
 			else if (i == 7)
 				s_output = s_8[str_col[i][0]][str_col[i][1]];
 			i++;
-			printf("%d\n", s_output);
+			//printf("%d\n", s_output);
 			to_binary(&four_bits, s_output, 2);
-			printf("%d %d %d %d\n", four_bits[0], four_bits[1], four_bits[2], four_bits[3]);
+			//printf("%d %d %d %d\n", four_bits[0], four_bits[1], four_bits[2], four_bits[3]);
 			k = 0;
 			j = 3;
 			while (k < 4)
@@ -696,8 +693,8 @@ void des_enc(t_args *params)
 			}
     m++;
   }
-	printf("right%s\n", right);
-	printf("CODE right after S-blocks%d %d %d %d\n", right[0], right[1], right[2], right[3]);
+	//printf("right%s\n", right);
+	//printf("CODE right after S-blocks%d %d %d %d\n", right[0], right[1], right[2], right[3]);
 	i = 0;
 	j = 0;
 	m = 0;
@@ -730,49 +727,38 @@ void des_enc(t_args *params)
     }
     i++;
   }
-	printf("right_f%s\n", right_f);
-	printf("CODE right_f%d %d %d %d\n", right_f[0], right_f[1], right_f[2], right_f[3]);
+	//printf("right_f%s\n", right_f);
+	//printf("CODE right_f%d %d %d %d\n", right_f[0], right_f[1], right_f[2], right_f[3]);
 	i = 0;
-	//Step 8. XOR between left part and f_function result
+	//Step 8. XOR between left part and f_function result. Right part becomes new right part
 	while (i < 4)
   {
     right[i] = left[i] ^ right_f[i];
     i++;
   }
-	printf("right = left after XOR%s\n", right);
-	printf("CODE right = left after XOR%d %d %d %d \n", right[0], right[1], right[2], right[3]);
-	//Step 9. Right part becomes new right part
-
-	//Step 9. Right part becomes new right part
-	/*while (i < 4)
-	{
-		right[i] = left[i];
-		i++;
-	}*/
-	//printf("new left%s\n", left);
-	//printf("CODE new left%d %d %d %d \n", left[0], left[1], left[2], left[3]);
+	//printf("right = left after XOR%s\n", right);
+	//printf("CODE right = left after XOR%d %d %d %d \n", right[0], right[1], right[2], right[3]);
 	i = 0;
-	//Step 10. Right part becomes new left part
+	//Step 9. Left part becomes prev right part
 	while (i < 4)
 	{
 		left[i] = tmp[i];
 		i++;
 	}
-
 	i = 0;
-	printf("left = right prev%s\n", left);
-	printf("CODE left = right prev%d %d %d %d \n", left[0], left[1], left[2], left[3]);
-	//Step 10. Right part becomes new left part
+	//printf("left = right prev%s\n", left);
+	//printf("CODE left = right prev%d %d %d %d \n", left[0], left[1], left[2], left[3]);
+	//Step 10. Save right part for next round
 	while (i < 4)
 	{
 		tmp[i] = right[i];
 		i++;
 	}
-	printf("tmp saved right%s\n", right);
-	printf("CODE right = left%d %d %d %d \n", right[0], right[1], right[2], right[3]);
+	//printf("tmp saved right%s\n", right);
+	//printf("CODE right = left%d %d %d %d \n", right[0], right[1], right[2], right[3]);
 	rounds++;
 }
-	//Step 11. Make final encrypted output for message
+//Step 11. Make final encrypted output for message
 i = 0;
 j = 0;
 while (i < 4)
@@ -814,34 +800,49 @@ while (i < 8)
 	}
 	i++;
 }
-/*i = 4;
-while (i < 8)
-{
-	j = 7;
-	while (j >= 0)
-	{
-		if ((m_end[k] % 8) > 0)
-		{
-			if (((1 << (8 - (m_end[k] % 8))) & left[m_end[k] / 8]))
-				(*params).des_output[i] |= (1 << j);
-			else
-				(*params).des_output[i] &= ~(1 << j);
-		}
-		else
-		{
-			if (((1 << 0) & left[m_end[k] / 8 - 1]))
-				(*params).des_output[i] |= (1 << j);
-			else
-				(*params).des_output[i] &= ~(1 << j);
-		}
-		k++;
-		j--;
-	}
-	i++;
-}*/
 printf("%s\n", (*params).des_output);
 printf("CODE 64 bits m output%d %d %d %d %d %d %d %d\n", (*params).des_output[0], (*params).des_output[1], (*params).des_output[2],
 (*params).des_output[3], (*params).des_output[4], (*params).des_output[5], (*params).des_output[6], (*params).des_output[7]);
+if ((find_symb((*params).flags, 'a', FLAG_LEN)) < 0)
+{
+	if ((find_symb((*params).flags, 'o', FLAG_LEN)) >= 0)
+		write((*params).ofd, (*params).des_output, ft_strlen((char *)(*params).des_output));
+	else
+		write(1, (*params).des_output, ft_strlen((char *)(*params).des_output));
+}
+else
+{
+	i = 0;
+	j = 0;
+	while (i < 3)
+	{
+		(*params).b64_buf[i] = (*params).des_output[j];
+		i++;
+		j++;
+	}
+	(*params).b64_buf[i] = 0;
+	base64_enc((*params).b64_buf, params);
+	i = 0;
+	while (i < 3)
+	{
+		(*params).b64_buf[i] = (*params).des_output[j];
+		i++;
+		j++;
+	}
+	(*params).b64_buf[i] = 0;
+	base64_enc((*params).b64_buf, params);
+	i = 0;
+	while (i < 2)
+	{
+		(*params).b64_buf[i] = (*params).des_output[j];
+		i++;
+		j++;
+	}
+	(*params).b64_buf[i++] = 0;
+	(*params).b64_buf[i] = 0;
+	base64_enc((*params).b64_buf, params);
+	i = 0;
+}
 }
 
 void des_read(t_args *params, char **argv)
@@ -855,23 +856,39 @@ void des_read(t_args *params, char **argv)
     while ((ret = read((*params).ifd, params->buf, DES_BLOCK)) > 0)
     {
       //ft_printf("BUF %s\n", (*params).buf);
+			i = ret;
+			while (i < DES_BLOCK)
+      {
+        (*params).buf[i] = 0;
+        i++;
+      }
+			if ((*params).buf[ret - 1] == 10)
+				(*params).buf[ret - 1] = 0;
       if ((find_symb((*params).flags, 'd', FLAG_LEN)) >= 0)
         des_dec(params);
       else
         des_enc(params);
       if (ret < DES_BLOCK)
         break;
-      i = 0;
+      /*i = 0;
       while (i < DES_BLOCK)
       {
         (*params).buf[i] = 0;
         i++;
-      }
+      }*/
     }
   }
   else if ((ret = read(0, params->buf, DES_BLOCK)) > 0)
   {
     ft_printf("BUF %s\n", (*params).buf);
+		i = ret;
+    while (i < DES_BLOCK)
+    {
+      (*params).buf[i] = 0;
+      i++;
+    }
+		if ((*params).buf[ret - 1] == 10)
+			(*params).buf[ret - 1] = 0;
     if ((find_symb((*params).flags, 'd', FLAG_LEN)) >= 0)
       des_dec(params);
     else
@@ -882,57 +899,59 @@ void des_read(t_args *params, char **argv)
       des_ecb_enc(buf);
     else if (ft_strcmp(argv[1], "des-cbc") == 0)
       des_cbc_enc(buf);*/
-    i = 0;
-    while (i < DES_BLOCK)
-    {
-      (*params).buf[i] = 0;
-      i++;
-    }
+
     while ((ret = read(0, params->buf, DES_BLOCK)) > 0)
     {
       //ft_printf("BUF %s\n", (*params).buf);
+			i = ret;
+      while (i < DES_BLOCK)
+      {
+        (*params).buf[i] = 0;
+        i++;
+      }
+			if ((*params).buf[ret - 1] == 10)
+				(*params).buf[ret - 1] = 0;
       if ((find_symb((*params).flags, 'd', FLAG_LEN)) >= 0)
         des_dec(params);
       else
         des_enc(params);
       if (ret < DES_BLOCK)
         break;
-      i = 0;
-      while (i < DES_BLOCK)
-      {
-        (*params).buf[i] = 0;
-        i++;
-      }
+
     }
   }
   else if ((ret = read(1, params->buf, DES_BLOCK)) > 0)
   {
       //ft_printf("%s\n", (*params).buf);
-      if ((find_symb((*params).flags, 'd', FLAG_LEN)) >= 0)
-        des_dec(params);
-      else
-        des_enc(params);
-      i = 0;
+			i = ret;
       while (i < DES_BLOCK)
       {
         (*params).buf[i] = 0;
         i++;
       }
+			if ((*params).buf[ret - 1] == 10)
+				(*params).buf[ret - 1] = 0;
+      if ((find_symb((*params).flags, 'd', FLAG_LEN)) >= 0)
+        des_dec(params);
+      else
+        des_enc(params);
       while ((ret = read(1, params->buf, DES_BLOCK)) > 0)
       {
         //ft_printf("%s\n", (*params).buf);
+				i = ret;
+        while (i < DES_BLOCK)
+        {
+          (*params).buf[i] = 0;
+          i++;
+        }
+				if ((*params).buf[ret - 1] == 10)
+					(*params).buf[ret - 1] = 0;
         if ((find_symb((*params).flags, 'd', FLAG_LEN)) >= 0)
           des_dec(params);
         else
           des_enc(params);
         if (ret < DES_BLOCK)
           break;
-        i = 0;
-        while (i < DES_BLOCK)
-        {
-          (*params).buf[i] = 0;
-          i++;
-        }
       }
   }
   if ((find_symb((*params).flags, 'o', FLAG_LEN)) < 0)
