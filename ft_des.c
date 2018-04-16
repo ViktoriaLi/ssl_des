@@ -21,7 +21,7 @@ void	to_binary(int **res, int nbr, unsigned int base)
   int *tmp;
 
   d = nbr;
-	len = 1;
+	len = 0;
 	i = 0;
 	while (d > base - 1)
 	{
@@ -33,7 +33,7 @@ void	to_binary(int **res, int nbr, unsigned int base)
 		return ;
   if (!((*res) = (int *)malloc(sizeof(int) * 4)))
   		return ;
-	while (len > 0)
+	while (len >= 0)
 	{
 		if ((nbr % base) < 10)
 			tmp[len--] = (nbr % base);
@@ -698,6 +698,9 @@ void des_enc(t_args *params)
 	j = 0;
 	m = 0;
 	k = 0;
+	while (i < 4)
+		right_f[i++] = 0;
+	i = 0;
 	//Step 7. Final bits permutation for right part
   while (i < 4)
   {
@@ -713,7 +716,7 @@ void des_enc(t_args *params)
 			}
 			else
 			{
-				if (((1 << 0) & right[p_shift[k] / 8]))
+				if (((1 << 0) & right[p_shift[k] / 8 - 1]))
 	    		right_f[i] |= (1 << j);
 				else
 					right_f[i] &= ~(1 << j);
@@ -724,6 +727,7 @@ void des_enc(t_args *params)
     i++;
   }
 	printf("right_f%s\n", right_f);
+	printf("CODE right_f%d %d %d %d\n", right_f[0], right_f[1], right_f[2], right_f[3]);
 	i = 0;
 	//Step 8. XOR between left part and f_function result
 	while (i < 4)
@@ -731,13 +735,19 @@ void des_enc(t_args *params)
     left[i] ^= right_f[i];
     i++;
   }
+	printf("left after XOR %s\n", left);
+	printf("CODE left after XOR%d %d %d %d\n", left[0], left[1], left[2], left[3]);
 	i = 0;
+	printf("new right%s\n", right);
+	printf("CODE new right%d %d %d %d \n", right[0], right[1], right[2], right[3]);
 	//Step 9. Right part becomes new right part
 	while (i < 4)
 	{
 		right[i] = left[i];
 		i++;
 	}
+	printf("new left%s\n", left);
+	printf("CODE new left%d %d %d %d \n", left[0], left[1], left[2], left[3]);
 	i = 0;
 	//Step 10. Right part becomes new left part
 	while (i < 4)
@@ -745,10 +755,19 @@ void des_enc(t_args *params)
 		left[i] = tmp[i];
 		i++;
 	}
+	i = 0;
+	printf("new right%s\n", right);
+	printf("CODE new right%d %d %d %d \n", right[0], right[1], right[2], right[3]);
+	printf("new left%s\n", left);
+	printf("CODE new left%d %d %d %d \n", left[0], left[1], left[2], left[3]);
+	//Step 10. Right part becomes new left part
+	while (i < 4)
+	{
+		tmp[i] = right[i];
+		i++;
+	}
 	rounds++;
 }
-	printf("new right%s\n", right);
-	printf("new left%s\n", left);
 	//Step 11. Make final encrypted output for message
 i = 0;
 while (i < 4)

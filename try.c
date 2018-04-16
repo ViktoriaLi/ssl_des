@@ -44,7 +44,7 @@ void	to_binary(int **res, int nbr, unsigned int base)
   int *tmp;
 
   d = nbr;
-	len = 1;
+	len = 0;
 	i = 0;
 	while (d > base - 1)
 	{
@@ -56,11 +56,12 @@ void	to_binary(int **res, int nbr, unsigned int base)
 		return ;
   if (!((*res) = (int *)malloc(sizeof(int) * 4)))
   		return ;
-	while (len > 0)
+	while (len >= 0)
 	{
 		if ((nbr % base) < 10)
 			tmp[len--] = (nbr % base);
 		nbr = nbr / base;
+
 	}
   if (i < 4)
   {
@@ -84,7 +85,7 @@ int main()
 {
   int *res;
   res = NULL;
-	
+
 	int test = 255;
 	//printf("%d\n", test >> 1);
 	//printf("%d\n", 14 / 8);
