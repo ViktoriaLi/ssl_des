@@ -37,6 +37,14 @@ typedef struct		s_args
 	unsigned char des_output[8];
 }					t_args;
 
+typedef struct		s_addition
+{
+  int i;
+  int j;
+  int k;
+  int m;
+}					t_addition;
+
 int		get_next_line(const int fd, char **line);
 size_t		ft_strlen(const char *s);
 int		ft_printf(const char *format, ...);
@@ -61,6 +69,9 @@ void remove_8bits(unsigned char key_res[], t_args *params, int rounds);
 
 void one_bit_shift(unsigned char key_56[], t_args *params);
 void two_bit_shift(unsigned char key_56[], t_args *params);
+
+void bit_permutations(int max, const int table[], unsigned char key_56[], unsigned char *src);
+void clear_iterators(t_addition *iters);
 
 char	*ft_strncpy(char *dst, const char *src, size_t len);
 

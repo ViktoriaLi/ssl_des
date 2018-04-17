@@ -33,42 +33,11 @@ void	to_binary(int **res, int nbr, unsigned int base)
 //Step 6.3 Final key bits permutation
 void finish_key_shift(unsigned char key_56[], t_args *params)
 {
-  int i;
-  int j;
-  int k;
-  const int key_finish[48] = {14,	17,	11,	24,	1,	5,	3,	28,	15,	6,	21,	10,	23,	19,	12,\
+	  const int key_finish[48] = {14,	17,	11,	24,	1,	5,	3,	28,	15,	6,	21,	10,	23,	19,	12,\
   	4, 26,	8,	16,	7,	27,	20,	13,	2,	41,	52,	31,	37,	47,	55,	30,	40,\
   	51,	45,	33,	48,	44,	49,	39, 56, 34, 53, 46, 42, 50, 36, 29, 32};
 
-  i = 0;
-  j = 0;
-  k = 0;
-  while (i < 6)
-  {
-    j = 7;
-    while (j >= 0)
-    {
-			if ((key_finish[k] % 8) > 0)
-			{
-				if (((1 << (8 - (key_finish[k] % 8))) & key_56[key_finish[k] / 8]))
-	      	(*params).key_res48[i] |= (1 << j);
-				else
-					(*params).key_res48[i] &= ~(1 << j);
-					k++;
-		      j--;
-			}
-			else
-			{
-				if (((1 << 0) & key_56[key_finish[k] / 8 - 1]))
-	      	(*params).key_res48[i] |= (1 << j);
-				else
-					(*params).key_res48[i] &= ~(1 << j);
-				k++;
-		    j--;
-			}
-    }
-    i++;
-  }
+	bit_permutations(6, key_finish, (*params).key_res48, key_56);
   //printf("finish key%s\n", (*params).key_res48);
 	//printf("CODE finish key%d %d %d %d %d %d \n", key_48[0], key_48[1], key_48[2], key_48[3], key_48[4], key_48[5]);
 	//printf("CODE finish key%d %d %d %d %d %d \n", (*params).key_res48[0], (*params).key_res48[1], (*params).key_res48[2],
@@ -162,92 +131,57 @@ void one_bit_shift(unsigned char key_56[], t_args *params)
   finish_key_shift(key_res, params);
 }
 
-void bit_permutations(int max, const int table[], unsigned char *dest[], unsigned char *src)
+void bit_permutations(int max, const int table[], unsigned char key_56[], unsigned char *src)
 {
-	int i;
-  int j;
-  int k;
-
-	i = 0;
-  j = 0;
-  k = 0;
-	while (i < max)
-    dest[i++] = 0;
-  i = 0;
-  while (i < max)
+	t_addition iters;
+	clear_iterators(&iters);
+	 while (iters.i < max)
   {
-    j = 7;
-    while (j >= 0)
+    iters.j = 7;
+    while (iters.j >= 0)
     {
 			//printf("bits %d %d %d %d\n", ((1 << (8 - (key_start[k] % 8))) & key_res[key_start[k] / 8]), j, (8 - (key_start[k] % 8)), (key_res[key_start[k] / 8]));
-			if((table[k] % 8) > 0)
+			if((table[iters.k] % 8) > 0)
 			{
-				if (((1 << (8 - (table[k] % 8)))  &
-	      src[table[k] / 8]))
-	      	*dest[i] |= (1 << j);
+				if (((1 << (8 - (table[iters.k] % 8)))  &
+	      src[table[iters.k] / 8]))
+	      	key_56[iters.i] |= (1 << iters.j);
 				else
-					*dest[i] &= ~(1 << j);
+					key_56[iters.i] &= ~(1 << iters.j);
 			}
 			else
 			{
-				if (((1 << 0) & src[table[k] / 8 - 1]))
-	      	*dest[i] |= (1 << j);
+				if (((1 << 0) & src[table[iters.k] / 8 - 1]))
+	      	key_56[iters.i] |= (1 << iters.j);
 				else
-				*dest[i] &= ~(1 << j);
+				key_56[iters.i] &= ~(1 << iters.j);
 			}
-      k++;
-      j--;
+      iters.k++;
+      iters.j--;
     }
-    i++;
+    iters.i++;
   }
 }
 
 //Step 6.2 Make 56 bits key (remove each 8 bit)
+void clear_iterators(t_addition *iters)
+{
+	(*iters).i = 0;
+	(*iters).j = 0;
+	(*iters).k = 0;
+	(*iters).m = 0;
+}
+
 void remove_8bits(unsigned char key_res[], t_args *params, int rounds)
 {
-  int i;
-  int j;
-  int k;
-  unsigned char key_56[7];
+  static unsigned char key_56[7];
   const int key_start[56] = {57, 49, 41, 33, 25, 17, 9, 1, 58, 50, 42, 34, 26, 18, 10, 2,\
   	59, 51, 43, 35, 27,	19, 11, 3, 60, 52, 44, 36, 63, 55, 47, 39, 31, 23, 15, 7,\
   	62, 54, 46, 38, 30, 22, 14, 6, 61, 53, 45, 37, 29, 21, 13, 5, 28, 20, 12, 4};
 	const int shift_table_e[16] = {1, 1, 2, 2,	2, 2,	2, 2, 1, 2, 2, 2, 2, 2, 2, 1};
 
-  i = 0;
-  j = 0;
-  k = 0;
-	bit_permutations(7, key_start, &key_56, key_res);
-  /*while (i < 7)
-    key_56[i++] = 0;
-  i = 0;
-  while (i < 7)
-  {
-    j = 7;
-    while (j >= 0)
-    {
-			//printf("bits %d %d %d %d\n", ((1 << (8 - (key_start[k] % 8))) & key_res[key_start[k] / 8]), j, (8 - (key_start[k] % 8)), (key_res[key_start[k] / 8]));
-			if((key_start[k] % 8) > 0)
-			{
-				if (((1 << (8 - (key_start[k] % 8)))  &
-	      key_res[key_start[k] / 8]))
-	      	key_56[i] |= (1 << j);
-				else
-					key_56[i] &= ~(1 << j);
-			}
-			else
-			{
-				if (((1 << 0) & key_res[key_start[k] / 8 - 1]))
-	      	key_56[i] |= (1 << j);
-				else
-				key_56[i] &= ~(1 << j);
-			}
-      k++;
-      j--;
-    }
-    i++;
-  }*/
-  //printf("KEY 56 bits%s\n", key_56);
+	bit_permutations(7, key_start, key_56, key_res);
+    //printf("KEY 56 bits%s\n", key_56);
 	//printf("CODE KEY 56 bits%d %d %d %d %d %d %d\n", key_56[0], key_56[1], key_56[2], key_56[3],
 //key_56[4], key_56[5], key_56[6]);
 	//Step 6.3 Key cycle shift
@@ -293,51 +227,19 @@ key_res[4], key_res[5], key_res[6], key_res[7]);*/
 /*initial bit permutation*/
 void message_first_shift(t_args *params)
 {
-  int i;
-  int j;
-  int k;
-  unsigned char buf_res[DES_BLOCK];
+	int i;
+
+  static unsigned char buf_res[DES_BLOCK];
   const int m_start[64] = {58, 50, 42, 34, 26, 18, 10, 2,	60,	52,	44,	36,	28,	20,	12,	4,\
   62,	54,	46,	38,	30,	22,	14,	6, 64, 56,	48,	40,	32,	24,	16,	8, 57, 49, 41, 33,\
   25,	17,	9, 1,	59,	51,	43,	35,	27,	19,	11,	3, 61, 53,	45,	37,	29,	21,	13,	5, 63,\
   55,	47,	39,	31,	23,	15,	7};
 
   i = 0;
-  j = 0;
-  k = 0;
-  while (i < DES_BLOCK)
-    buf_res[i++] = 0;
-  i = 0;
-  while (i < DES_BLOCK)
-  {
-    j = 7;
-    while (j >= 0)
-    {
-			if ((m_start[k] % 8) > 0)
-			{
-				if (((1 << (8 - (m_start[k] % 8))) &
-	      (*params).buf[m_start[k] / 8]))
-	        buf_res[i] |= (1 << j);
-	      else
-	        buf_res[i] &= ~(1 << j);
-	      k++;
-	      j--;
-			}
-			else
-			{
-				if (((1 << 0) & (*params).buf[m_start[k] / 8 - 1]))
-	        buf_res[i] |= (1 << j);
-	      else
-	        buf_res[i] &= ~(1 << j);
-	      k++;
-	      j--;
-			}
-    }
-    i++;
-  }
+	bit_permutations(DES_BLOCK, m_start, buf_res, (*params).buf);
+
 	//printf("CODE FSHIFT%d %d %d %d %d %d %d %d\n", buf_res[0], buf_res[1], buf_res[2], buf_res[3],
 	//buf_res[4], buf_res[5], buf_res[6], buf_res[7]);
-  i = 0;
   //printf("first shift%s\n", buf_res);
   while (i < 8)
   {
@@ -406,15 +308,14 @@ void des_dec(t_args *params)
 /*main des-encryption function */
 void des_enc(t_args *params)
 {
-  int i;
-  int j;
-  int k;
-	int m;
+	t_addition iters;
+
+
   unsigned char left[4];
   unsigned char right[4];
-	unsigned char right_f[4];
+	static unsigned char right_f[4];
 	unsigned char tmp[4];
-  unsigned char right48[6];
+  static unsigned char right48[6];
 	unsigned char exp_for_s[8];
 	int string[2];
  	int column[4];
@@ -422,18 +323,15 @@ void des_enc(t_args *params)
   int s_output;
   int *four_bits;
 	int rounds;
-	m = 0;
+
+	rounds = 0;
+  s_output = 0;
 	four_bits = NULL;
+	clear_iterators(&iters);
+
   printf("1BUF%s\n", (*params).buf);
 	printf("1BUF%d %d %d %d %d %d %d %d\n", (*params).buf[0], (*params).buf[1], (*params).buf[2],
 (*params).buf[3], (*params).buf[4], (*params).buf[5], (*params).buf[6], (*params).buf[7]);
-	m = 0;
-	while (m < 8)
-	{
-		str_col[m][0] = 0;
-		str_col[m][1] = 0;
-		m++;
-	}
 	//printf("CODE 1BUF%d %d %d %d %d %d %d %d\n", (*params).buf[0], (*params).buf[1], (*params).buf[2], (*params).buf[3],
 	//(*params).buf[4], (*params).buf[5], (*params).buf[6], (*params).buf[7]);
 	//table for right part rotation
@@ -482,80 +380,38 @@ void des_enc(t_args *params)
   38, 6, 46, 14, 54, 22, 62, 30, 37, 5, 45, 13, 53, 21, 61, 29, 36, 4, 44, 12, \
   52, 20, 60, 28, 35, 3, 43, 11, 51, 19, 59, 27, 34, 2, 42, 10, 50, 18, 58, 26, \
   33, 1, 41, 9, 49, 17, 57, 25};
-  //fill_des_tables(&des_base);
-  i = 0;
-  j = 0;
-  k = 0;
-	rounds = 0;
-  s_output = 0;
 	//Step 1. Make first bit permutation for message (8 bytes)
   message_first_shift(params);
   //printf("M after first shift%s\n", (*params).buf);
 	//printf("CODE M after first shift%d %d %d %d %d %d %d %d\n", (*params).buf[0], (*params).buf[1], (*params).buf[2], (*params).buf[3],
 	//(*params).buf[4], (*params).buf[5], (*params).buf[6], (*params).buf[7]);
 	//Step 2. Message division into 2 parts
-  while (i < 4)
+  while (iters.i < 4)
   {
-    left[i] = (*params).buf[j];
-    i++;
-    j++;
+    left[iters.i] = (*params).buf[iters.j];
+    iters.i++;
+    iters.j++;
   }
-  i = 0;
-  while (i < 4)
+  while (iters.k < 4)
   {
-  right[i] = (*params).buf[j];
-    i++;
-    j++;
+  	right[iters.k] = (*params).buf[iters.j];
+    iters.k++;
+    iters.j++;
   }
-	i = 0;
 	//printf("CODE left start%d %d %d %d\n", left[0], left[1], left[2], left[3]);
 	//printf("CODE right start%d %d %d %d\n", right[0], right[1], right[2], right[3]);
-  while (i < 4)
+  while (iters.m < 4)
   {
-			tmp[i] = right[i];
-    i++;
+		tmp[iters.m] = right[iters.m];
+    iters.m++;
   }
-  i = 0;
-  j = 0;
 	//printf("CODE tmp start%d %d %d %d\n", tmp[0], tmp[1], tmp[2], tmp[3]);
-  while (i < 6)
-  {
-    right48[i] = 0;
-    i++;
-  }
-	i = 0;
-	//start cycle with 16 rounds for message encryption (f-function)
+  //start cycle with 16 rounds for message encryption (f-function)
 	while (rounds < 16)
   {
-		i = 0;
-		j = 0;
 	//Step 3. Make expansion of right part to 48 bits
-	k = 0;
-  while (i < 6)
-  {
-    j = 7;
-    while (j >= 0)
-    {
-			if ((r_to_48[k] % 8) > 0)
-			{
-				if ((1 << (8 - (r_to_48[k] % 8))) &
-	        right[r_to_48[k] / 8])
-	      	right48[i] |= (1 << j);
-				else
-					right48[i] &= ~(1 << j);
-			}
-			else
-			{
-				if ((1 << 0) & right[r_to_48[k] / 8 - 1])
-	      	right48[i] |= (1 << j);
-				else
-					right48[i] &= ~(1 << j);
-			}
-      k++;
-      j--;
-    }
-    i++;
-  }
+	clear_iterators(&iters);
+	bit_permutations(6, r_to_48, right48, right);
   //printf("Right to 48%s\n", right48);
 	//printf("CODE Right to 48 %d %d %d %d %d %d \n", right48[0], right48[1], right48[2],
 	//right48[3], right48[4], right48[5]);
@@ -567,23 +423,15 @@ void des_enc(t_args *params)
 	else if (shift_table_e[rounds] == 2)
 		two_bit_shift((*params).key_res56, params);
 	//Step 5. XOR key and right part
-  i = 0;
-  while (i < 6)
+  while (iters.k < 6)
   {
-    right48[i] ^= (*params).key_res48[i];
-    i++;
+    right48[iters.k] ^= (*params).key_res48[iters.k];
+    iters.k++;
   }
 	//Step 6. Make bits permutation with s-blocks
   //printf("Right after XOR%s\n", right48);
 	//printf("CODE Right after XOR%d %d %d %d %d %d\n", right48[0], right48[1], right48[2], right48[3], right48[4], right48[5]);
 	//Step 6.1 Make 8 grops per 6 main bits
-	i = 0;
-	while (i < 8)
-	{
-		exp_for_s[i] = 0;
-		i++;
-	}
-	i = 0;
 	exp_for_s[0] = (right48[0] & 255) >> 2;
 	exp_for_s[1] = (((right48[0] & 255) << 6) + (right48[1] >> 2)) >> 2;
 	exp_for_s[2] = ((right48[1] & 255) << 4) + (right48[2] >> 4);
@@ -601,205 +449,143 @@ void des_enc(t_args *params)
 	//printf("CODE right made to 8 bits%d %d %d %d %d %d %d %d \n", exp_for_s[0], exp_for_s[1], exp_for_s[2],
 	//exp_for_s[3], exp_for_s[4], exp_for_s[5], exp_for_s[6], exp_for_s[7]);
 	//Step 6.2 Receive string and column numbers
-	k = 0;
-	while (k < 8)
+	while (iters.j < 8)
 	{
-		if (((1 << 5) & exp_for_s[k]))
+		if (((1 << 5) & exp_for_s[iters.j]))
 			string[0] = 1;
 		else
 			string[0] = 0;
-		if (((1 << 0) & exp_for_s[k]))
+		if (((1 << 0) & exp_for_s[iters.j]))
 			string[1] = 1;
 		else
 			string[1] = 0;
-		if (((1 << 4) & exp_for_s[k]))
+		if (((1 << 4) & exp_for_s[iters.j]))
 			column[0] = 1;
 		else
 			column[0] = 0;
-		if (((1 << 3) & exp_for_s[k]))
+		if (((1 << 3) & exp_for_s[iters.j]))
 			column[1] = 1;
 		else
 			column[1] = 0;
-		if (((1 << 2) & exp_for_s[k]))
+		if (((1 << 2) & exp_for_s[iters.j]))
 			column[2] = 1;
 		else
 			column[2] = 0;
-		if (((1 << 1) & exp_for_s[k]))
+		if (((1 << 1) & exp_for_s[iters.j]))
 			column[3] = 1;
 		else
 			column[3] = 0;
-		str_col[k][0] = string[0] * 2 + string[1];
-		str_col[k][1] = column[0] * 8 + column[1] * 4 + column[2] * 2 + column[3];
+		str_col[iters.j][0] = string[0] * 2 + string[1];
+		str_col[iters.j][1] = column[0] * 8 + column[1] * 4 + column[2] * 2 + column[3];
 		//printf("CODE check binary%d %d %d %d %d %d\n", string[0], string[1], column[0], column[1], column[2], column[3]);
 		//printf("str%d col %d\n", str_col[k][0], str_col[k][1]);
-		k++;
+		iters.j++;
 	}
-	i = 0;
-	k = 0;
-	m = 0;
-	j = 0;
 	//Step 6.3 Make s-blocks permutation
-  while (m < 4)
+  while (iters.m < 4)
   {
 			// Receive new value 4 bits instead 6 bits
-			if (i == 0)
-				s_output = s_1[str_col[i][0]][str_col[i][1]];
-			else if (i == 2)
-				s_output = s_3[str_col[i][0]][str_col[i][1]];
-			else if (i == 4)
-				s_output = s_5[str_col[i][0]][str_col[i][1]];
-			else if (i == 6)
-				s_output = s_7[str_col[i][0]][str_col[i][1]];
-			i++;
+			if (iters.i == 0)
+				s_output = s_1[str_col[iters.i][0]][str_col[iters.i][1]];
+			else if (iters.i == 2)
+				s_output = s_3[str_col[iters.i][0]][str_col[iters.i][1]];
+			else if (iters.i == 4)
+				s_output = s_5[str_col[iters.i][0]][str_col[iters.i][1]];
+			else if (iters.i == 6)
+				s_output = s_7[str_col[iters.i][0]][str_col[iters.i][1]];
+			iters.i++;
 			//printf("%d\n", s_output);
 			//Receive binary representation
 			to_binary(&four_bits, s_output, 2);
 			//printf("%d %d %d %d\n", four_bits[0], four_bits[1], four_bits[2], four_bits[3]);
-			k = 0;
+			iters.k = 0;
 			//assign new value to right block
-			j = 7;
-			while (k < 4)
+			iters.j = 7;
+			while (iters.k < 4)
 			{
-				if (four_bits[k])
-			    right[m] |= (1 << j);
+				if (four_bits[iters.k])
+			    right[iters.m] |= (1 << iters.j);
 			  else
-			    right[m] &= ~(1 << j);
-				k++;
-				j--;
+			    right[iters.m] &= ~(1 << iters.j);
+				iters.k++;
+				iters.j--;
 			}
 			//repeat the same for next 4 bits
-			if (i == 1)
-				s_output = s_2[str_col[i][0]][str_col[i][1]];
-			else if (i == 3)
-				s_output = s_4[str_col[i][0]][str_col[i][1]];
-			else if (i == 5)
-				s_output = s_6[str_col[i][0]][str_col[i][1]];
-			else if (i == 7)
-				s_output = s_8[str_col[i][0]][str_col[i][1]];
-			i++;
+			if (iters.i == 1)
+				s_output = s_2[str_col[iters.i][0]][str_col[iters.i][1]];
+			else if (iters.i == 3)
+				s_output = s_4[str_col[iters.i][0]][str_col[iters.i][1]];
+			else if (iters.i == 5)
+				s_output = s_6[str_col[iters.i][0]][str_col[iters.i][1]];
+			else if (iters.i == 7)
+				s_output = s_8[str_col[iters.i][0]][str_col[iters.i][1]];
+			iters.i++;
 			//printf("%d\n", s_output);
 			to_binary(&four_bits, s_output, 2);
 			//printf("%d %d %d %d\n", four_bits[0], four_bits[1], four_bits[2], four_bits[3]);
-			k = 0;
-			j = 3;
-			while (k < 4)
+			iters.k = 0;
+			iters.j = 3;
+			while (iters.k < 4)
 			{
-				if (four_bits[k])
-			    right[m] |= (1 << j);
+				if (four_bits[iters.k])
+			    right[iters.m] |= (1 << iters.j);
 			  else
-			    right[m] &= ~(1 << j);
-				k++;
-				j--;
+			    right[iters.m] &= ~(1 << iters.j);
+				iters.k++;
+				iters.j--;
 			}
-    m++;
+    iters.m++;
   }
 	//printf("right%s\n", right);
 	//printf("CODE right after S-blocks%d %d %d %d\n", right[0], right[1], right[2], right[3]);
-	i = 0;
-	j = 0;
-	m = 0;
-	k = 0;
-	while (i < 4)
-		right_f[i++] = 0;
-	i = 0;
+	clear_iterators(&iters);
 	//Step 7. Final bits permutation for right part
-  while (i < 4)
-  {
-    j = 7;
-    while (j >= 0)
-    {
-			if ((p_shift[k] % 8) > 0)
-			{
-				if (((1 << (8 - (p_shift[k] % 8))) & right[p_shift[k] / 8]))
-	    		right_f[i] |= (1 << j);
-				else
-					right_f[i] &= ~(1 << j);
-			}
-			else
-			{
-				if (((1 << 0) & right[p_shift[k] / 8 - 1]))
-	    		right_f[i] |= (1 << j);
-				else
-					right_f[i] &= ~(1 << j);
-			}
-      k++;
-      j--;
-    }
-    i++;
-  }
-	//printf("right_f%s\n", right_f);
+	bit_permutations(4, p_shift, right_f, right);
+  	//printf("right_f%s\n", right_f);
 	//printf("CODE right_f%d %d %d %d\n", right_f[0], right_f[1], right_f[2], right_f[3]);
-	i = 0;
+	iters.j = 0;
 	//Step 8. XOR between left part and f_function result. Right part becomes new right part
-	while (i < 4)
+	while (iters.j < 4)
   {
-    right[i] = left[i] ^ right_f[i];
-    i++;
+    right[iters.j] = left[iters.j] ^ right_f[iters.j];
+    iters.j++;
   }
 	//printf("right = left after XOR%s\n", right);
 	//printf("CODE right = left after XOR%d %d %d %d \n", right[0], right[1], right[2], right[3]);
-	i = 0;
 	//Step 9. Left part becomes prev right part
-	while (i < 4)
+	while (iters.k < 4)
 	{
-		left[i] = tmp[i];
-		i++;
+		left[iters.k] = tmp[iters.k];
+		iters.k++;
 	}
-	i = 0;
 	//printf("left = right prev%s\n", left);
 	//printf("CODE left = right prev%d %d %d %d \n", left[0], left[1], left[2], left[3]);
 	//Step 10. Save right part for next round
-	while (i < 4)
+	while (iters.m < 4)
 	{
-		tmp[i] = right[i];
-		i++;
+		tmp[iters.m] = right[iters.m];
+		iters.m++;
 	}
 	//printf("tmp saved right%s\n", right);
 	//printf("CODE right = left%d %d %d %d \n", right[0], right[1], right[2], right[3]);
 	rounds++;
 }
 //Step 11. Make final encrypted output for message
-i = 0;
-j = 0;
-while (i < 4)
+clear_iterators(&iters);
+while (iters.i < 4)
 {
-	exp_for_s[j] = right[i];
-	j++;
-	i++;
+	exp_for_s[iters.j] = right[iters.i];
+	iters.j++;
+	iters.i++;
 }
-i = 0;
-while (i < 4)
+iters.i = 0;
+while (iters.i < 4)
 {
-	exp_for_s[j] = left[i];
-	j++;
-	i++;
+	exp_for_s[iters.j] = left[iters.i];
+	iters.j++;
+	iters.i++;
 }
-i = 0;
-k = 0;
-while (i < 8)
-{
-	j = 7;
-	while (j >= 0)
-	{
-		if ((m_end[k] % 8) > 0)
-		{
-			if (((1 << (8 - (m_end[k] % 8))) & exp_for_s[m_end[k] / 8]))
-				(*params).des_output[i] |= (1 << j);
-			else
-				(*params).des_output[i] &= ~(1 << j);
-		}
-		else
-		{
-			if (((1 << 0) & exp_for_s[m_end[k] / 8 - 1]))
-				(*params).des_output[i] |= (1 << j);
-			else
-				(*params).des_output[i] &= ~(1 << j);
-		}
-		k++;
-		j--;
-	}
-	i++;
-}
+bit_permutations(8, m_end, (*params).des_output, exp_for_s);
 printf("%s\n", (*params).des_output);
 printf("CODE 64 bits m output%d %d %d %d %d %d %d %d\n", (*params).des_output[0], (*params).des_output[1], (*params).des_output[2],
 (*params).des_output[3], (*params).des_output[4], (*params).des_output[5], (*params).des_output[6], (*params).des_output[7]);
@@ -812,36 +598,34 @@ if ((find_symb((*params).flags, 'a', FLAG_LEN)) < 0)
 }
 else
 {
-	i = 0;
-	j = 0;
-	while (i < 3)
+
+	while (iters.k < 3)
 	{
-		(*params).b64_buf[i] = (*params).des_output[j];
-		i++;
-		j++;
+		(*params).b64_buf[iters.k] = (*params).des_output[iters.m];
+		iters.k++;
+		iters.m++;
 	}
-	(*params).b64_buf[i] = 0;
+	(*params).b64_buf[iters.k] = 0;
 	base64_enc((*params).b64_buf, params);
-	i = 0;
-	while (i < 3)
+	clear_iterators(&iters);
+	while (iters.i < 3)
 	{
-		(*params).b64_buf[i] = (*params).des_output[j];
-		i++;
-		j++;
+		(*params).b64_buf[iters.i] = (*params).des_output[iters.j];
+		iters.i++;
+		iters.j++;
 	}
-	(*params).b64_buf[i] = 0;
+	(*params).b64_buf[iters.i] = 0;
 	base64_enc((*params).b64_buf, params);
-	i = 0;
-	while (i < 2)
+	iters.i = 0;
+	while (iters.i < 2)
 	{
-		(*params).b64_buf[i] = (*params).des_output[j];
-		i++;
-		j++;
+		(*params).b64_buf[iters.i] = (*params).des_output[iters.j];
+		iters.i++;
+		iters.j++;
 	}
-	(*params).b64_buf[i++] = 0;
-	(*params).b64_buf[i] = 0;
+	(*params).b64_buf[iters.i++] = 0;
+	(*params).b64_buf[iters.i] = 0;
 	base64_enc((*params).b64_buf, params);
-	i = 0;
 }
 }
 
