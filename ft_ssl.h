@@ -25,9 +25,10 @@
 
 typedef struct		s_args
 {
-	//char	*cipher;
+	char	*cipher;
   unsigned char b64_buf[4];
   unsigned char buf[DES_BLOCK];
+  unsigned char *vector16;
 	char flags[FLAG_LEN];
 	int ifd;
 	int ofd;
@@ -61,8 +62,8 @@ void clear_struct(t_args *params);
 int check_des_flags(int argc, char **argv, t_args *params);
 
 void des_read(t_args *params, char **argv);
-void des_dec(t_args *params);
-void des_enc(t_args *params);
+void des_dec(t_args *params, int count);
+void des_enc(t_args *params, int count);
 void	to_binary(int **res, int nbr, unsigned int base);
 void finish_key_shift(unsigned char key_56[], t_args *params);
 void remove_8bits(unsigned char key_res[], t_args *params, int rounds);
