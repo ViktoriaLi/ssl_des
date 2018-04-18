@@ -68,6 +68,8 @@ void	to_binary(int **res, int nbr, unsigned int base);
 void finish_key_shift(unsigned char key_56[], t_args *params);
 void remove_8bits(unsigned char key_res[], t_args *params, int rounds);
 
+void one_bit_shift_right(unsigned char key_56[], t_args *params);
+void two_bit_shift_right(unsigned char key_56[], t_args *params);
 void one_bit_shift_left(unsigned char key_56[], t_args *params);
 void two_bit_shift_left(unsigned char key_56[], t_args *params);
 

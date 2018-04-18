@@ -194,11 +194,34 @@ int if_valid_args(int argc, char **argv, t_args *params)
 
 void clear_struct(t_args *params)
 {
+  int i;
+
+  i = 0;
   (*params).ifd = 0;
 	(*params).ofd = 0;
   (*params).des_key = NULL;
   (*params).vector16 = NULL;
   (*params).cipher = NULL;
+  while (i < 8)
+    (*params).des_output[i++] = 0;
+  i = 0;
+  while (i < DES_BLOCK)
+  {
+    (*params).buf[i] = 0;
+    i++;
+  }
+  i = 0;
+  while (i < 6)
+  {
+    (*params).key_res48[i] = 0;
+    i++;
+  }
+  i = 0;
+  while (i < 7)
+  {
+    (*params).key_res56[i] = 0;
+    i++;
+  }
 }
 
 int main (int argc, char **argv)
@@ -216,22 +239,22 @@ int main (int argc, char **argv)
 || (ft_strcmp(params.cipher, "des-cbc") == 0))
   && (find_symb(params.flags, 'd', FLAG_LEN) < 0))*/
   {
-    params.buf[0] = 1;
+    /*params.buf[0] = 1;
     params.buf[1] = 35;
     params.buf[2] = 69;
     params.buf[3] = 103;
     params.buf[4] = 137;
     params.buf[5] = 171;
     params.buf[6] = 205;
-    params.buf[7] = 239;
-    /*params.buf[0] = 18;
+    params.buf[7] = 239;*/
+    params.buf[0] = 18;
     params.buf[1] = 52;
     params.buf[2] = 86;
     params.buf[3] = 171;
     params.buf[4] = 205;
     params.buf[5] = 19;
     params.buf[6] = 37;
-    params.buf[7] = 54;*/
+    params.buf[7] = 54;
     //des_read(&params, argv);
     des_enc(&params, 1);
   }

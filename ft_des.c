@@ -39,12 +39,59 @@ void finish_key_shift(unsigned char key_56[], t_args *params)
 
 	bit_permutations(6, key_finish, (*params).key_res48, key_56);
   //printf("finish key%s\n", (*params).key_res48);
-	//printf("CODE finish key%d %d %d %d %d %d \n", key_48[0], key_48[1], key_48[2], key_48[3], key_48[4], key_48[5]);
-	//printf("CODE finish key%d %d %d %d %d %d \n", (*params).key_res48[0], (*params).key_res48[1], (*params).key_res48[2],
-	//(*params).key_res48[3], (*params).key_res48[4], (*params).key_res48[5]);
+	printf("CODE finish key%d %d %d %d %d %d \n", (*params).key_res48[0], (*params).key_res48[1], (*params).key_res48[2],
+	(*params).key_res48[3], (*params).key_res48[4], (*params).key_res48[5]);
 }
 
-void two_bit_shift(unsigned char key_56[], t_args *params)
+void two_bit_shift_right(unsigned char key_56[], t_args *params)
+{
+	int i;
+  int bit0;
+  int bit1;
+  unsigned char key_res[7];
+
+	i = 0;
+  bit0 = (1 << 4) & key_56[3];
+  bit1 = (1 << 5) & key_56[3];
+	key_res[0] = ((key_56[0] & 255) >> 2);
+	if (bit0)
+    key_res[0] |= (1 << 6);
+  else
+    key_res[0] &= ~(1 << 6);
+  if (bit1)
+    key_res[0] |= (1 << 7);
+  else
+    key_res[0] &= ~(1 << 7);
+	bit0 = (1 << 0) & key_56[6];
+	bit1 = (1 << 1) & key_56[6];
+	key_res[1] = ((key_56[0] & 255) << 6) + (key_56[1] >> 2);
+	key_res[2] = ((key_56[1] & 255) << 6) + (key_56[2] >> 2);
+  key_res[3] = ((key_56[2] & 255) << 6) + (key_56[3] >> 2);
+	if (bit0)
+    key_res[3] |= (1 << 2);
+  else
+    key_res[3] &= ~(1 << 2);
+  if (bit1)
+    key_res[3] |= (1 << 3);
+  else
+    key_res[3] &= ~(1 << 3);
+	key_res[4] = ((key_56[3] & 255) << 6) + (key_56[4] >> 2);
+  key_res[5] = ((key_56[4] & 255) << 6) + (key_56[5] >> 2);
+  key_res[6] = ((key_56[5] & 255) << 6) + (key_56[6] >> 2);
+	i = 0;
+	 while (i < 7)
+	 {
+	   (*params).key_res56[i] = key_res[i];
+	   i++;
+	 }
+	//printf("CODE KEY after 2 bit shift%d %d %d %d %d %d %d \n", key_res[0], key_res[1], key_res[2],
+ 	//key_res[3], key_res[4], key_res[5], key_res[6]);
+	//printf("CODE KEY after 2 bit shift%d %d %d %d %d %d %d \n", (*params).key_res56[0], (*params).key_res56[1], (*params).key_res56[2],
+ 	//(*params).key_res56[3], (*params).key_res56[4], (*params).key_res56[5], (*params).key_res56[6]);
+  finish_key_shift(key_res, params);
+}
+
+void two_bit_shift_left(unsigned char key_56[], t_args *params)
 {
 	int i;
   int bit0;
@@ -92,7 +139,47 @@ void two_bit_shift(unsigned char key_56[], t_args *params)
   finish_key_shift(key_res, params);
 }
 
-void one_bit_shift(unsigned char key_56[], t_args *params)
+void one_bit_shift_right(unsigned char key_56[], t_args *params)
+{
+	int i;
+  int bit1;
+	int bit2;
+  unsigned char key_res[7];
+
+	i = 0;
+  bit1 = (1 << 4) & key_56[3];
+	bit2 = (1 << 0) & key_56[6];
+  key_res[0] = ((key_56[0] & 255) >> 1);
+	if (bit1)
+		key_res[0] |= (1 << 7);
+	else
+		key_res[0] &= ~(1 << 7);
+  key_res[1] = ((key_56[0] & 255) << 7) + (key_56[1] >> 1);
+	key_res[2] = ((key_56[1] & 255) << 7) + (key_56[2] >> 1);
+  key_res[3] = ((key_56[2] & 255) << 7) + (key_56[3] >> 1);
+	if (bit2)
+    key_res[3] |= (1 << 3);
+  else
+    key_res[3] &= ~(1 << 3);
+  key_res[4] = ((key_56[3] & 255) << 7) + (key_56[4] >> 1);
+  key_res[5] = ((key_56[4] & 255) << 7) + (key_56[5] >> 1);
+  key_res[6] = ((key_56[5] & 255) << 7) + (key_56[6] >> 1);
+
+  //printf("KEY after 1 bit shift%s\n", key_res);
+	//printf("CODE KEY after 1 bit shift%d %d %d %d %d %d %d \n", key_res[0], key_res[1], key_res[2],
+	//key_res[3], key_res[4], key_res[5], key_res[6]);
+	i = 0;
+	 while (i < 7)
+	 {
+	   (*params).key_res56[i] = key_res[i];
+	   i++;
+	 }
+	 //printf("CODE KEY after 1 bit shift%d %d %d %d %d %d %d \n", (*params).key_res56[0], (*params).key_res56[1], (*params).key_res56[2],
+ //(*params).key_res56[3], (*params).key_res56[4], (*params).key_res56[5], (*params).key_res56[6]);
+  finish_key_shift(key_res, params);
+}
+
+void one_bit_shift_left(unsigned char key_56[], t_args *params)
 {
 	int i;
   int bit1;
@@ -174,21 +261,44 @@ void clear_iterators(t_addition *iters)
 
 void remove_8bits(unsigned char key_res[], t_args *params, int rounds)
 {
+	int i;
+
+	i = 0;
   static unsigned char key_56[7];
   const int key_start[56] = {57, 49, 41, 33, 25, 17, 9, 1, 58, 50, 42, 34, 26, 18, 10, 2,\
   	59, 51, 43, 35, 27,	19, 11, 3, 60, 52, 44, 36, 63, 55, 47, 39, 31, 23, 15, 7,\
   	62, 54, 46, 38, 30, 22, 14, 6, 61, 53, 45, 37, 29, 21, 13, 5, 28, 20, 12, 4};
 	const int shift_table_e[16] = {1, 1, 2, 2,	2, 2,	2, 2, 1, 2, 2, 2, 2, 2, 2, 1};
-
+	const int shift_table_d[16] = {0, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1};
 	bit_permutations(7, key_start, key_56, key_res);
-    //printf("KEY 56 bits%s\n", key_56);
-	//printf("CODE KEY 56 bits%d %d %d %d %d %d %d\n", key_56[0], key_56[1], key_56[2], key_56[3],
-//key_56[4], key_56[5], key_56[6]);
+  /*  printf("KEY 56 bits%s\n", key_56);
+	printf("CODE KEY 56 bits%d %d %d %d %d %d %d\n", key_56[0], key_56[1], key_56[2], key_56[3],
+key_56[4], key_56[5], key_56[6]);*/
 	//Step 6.3 Key cycle shift
-	if (shift_table_e[rounds] == 1)
-  	one_bit_shift(key_56, params);
-	if (shift_table_e[rounds] == 2)
-	 	two_bit_shift(key_56, params);
+	if (find_symb((*params).flags, 'd', FLAG_LEN) < 0)
+	{
+		if (shift_table_e[rounds] == 1)
+	  	one_bit_shift_left(key_56, params);
+		if (shift_table_e[rounds] == 2)
+		 	two_bit_shift_left(key_56, params);
+	}
+	else
+	{
+		//printf("test%s\n", "test");
+		if (shift_table_d[rounds] == 0)
+		{
+			 while (i < 7)
+			 {
+			   (*params).key_res56[i] = key_56[i];
+			   i++;
+			 }
+			 finish_key_shift(key_56, params);
+		}
+		if (shift_table_d[rounds] == 1)
+	  	one_bit_shift_right(key_56, params);
+		if (shift_table_d[rounds] == 2)
+		 	two_bit_shift_right(key_56, params);
+	}
 }
 
 //Step 6.1 Receive binary representation for hrxadecimal key and cut or lengthen to 64 bits
@@ -198,7 +308,7 @@ void make_keys(unsigned char **des_key, t_args *params, int rounds)
   unsigned char key_res[KEY_LEN];
 
 	clear_iterators(&iters);
-  //printf("Original key%s\n", (*params).des_key);
+  printf("Original key%s\n", (*params).des_key);
   while ((*des_key)[iters.j] && iters.i < KEY_LEN)
   {
     if ((*des_key)[iters.j] >= 65 && (*des_key)[iters.j] <= 70)
@@ -213,9 +323,9 @@ void make_keys(unsigned char **des_key, t_args *params, int rounds)
     iters.i++;
     iters.j += 2;
   }
-  /*printf("64 bits key%s\n", key_res);
+  printf("64 bits key%s\n", key_res);
 	printf("CODE 64 bits key%d %d %d %d %d %d %d %d\n", key_res[0], key_res[1], key_res[2], key_res[3],
-key_res[4], key_res[5], key_res[6], key_res[7]);*/
+key_res[4], key_res[5], key_res[6], key_res[7]);
 	if (rounds != -1)
   	remove_8bits(key_res, params, rounds);
 	else
@@ -377,6 +487,7 @@ void des_enc(t_args *params, int count)
   	2, 8, 24, 14, 32,	27,	3, 9, 19,	13,	30,	6, 22, 11, 4,	25};
   //t_des_tables des_base;
 	const int shift_table_e[16] = {1, 1, 2, 2,	2, 2,	2, 2, 1, 2, 2, 2, 2, 2, 2, 1};
+	const int shift_table_d[16] = {0, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1};
 	const int m_end[64] = {40, 8, 48, 16, 56, 24, 64, 32, 39, 7, 47, 15, 55, 23, 63, 31, \
   38, 6, 46, 14, 54, 22, 62, 30, 37, 5, 45, 13, 53, 21, 61, 29, 36, 4, 44, 12, \
   52, 20, 60, 28, 35, 3, 43, 11, 51, 19, 59, 27, 34, 2, 42, 10, 50, 18, 58, 26, \
@@ -433,10 +544,25 @@ void des_enc(t_args *params, int count)
 	//Step 4. One key generation for current round
 	if (rounds == 0)
   	make_keys(&params->des_key, params, rounds);
-	else if (shift_table_e[rounds] == 1)
-	  one_bit_shift((*params).key_res56, params);
-	else if (shift_table_e[rounds] == 2)
-		two_bit_shift((*params).key_res56, params);
+	else
+	{
+		if (find_symb((*params).flags, 'd', FLAG_LEN) < 0)
+		{
+			if (shift_table_e[rounds] == 1)
+			  one_bit_shift_left((*params).key_res56, params);
+			if (shift_table_e[rounds] == 2)
+				two_bit_shift_left((*params).key_res56, params);
+		}
+		else
+		{
+			printf("test%s\n", "test");
+			if (shift_table_d[rounds] == 1)
+			  one_bit_shift_right((*params).key_res56, params);
+			if (shift_table_d[rounds] == 2)
+				two_bit_shift_right((*params).key_res56, params);
+		}
+	}
+
 	//Step 5. XOR key and right part
   while (iters.k < 6)
   {
