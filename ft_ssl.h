@@ -26,7 +26,7 @@
 typedef struct		s_args
 {
 	char	*cipher;
-  unsigned char b64_buf[4];
+  unsigned char b64_buf[64];
   unsigned char buf[DES_BLOCK];
   unsigned char *vector16;
 	char flags[FLAG_LEN];
@@ -77,5 +77,6 @@ void bit_permutations(int max, const int table[], unsigned char key_56[], unsign
 void clear_iterators(t_addition *iters);
 
 char	*ft_strncpy(char *dst, const char *src, size_t len);
+char	*ft_strsub(char const *s, unsigned int start, size_t len);
 
 #endif

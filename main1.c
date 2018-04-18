@@ -232,21 +232,21 @@ int main (int argc, char **argv)
   if (!if_valid_args(argc, argv, &params))
     return (0);
   if (ft_strcmp(params.cipher, "base64") == 0 && find_symb(params.flags, 'd', FLAG_LEN) < 0)
-    base64_read(&params, argv, 3);
+    base64_read(&params, argv, 64);
   else if (ft_strcmp(params.cipher, "base64") == 0 && find_symb(params.flags, 'd', FLAG_LEN) >= 0)
-    base64_read(&params, argv, 4);
+    base64_read(&params, argv, 64);
   else /*if (((ft_strcmp(params.cipher, "des") == 0) || (ft_strcmp(params.cipher, "des-ecb") == 0)
 || (ft_strcmp(params.cipher, "des-cbc") == 0))
   && (find_symb(params.flags, 'd', FLAG_LEN) < 0))*/
   {
-    params.buf[0] = 1;
+    /*params.buf[0] = 1;
     params.buf[1] = 35;
     params.buf[2] = 69;
     params.buf[3] = 103;
     params.buf[4] = 137;
     params.buf[5] = 171;
     params.buf[6] = 205;
-    params.buf[7] = 239;
+    params.buf[7] = 239;*/
     /*params.buf[0] = 18;
     params.buf[1] = 52;
     params.buf[2] = 86;
@@ -271,7 +271,7 @@ int main (int argc, char **argv)
     params.buf[5] = ;
     params.buf[6] = ;
     params.buf[7] = ;*/
-    //des_read(&params, argv);
+    des_read(&params, argv);
     des_enc(&params, 1);
   }
 
