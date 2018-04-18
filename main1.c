@@ -239,22 +239,38 @@ int main (int argc, char **argv)
 || (ft_strcmp(params.cipher, "des-cbc") == 0))
   && (find_symb(params.flags, 'd', FLAG_LEN) < 0))*/
   {
-    /*params.buf[0] = 1;
+    params.buf[0] = 1;
     params.buf[1] = 35;
     params.buf[2] = 69;
     params.buf[3] = 103;
     params.buf[4] = 137;
     params.buf[5] = 171;
     params.buf[6] = 205;
-    params.buf[7] = 239;*/
-    params.buf[0] = 18;
+    params.buf[7] = 239;
+    /*params.buf[0] = 18;
     params.buf[1] = 52;
     params.buf[2] = 86;
     params.buf[3] = 171;
     params.buf[4] = 205;
     params.buf[5] = 19;
     params.buf[6] = 37;
-    params.buf[7] = 54;
+    params.buf[7] = 54;*/
+    /*params.buf[0] = 192;
+    params.buf[1] = 183;
+    params.buf[2] = 168;
+    params.buf[3] = 208;
+    params.buf[4] = 95;
+    params.buf[5] = 58;
+    params.buf[6] = 130;
+    params.buf[7] = 156;*/
+    /*params.buf[0] = ;
+    params.buf[1] = ;
+    params.buf[2] = ;
+    params.buf[3] = ;
+    params.buf[4] = ;
+    params.buf[5] = ;
+    params.buf[6] = ;
+    params.buf[7] = ;*/
     //des_read(&params, argv);
     des_enc(&params, 1);
   }

@@ -428,6 +428,7 @@ void des_enc(t_args *params, int count)
 	unsigned char tmp[4];
   static unsigned char right48[6];
 	unsigned char exp_for_s[8];
+	unsigned char save_res[8];
 	int string[2];
  	int column[4];
   int str_col[8][2];
@@ -500,7 +501,7 @@ void des_enc(t_args *params, int count)
 (*params).des_output[2], (*params).des_output[3], (*params).des_output[4], (*params).des_output[5],
 (*params).des_output[6], (*params).des_output[7]);
 	//Step 1. Make first bit permutation for message (8 bytes)
-	if (ft_strcmp((*params).cipher, "des-cbc") == 0)
+	if (ft_strcmp((*params).cipher, "des-cbc") == 0 && find_symb((*params).flags, 'd', FLAG_LEN) < 0)
 		while (iters.i < 8)
 		{
 			(*params).buf[iters.i] ^= (*params).des_output[iters.i];
@@ -725,7 +726,21 @@ while (iters.i < 4)
 	iters.j++;
 	iters.i++;
 }
+if (ft_strcmp((*params).cipher, "des-cbc") == 0 && find_symb((*params).flags, 'd', FLAG_LEN) >= 0)
+	while (iters.k < 8)
+	{
+		save_res[iters.k] = (*params).des_output[iters.k];
+		iters.k++;
+	}
 bit_permutations(8, m_end, (*params).des_output, exp_for_s);
+if (ft_strcmp((*params).cipher, "des-cbc") == 0 && find_symb((*params).flags, 'd', FLAG_LEN) >= 0)
+{
+	while (iters.m < 8)
+	{
+		(*params).des_output[iters.m] ^= save_res[iters.m];
+		iters.m++;
+	}
+}
 printf("%s\n", (*params).des_output);
 printf("CODE 64 bits m output%d %d %d %d %d %d %d %d\n", (*params).des_output[0], (*params).des_output[1], (*params).des_output[2],
 (*params).des_output[3], (*params).des_output[4], (*params).des_output[5], (*params).des_output[6], (*params).des_output[7]);
@@ -738,7 +753,6 @@ if ((find_symb((*params).flags, 'a', FLAG_LEN)) < 0)
 }
 else
 {
-
 	while (iters.k < 3)
 	{
 		(*params).b64_buf[iters.k] = (*params).des_output[iters.m];
