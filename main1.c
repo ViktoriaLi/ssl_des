@@ -232,9 +232,9 @@ int main (int argc, char **argv)
   if (!if_valid_args(argc, argv, &params))
     return (0);
   if (ft_strcmp(params.cipher, "base64") == 0 && find_symb(params.flags, 'd', FLAG_LEN) < 0)
-    base64_read(&params, argv, 64);
+    base64_read(&params, argv, 48);
   else if (ft_strcmp(params.cipher, "base64") == 0 && find_symb(params.flags, 'd', FLAG_LEN) >= 0)
-    base64_read(&params, argv, 64);
+    base64_read(&params, argv, 48);
   else /*if (((ft_strcmp(params.cipher, "des") == 0) || (ft_strcmp(params.cipher, "des-ecb") == 0)
 || (ft_strcmp(params.cipher, "des-cbc") == 0))
   && (find_symb(params.flags, 'd', FLAG_LEN) < 0))*/
