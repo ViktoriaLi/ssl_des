@@ -231,9 +231,7 @@ int main (int argc, char **argv)
   clear_struct(&params);
   if (!if_valid_args(argc, argv, &params))
     return (0);
-  if (ft_strcmp(params.cipher, "base64") == 0 && find_symb(params.flags, 'd', FLAG_LEN) < 0)
-    base64_read(&params, argv, 48);
-  else if (ft_strcmp(params.cipher, "base64") == 0 && find_symb(params.flags, 'd', FLAG_LEN) >= 0)
+  if (ft_strcmp(params.cipher, "base64") == 0)
     base64_read(&params, argv, 48);
   else /*if (((ft_strcmp(params.cipher, "des") == 0) || (ft_strcmp(params.cipher, "des-ecb") == 0)
 || (ft_strcmp(params.cipher, "des-cbc") == 0))
@@ -263,16 +261,16 @@ int main (int argc, char **argv)
     params.buf[5] = 58;
     params.buf[6] = 130;
     params.buf[7] = 156;*/
-    /*params.buf[0] = ;
-    params.buf[1] = ;
-    params.buf[2] = ;
-    params.buf[3] = ;
-    params.buf[4] = ;
-    params.buf[5] = ;
-    params.buf[6] = ;
-    params.buf[7] = ;*/
+    /*params.buf[0] = 'f';
+    params.buf[1] = 'o';
+    params.buf[2] = 'o';
+    params.buf[3] = ' ';
+    params.buf[4] = 'b';
+    params.buf[5] = 'a';
+    params.buf[6] = 'r';
+    params.buf[7] = '\n';*/
     des_read(&params, argv);
-    des_enc(&params, 1);
+    //des_enc(&params, 1, 0);
   }
 
   if (params.ifd > 1)

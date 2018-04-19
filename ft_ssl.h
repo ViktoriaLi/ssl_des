@@ -36,6 +36,8 @@ typedef struct		s_args
 	unsigned char key_res48[6];
 	unsigned char key_res56[7];
 	unsigned char des_output[8];
+	unsigned char des_48_read[48];
+	unsigned char des_48_res[48];
 }					t_args;
 
 typedef struct		s_addition
@@ -63,7 +65,7 @@ int check_des_flags(int argc, char **argv, t_args *params);
 
 void des_read(t_args *params, char **argv);
 void des_dec(t_args *params, int count);
-void des_enc(t_args *params, int count);
+void des_enc(t_args *params, int count, int *l);
 void	to_binary(int **res, int nbr, unsigned int base);
 void finish_key_shift(unsigned char key_56[], t_args *params);
 void remove_8bits(unsigned char key_res[], t_args *params, int rounds);
