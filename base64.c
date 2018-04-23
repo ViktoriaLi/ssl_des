@@ -97,6 +97,8 @@ void base64_read(t_args *params, char **argv, int len)
     while ((ret = read((*params).ifd, &params->b64_buf, len)) > 0)
     {
 			i = 0;
+			if (len == 65)
+				ret -= 1;
       //ft_printf("%s\n", (*params).b64_buf);
 			//ft_printf("%d\n", ret);
       if (find_symb((*params).flags, 'd', FLAG_LEN) >= 0)
@@ -147,6 +149,8 @@ void base64_read(t_args *params, char **argv, int len)
     //ft_printf("%s\n", (*params).b64_buf);
 		//ft_printf("%d\n", ret);
 		i = 0;
+		if (len == 65)
+			ret -= 1;
 		if (find_symb((*params).flags, 'd', FLAG_LEN) >= 0)
 		{
 			//(*params).b64_buf[64] = 0;
@@ -198,6 +202,8 @@ void base64_read(t_args *params, char **argv, int len)
     while ((ret = read(0, &params->b64_buf, len)) > 0)
     {
 			i = 0;
+			if (len == 65)
+				ret -= 1;
       //ft_printf("%s\n", (*params).b64_buf);
 			//ft_printf("%d\n", ret);
 			//ft_printf("2%s\n", (*params).b64_buf);

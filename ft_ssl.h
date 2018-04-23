@@ -26,7 +26,8 @@
 typedef struct		s_args
 {
 	char	*cipher;
-  unsigned char b64_buf[64];
+	int if_full;
+  unsigned char b64_buf[65];
   unsigned char buf[DES_BLOCK];
   unsigned char *vector16;
 	char flags[FLAG_LEN];
@@ -63,7 +64,7 @@ int if_valid_args(int argc, char **argv, t_args *params);
 void clear_struct(t_args *params);
 int check_des_flags(int argc, char **argv, t_args *params);
 
-void des_read(t_args *params, char **argv);
+void des_read(t_args *params, char **argv, int len);
 void des_dec(t_args *params, int count);
 void des_enc(t_args *params, int count, int *l);
 void	to_binary(int **res, int nbr, unsigned int base);

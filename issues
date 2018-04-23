@@ -1,4 +1,3 @@
-1. Считывание инпута - сделать с новой строки каждый ввод
 2. OpenSSL base64 puts a newline character after every 64 characters.
 You must be able to parse the whitespace.  Recreating it is optional.
 если нет ключа, а есть другой флаг, надо его отклонять?
@@ -22,8 +21,15 @@ You must be able to parse the whitespace.  Recreating it is optional.
 с инпута перестало выдавать больше  ответа
 игнорировать паддинг при декрипшене и добавить 8байтовый паддинг, особенно если считано ровно 48 байт и это весь текст
 бесконечный цикл если больше / меньше 8 байт сообщение в дес
-моет ошибка в добавлении паддинга
+может ошибка в добавлении паддинга
+если вызов программы без флагов запросить ввод ключа и вектора если нужно
+включить в тесты все нюансы из сабджекта включая некоректный вызов
+дес в опенссл не ставит перевод строки
+вместо интов сделать лонги
 
+ebc работает с паддингом, сбс нет, с флагом -a - бесконечный цикл
+сделать обработку ошибок деса, остановилась в мейне
+сделать проверку, что вектор и ключ должны быть 16ричными
 
 m = 1 35 69 103 137 171 205 239+
 m first shift = 204 0 204 255 240 170 240 170+
@@ -87,3 +93,75 @@ R3 = L2 + f(R2 , K3 )
 
 
 example 3 cbc http://studbooks.net/2009665/informatika/rezhim#41
+
+echo
+echo "des-ecb -e -k 6162636461626364"
+echo "foo bar" | ./a.out des-ecb -k 6162636461626364
+echo
+echo "97 145 119 64 166 154 109 117"
+echo toto | ./a.out des-ecb -k 6162636461626364
+echo
+echo "127 45 247 90 228 110 100 45"
+echo a | ./a.out des-ecb -k 6162636461626364
+echo
+echo "130 0 154 196 64 187 78 152"
+echo bc | ./a.out des-ecb -k 6162636461626364
+echo
+echo "166 76 95 170 230 56 61 247"
+echo efd | ./a.out des-ecb -k 6162636461626364
+echo
+echo "18 243 156 236 182 89 228 248"
+echo hijk | ./a.out des-ecb -k 6162636461626364
+echo
+echo "237 2 144 136 155 148 193 62"
+echo lmnop | ./a.out des-ecb -k 6162636461626364
+echo
+echo "15 9 22 160 18 23 125 223"
+echo qrstyv | ./a.out des-ecb -k 6162636461626364
+echo
+echo "78 122 187 159 14 72 31 52"
+echo wxwz123 | ./a.out des-ecb -k 6162636461626364
+echo
+echo "34 37 134 230 50 14 223 159"
+echo 4567890Q | ./a.out des-ecb -k 6162636461626364
+echo
+echo "101 112 79 1 0 74 251 170 37 205 200 217 159 111 169 242"
+echo WERTYUIOP | ./a.out des-ecb -k 6162636461626364
+echo
+echo "205 227 139 121 193 98 102 196 90 49 225 154 160 234 129 187"
+
+echo
+echo "des-ecb -e"
+echo "foo bar" | ./a.out des-ecb -k 6162636461626364
+echo
+echo "foo bar" | openssl des-ecb -K 6162636461626364
+echo "toto" | ./a.out des-ecb -k 6162636461626364
+echo
+echo "toto" | openssl des-ecb -K 6162636461626364
+echo "a" | ./a.out des-ecb -k 6162636461626364
+echo
+echo "a" | openssl des-ecb -K 6162636461626364
+echo "bc" | ./a.out des-ecb -k 6162636461626364
+echo
+echo "bc" | openssl des-ecb -K 6162636461626364
+echo "efd" | ./a.out des-ecb -k 6162636461626364
+echo
+echo "efd" | openssl des-ecb -K 6162636461626364
+echo "hijk" | ./a.out des-ecb -k 6162636461626364
+echo
+echo "hijk" | openssl des-ecb -K 6162636461626364
+echo "lmnop" | ./a.out des-ecb -k 6162636461626364
+echo
+echo "lmnop" | openssl des-ecb -K 6162636461626364
+echo "qrstyv" | ./a.out des-ecb -k 6162636461626364
+echo
+echo "qrstyv" | openssl des-ecb -K 6162636461626364
+echo "wxwz123" | ./a.out des-ecb -k 6162636461626364
+echo
+echo "wxwz123" | openssl des-ecb -K 6162636461626364
+echo "4567890Q" | ./a.out des-ecb -k 6162636461626364
+echo
+echo "4567890Q" | openssl des-ecb -K 6162636461626364
+echo "WERTYUIOP" | ./a.out des-ecb -k 6162636461626364
+echo
+echo "WERTYUIOP" | openssl des-ecb -K 6162636461626364

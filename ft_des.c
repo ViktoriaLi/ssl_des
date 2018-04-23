@@ -739,9 +739,9 @@ if (ft_strcmp((*params).cipher, "des-cbc") == 0 && find_symb((*params).flags, 'd
 		iters.m++;
 	}
 }
-printf("%s\n", (*params).des_output);
-printf("CODE 64 bits m output%d %d %d %d %d %d %d %d\n", (*params).des_output[0], (*params).des_output[1], (*params).des_output[2],
-(*params).des_output[3], (*params).des_output[4], (*params).des_output[5], (*params).des_output[6], (*params).des_output[7]);
+//printf("%s\n", (*params).des_output);
+//printf("CODE 64 bits m output%d %d %d %d %d %d %d %d\n", (*params).des_output[0], (*params).des_output[1], (*params).des_output[2],
+//(*params).des_output[3], (*params).des_output[4], (*params).des_output[5], (*params).des_output[6], (*params).des_output[7]);
 clear_iterators(&iters);
 if (find_symb((*params).flags, 'd', FLAG_LEN) >= 0)
 {
@@ -759,13 +759,13 @@ if (find_symb((*params).flags, 'd', FLAG_LEN) >= 0)
 if ((find_symb((*params).flags, 'a', FLAG_LEN)) < 0)
 {
 	if ((find_symb((*params).flags, 'o', FLAG_LEN)) >= 0)
-		write((*params).ofd, (*params).des_output, 8);
+		write((*params).ofd, (*params).des_output, ft_strlen((char *)(*params).des_output));
 	else
-		write(1, (*params).des_output, 8);
+		write(1, (*params).des_output, ft_strlen((char *)(*params).des_output));
 }
 else
 {
-	while (iters.j < 8)
+	while ((*params).des_output[iters.j] && iters.j < 8)
 		(*params).des_48_res[(*l)++] = (*params).des_output[iters.j++];
 
 	/*while (iters.k < 3)
@@ -798,7 +798,7 @@ else
 }
 }
 
-void des_read(t_args *params, char **argv)
+void des_read(t_args *params, char **argv, int len)
 {
   int i;
 	int j;
@@ -817,9 +817,17 @@ void des_read(t_args *params, char **argv)
 	l = 0;
   if ((find_symb((*params).flags, 'i', FLAG_LEN)) >= 0)
   {
-    while ((ret = read((*params).ifd, params->des_48_read, 48)) > 0)
+    while ((ret = read((*params).ifd, params->des_48_read, len)) > 0)
     {
+			if (ret == len && (find_symb((*params).flags, 'd', FLAG_LEN)) < 0)
+				if_full = 1;
       //ft_printf("BUF %s\n", (*params).buf);
+			/*if ((*params).des_48_read[ret - 1] == 10)
+			{
+				(*params).des_48_read[ret - 1] = 0;
+				ret -= 1;
+			}*/
+
 			i = 0;
 			while (i < ret)
       {
@@ -827,7 +835,7 @@ void des_read(t_args *params, char **argv)
 				while (j < 8 && i < ret)
 					(*params).buf[j++] = (*params).des_48_read[i++];
 				count++;
-				if ((find_symb((*params).flags, 'd', FLAG_LEN)) <= 0)
+				if ((find_symb((*params).flags, 'd', FLAG_LEN)) < 0)
 				{
 					if (j < 8)
 					{
@@ -836,19 +844,31 @@ void des_read(t_args *params, char **argv)
 							(*params).buf[j++] = k;
 					}
 				}
+				//printf("TEST %d %d %d %d %d %d %d %d\n", (*params).buf[0], (*params).buf[1], (*params).buf[2],
+			//(*params).buf[3], (*params).buf[4], (*params).buf[5], (*params).buf[6], (*params).buf[7]);
 				des_enc(params, count, &l);
 				}
-				/*if ((ret % 8) == 0 && ret != 48)
+				if ((find_symb((*params).flags, 'd', FLAG_LEN)) < 0 && (ret % 8) == 0 && ret != len)
 				{
 					j = 0;
 					while (j < 8)
 						(*params).buf[j++] = 8;
 					des_enc(params, count, &l);
-				}*/
+				}
 				if ((find_symb((*params).flags, 'a', FLAG_LEN)) >= 0)
 				{
 					if (find_symb((*params).flags, 'd', FLAG_LEN) >= 0)
 		      {
+						if ((*params).des_48_res[l - 1] > 0 && (*params).des_48_res[l - 1] < 9)
+						{
+							j = (*params).des_48_res[7] - 48;
+							i = l - 1;
+							while (j > 0)
+							{
+								(*params).des_48_res[i--] = 0;
+								j--;
+							}
+						}
 						i = 0;
 		        while (i < l)
 		        {
@@ -886,13 +906,22 @@ void des_read(t_args *params, char **argv)
 		      i = 0;
 		      while (i < l)
 		        (*params).des_48_res[i++] = 0;
+					l = 0;
 				}
-				l = 0;
     }
   }
-  else if ((ret = read(0, params->des_48_read, 48)) > 0)
+	if (if_full == 1 && (find_symb((*params).flags, 'd', FLAG_LEN)) < 0)
+	{
+		j = 0;
+		while (j < 8)
+			(*params).buf[j++] = 8;
+		des_enc(params, count, &l);
+	}
+  else if ((ret = read(0, params->des_48_read, len)) > 0)
   {
-    ft_printf("BUF %s\n", (*params).des_48_read);
+    //ft_printf("BUF %s\n", (*params).des_48_read);
+		if (ret == len && (find_symb((*params).flags, 'd', FLAG_LEN)) < 0)
+			if_full = 1;
 		i = 0;
 		while (i < ret)
 		{
@@ -902,7 +931,7 @@ void des_read(t_args *params, char **argv)
 			count++;
 			if ((find_symb((*params).flags, 'd', FLAG_LEN)) <= 0)
 			{
-				if (j != 8)
+				if (j < 8)
 				{
 					k = 8 - j;
 					while (j < 8)
@@ -910,10 +939,27 @@ void des_read(t_args *params, char **argv)
 				}
 			}
 			des_enc(params, count, &l);
+			if ((find_symb((*params).flags, 'd', FLAG_LEN)) < 0 && (ret % 8) == 0 && ret != len)
+			{
+				j = 0;
+				while (j < 8)
+					(*params).buf[j++] = 8;
+				des_enc(params, count, &l);
+			}
 			if ((find_symb((*params).flags, 'a', FLAG_LEN)) >= 0)
 			{
 				if (find_symb((*params).flags, 'd', FLAG_LEN) >= 0)
 				{
+					if ((*params).des_48_res[l - 1] > 0 && (*params).des_48_res[l - 1] < 9)
+					{
+						j = (*params).des_48_res[7] - 48;
+						i = l - 1;
+						while (j > 0)
+						{
+							(*params).des_48_res[i--] = 0;
+							j--;
+						}
+					}
 					i = 0;
 					while (i < l)
 					{
@@ -953,17 +999,19 @@ void des_read(t_args *params, char **argv)
 					(*params).des_48_res[i] = 0;
 					i++;
 				}
+				l = 0;
 			}
-			l = 0;
-			}
+		}
     /*else if (ft_strcmp(argv[1], "des") == 0)
       des_enc(buf);
     else if (ft_strcmp(argv[1], "des-ecb") == 0)
       des_ecb_enc(buf);
     else if (ft_strcmp(argv[1], "des-cbc") == 0)
       des_cbc_enc(buf);*/
-    while ((ret = read(0, params->des_48_read, 48)) > 0)
+    while ((ret = read(0, params->des_48_read, len)) > 0)
     {
+			if (ret == len && (find_symb((*params).flags, 'd', FLAG_LEN)) < 0)
+				if_full = 1;
 			i = 0;
 			while (i < ret)
       {
@@ -973,7 +1021,7 @@ void des_read(t_args *params, char **argv)
 				count++;
 				if ((find_symb((*params).flags, 'd', FLAG_LEN)) <= 0)
 				{
-					if (j != 8)
+					if (j < 8)
 					{
 						k = 8 - j;
 						while (j < 8)
@@ -981,10 +1029,27 @@ void des_read(t_args *params, char **argv)
 					}
 				}
 				des_enc(params, count, &l);
+				if ((find_symb((*params).flags, 'd', FLAG_LEN)) < 0 && (ret % 8) == 0 && ret != len)
+				{
+					j = 0;
+					while (j < 8)
+						(*params).buf[j++] = 8;
+					des_enc(params, count, &l);
+				}
 				if ((find_symb((*params).flags, 'a', FLAG_LEN)) >= 0)
 				{
 					if (find_symb((*params).flags, 'd', FLAG_LEN) >= 0)
 					{
+						if ((*params).des_48_res[l - 1] > 0 && (*params).des_48_res[l - 1] < 9)
+						{
+							j = (*params).des_48_res[7] - 48;
+							i = l - 1;
+							while (j > 0)
+							{
+								(*params).des_48_res[i--] = 0;
+								j--;
+							}
+						}
 						i = 0;
 						while (i < l)
 						{
@@ -1024,12 +1089,18 @@ void des_read(t_args *params, char **argv)
 						(*params).des_48_res[i] = 0;
 						i++;
 					}
+					l = 0;
 				}
-				l = 0;
     }
   }
 }
-
+if (if_full == 1 && (find_symb((*params).flags, 'd', FLAG_LEN)) < 0)
+{
+	j = 0;
+	while (j < 8)
+		(*params).buf[j++] = 8;
+	des_enc(params, count, &l);
+}
   else if ((ret = read(1, params->des_48_read, 48)) > 0)
   {
 		i = 0;
@@ -1041,11 +1112,11 @@ void des_read(t_args *params, char **argv)
 			count++;
 			if ((find_symb((*params).flags, 'd', FLAG_LEN)) <= 0)
 			{
-				if (j != 8)
+				if (j < 8)
 				{
-					i = 0;
+					k = 8 - j;
 					while (j < 8)
-					 (*params).buf[j++] = i;
+					 (*params).buf[j++] = k;
 				}
 			}
 			des_enc(params, count, &l);
@@ -1106,11 +1177,11 @@ void des_read(t_args *params, char **argv)
 					count++;
 					if ((find_symb((*params).flags, 'd', FLAG_LEN)) <= 0)
 					{
-						if (j != 8)
+						if (j < 8)
 						{
-							i = j;
+							k = 8 - j;
 							while (j < 8)
-							 (*params).buf[j++] = i;
+							 (*params).buf[j++] = k;
 						}
 					}
 					des_enc(params, count, &l);
@@ -1162,6 +1233,6 @@ void des_read(t_args *params, char **argv)
 					}
   }
 }
-  if ((find_symb((*params).flags, 'o', FLAG_LEN)) < 0)
-    ft_printf("%s", "\n");
+  /*if ((find_symb((*params).flags, 'o', FLAG_LEN)) < 0)
+    ft_printf("%s", "\n");*/
 }
