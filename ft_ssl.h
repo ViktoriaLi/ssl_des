@@ -54,7 +54,7 @@ size_t		ft_strlen(const char *s);
 int		ft_printf(const char *format, ...);
 int		ft_strcmp(const char *s1, const char *s2);
 int find_symb(char *str, char flag, int len);
-void base64_enc(unsigned char *buf, t_args *params);
+void base64_enc(unsigned char *buf, t_args *params, int j);
 void base64_dec(unsigned char *buf, t_args *params);
 void base64_read(t_args *params, char **argv, int len);
 
@@ -80,6 +80,5 @@ void bit_permutations(int max, const int table[], unsigned char key_56[], unsign
 void clear_iterators(t_addition *iters);
 
 char	*ft_strncpy(char *dst, const char *src, size_t len);
-char	*ft_strsub(char const *s, unsigned int start, size_t len);
 
 #endif

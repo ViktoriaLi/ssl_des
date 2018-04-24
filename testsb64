@@ -1,0 +1,55 @@
+echo "base64 -e"
+echo toto | ./a.out base64
+echo
+echo toto | base64
+echo a | ./a.out base64
+echo
+echo a | base64
+echo bc | ./a.out base64
+echo
+echo bc | base64
+echo efd | ./a.out base64
+echo
+echo efd | base64
+echo hijk | ./a.out base64
+echo
+echo hijk | base64
+echo lmnop | ./a.out base64
+echo
+echo lmnop | base64
+echo qrstyv | ./a.out base64
+echo
+echo qrstyv | base64
+echo wxwz123 | ./a.out base64
+echo
+echo wxwz123 | base64
+echo 4567890Q | ./a.out base64
+echo
+echo 4567890Q | base64
+echo tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiuyouyityuhtyhuty | ./a.out base64
+echo
+echo tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiuyouyityuhtyhuty | base64
+
+echo
+echo "base64 -d"
+echo dG90bwo= | ./a.out base64 -d
+echo dG90bwo= | base64 -D
+echo YQo= | ./a.out base64 -d
+echo YQo= | base64 -D
+echo YmMK | ./a.out base64 -d
+echo YmMK | base64 -D
+echo ZWZkCg== | ./a.out base64 -d
+echo ZWZkCg== | base64 -D
+echo aGlqawo= | ./a.out base64 -d
+echo aGlqawo= | base64 -D
+echo bG1ub3AK | ./a.out base64 -d
+echo bG1ub3AK | base64 -D
+echo cXJzdHl2Cg== | ./a.out base64 -d
+echo cXJzdHl2Cg== | base64 -D
+echo d3h3ejEyMwo= | ./a.out base64 -d
+echo d3h3ejEyMwo= | base64 -D
+echo NDU2Nzg5MFEK | ./a.out base64 -d
+echo NDU2Nzg5MFEK | base64 -D
+echo tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiuyouyityuhtyhuty | ./a.out base64 -d
+echo
+echo tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiuyouyityuhtyhuty | base64 -D

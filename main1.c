@@ -150,17 +150,10 @@ int check_des_flags(int argc, char **argv, t_args *params)
   //printf("DDD%d\n", find_flag(params, 'i'));
   //printf("DDD%s\n", (*params).flags);
   //printf("DDD%d\n", (*params).ifd);
-  if ((find_symb((*params).flags, 'i', FLAG_LEN)) >= 0 && (*params).ifd < 0)
+  if (((find_symb((*params).flags, 'i', FLAG_LEN)) >= 0 && (*params).ifd < 0)
+  || ((find_symb((*params).flags, 'o', FLAG_LEN)) >= 0 && (*params).ofd < 0))
   {
-    ft_printf("%s\n", "base64: option requires an argument -- i");
-
-    usage: ft_ssl ciphername [-i file] [-v IV] [-k key] [-o file]
-    
-    return (1);
-  }
-  if ((find_symb((*params).flags, 'o', FLAG_LEN)) >= 0 && (*params).ofd < 0)
-  {
-    ft_printf("%s\n", "base64: option requires an argument -- o");
+    ft_printf("usage: ft_ssl %s [-i file] [-v IV] [-k key] [-o file]\n", argv[1]);
     return (1);
   }
   return (0);
@@ -205,7 +198,7 @@ void clear_struct(t_args *params)
   (*params).des_key = NULL;
   (*params).vector16 = NULL;
   (*params).cipher = NULL;
-  if_full = 0;
+  (*params).if_full = 0;
   while (i < 8)
     (*params).des_output[i++] = 0;
   i = 0;
@@ -285,7 +278,7 @@ int main (int argc, char **argv)
   else if (((ft_strcmp(params.cipher, "des") == 0) || (ft_strcmp(params.cipher, "des-ecb") == 0)
 || (ft_strcmp(params.cipher, "des-cbc") == 0)) && (find_symb(params.flags, 'd', FLAG_LEN) >= 0))
   {
-    des_read(&params, argv, 64);
+    des_read(&params, argv, 65);
   }
   if (params.ifd > 1)
     close(params.ifd);

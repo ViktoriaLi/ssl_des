@@ -12,24 +12,13 @@
 
 #include "ft_ssl.h"
 
-void ft_des_strsub(unsigned char *s, unsigned int start, size_t len, unsigned char dest[])
-{
-	size_t	i;
-
-	i = 0;
-	if (!s || start > ft_strlen((char *)s))
-		return ;
-	while (i < len && s[start] != 0)
-		dest[i++] = s[start++];
-	ft_printf("%s\n", dest);
-}
-
-
 void base64_dec(unsigned char *buf, t_args *params)
 {
   unsigned char dest[4];
   unsigned char tmp[4];
+	int len;
 
+	len = 0 ;
 	dest[3] = 0;
   tmp[0] = 0;
   tmp[1] = 0;
@@ -37,16 +26,19 @@ void base64_dec(unsigned char *buf, t_args *params)
   tmp[3] = 0;
   dest[0] = find_symb(BASE64_STR, buf[0], 64);
   //printf("%d\n", dest[1]);
-  dest[1] = find_symb(BASE64_STR, buf[1], 64);;
+  dest[1] = find_symb(BASE64_STR, buf[1], 64);
+	len = 1;
   //printf("%d\n", dest[1]);
   if (buf[2] != '=')
   {
-    dest[2] = find_symb(BASE64_STR, buf[2], 64);;
+    dest[2] = find_symb(BASE64_STR, buf[2], 64);
+		len = 1;
     //printf("%d\n", dest[1]);
   }
   if (buf[3] != '=')
   {
-    dest[3] = find_symb(BASE64_STR, buf[3], 64);;
+    dest[3] = find_symb(BASE64_STR, buf[3], 64);
+		len = 3;
     //printf("%d\n", dest[1]);
   }
   tmp[0] = (dest[0] << 2) + (dest[1] >> 4);
@@ -55,12 +47,12 @@ void base64_dec(unsigned char *buf, t_args *params)
   if (buf[3] != '=')
     tmp[2] = (dest[2] << 6) + dest[3];
   if ((find_symb((*params).flags, 'o', FLAG_LEN)) >= 0)
-    write((*params).ofd, tmp, ft_strlen((char *)tmp));
+    write((*params).ofd, tmp, len);
   else
-    write(1, (char *)tmp, ft_strlen((char *)tmp));
+    write(1, (char *)tmp, len);
 }
 
-void base64_enc(unsigned char *buf, t_args *params)
+void base64_enc(unsigned char *buf, t_args *params, int j)
 {
   unsigned char dest[4];
 
@@ -68,9 +60,9 @@ void base64_enc(unsigned char *buf, t_args *params)
   dest[3] = '=';
   dest[0] = BASE64_STR[buf[0] >> 2];
   dest[1] = BASE64_STR[((buf[0] & 3) << 4) + ((buf[1]) >> 4)];
-  if (ft_strlen((char *)buf) > 1)
+  if (j > 1)
     dest[2] = BASE64_STR[((buf[1] & 15) << 2) + ((buf[2]) >> 6)];
-  if (ft_strlen((char *)buf) > 2)
+  if (j > 2)
     dest[3] = BASE64_STR[buf[2] & 63];
   if ((find_symb((*params).flags, 'o', FLAG_LEN)) >= 0)
     write((*params).ofd, dest, 4);
@@ -127,7 +119,7 @@ void base64_read(t_args *params, char **argv, int len)
 					j = 0;
 					while (j < 3 && i < ret)
 						tmpb64d[j++] = (*params).b64_buf[i++];
-          base64_enc(tmpb64d, params);
+          base64_enc(tmpb64d, params, j);
 					j = 0;
 		      while (j < 3)
 		      {
@@ -177,7 +169,7 @@ void base64_read(t_args *params, char **argv, int len)
 				while (j < 3 && i < ret)
 					tmpb64d[j++] = (*params).b64_buf[i++];
 				//ft_printf("1%s\n", tmpb64d);
-				base64_enc(tmpb64d, params);
+				base64_enc(tmpb64d, params, j);
 				j = 0;
 				while (j < 3)
 				{
@@ -233,7 +225,7 @@ void base64_read(t_args *params, char **argv, int len)
 					while (i < ret && j < 3)
 						tmpb64d[j++] = (*params).b64_buf[i++];
 					//ft_printf("2%s\n", tmpb64d);
-					base64_enc(tmpb64d, params);
+					base64_enc(tmpb64d, params, j);
 					j = 0;
 		      while (j < 3)
 		      {

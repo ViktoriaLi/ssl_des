@@ -1,0 +1,35 @@
+echo
+echo "des-ecb -e -a"
+echo "foo bar" | ./a.out des-ecb -k 6162636461626364 -a
+echo
+echo "foo bar" | openssl des-ecb -K 6162636461626364 -a
+echo "toto" | ./a.out des-ecb -k 6162636461626364 -a
+echo
+echo "toto" | openssl des-ecb -K 6162636461626364 -a
+echo "a" | ./a.out des-ecb -k 6162636461626364 -a
+echo
+echo "a" | openssl des-ecb -K 6162636461626364 -a
+echo "bc" | ./a.out des-ecb -k 6162636461626364 -a
+echo
+echo "bc" | openssl des-ecb -K 6162636461626364 -a
+echo "efd" | ./a.out des-ecb -k 6162636461626364 -a
+echo
+echo "efd" | openssl des-ecb -K 6162636461626364 -a
+echo "hijk" | ./a.out des-ecb -k 6162636461626364 -a
+echo
+echo "hijk" | openssl des-ecb -K 6162636461626364 -a
+echo "lmnop" | ./a.out des-ecb -k 6162636461626364 -a
+echo
+echo "lmnop" | openssl des-ecb -K 6162636461626364 -a
+echo "qrstyv" | ./a.out des-ecb -k 6162636461626364 -a
+echo
+echo "qrstyv" | openssl des-ecb -K 6162636461626364 -a
+echo "wxwz123" | ./a.out des-ecb -k 6162636461626364 -a
+echo
+echo "wxwz123" | openssl des-ecb -K 6162636461626364 -a
+echo "4567890Q" | ./a.out des-ecb -k 6162636461626364 -a
+echo
+echo "4567890Q" | openssl des-ecb -K 6162636461626364 -a
+echo "WERTYUIOP" | ./a.out des-ecb -k 6162636461626364 -a
+echo
+echo "WERTYUIOP" | openssl des-ecb -K 6162636461626364 -a
