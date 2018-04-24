@@ -177,7 +177,7 @@ if ((find_symb((*params).flags, 'i', FLAG_LEN)) >= 0)
 		while (i < ret)
 		{
 			j = 0;
-			while (j < 8 && i < ret)
+			while (i < ret && j < 8)
 				(*params).buf[j++] = (*params).des_48_read[i++];
 			count++;
 			if ((find_symb((*params).flags, 'd', FLAG_LEN)) < 0)
@@ -218,16 +218,13 @@ if ((find_symb((*params).flags, 'i', FLAG_LEN)) >= 0)
 					while (i < l)
 					{
 						j = 0;
-						while (j < 4 && i < ret)
+						while (i < l && j < 4)
 							tmpb64[j++] = (*params).des_48_res[i++];
 						//ft_printf("%s\n", tmpb64d);
 						base64_dec(tmpb64, params);
 						j = 0;
 						while (j < 4)
-						{
-							tmpb64[j] = 0;
-							j++;
-						}
+							tmpb64[j++] = 0;
 					}
 				}
 				else
@@ -236,16 +233,13 @@ if ((find_symb((*params).flags, 'i', FLAG_LEN)) >= 0)
 					while (i < l)
 					{
 						j = 0;
-						while (j < 3 && i < l)
+						while (i < l && j < 3)
 							tmpb64[j++] = (*params).des_48_res[i++];
 						//printf("CCC%d %d %d %d \n", tmpb64[0], tmpb64[1], tmpb64[2], tmpb64[3]);
 						base64_enc(tmpb64, params, j);
 						j = 0;
 						while (j < 3)
-						{
-							tmpb64[j] = 0;
-							j++;
-						}
+							tmpb64[j++] = 0;
 					}
 				}
 				i = 0;

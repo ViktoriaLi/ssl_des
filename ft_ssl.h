@@ -37,8 +37,8 @@ typedef struct		s_args
 	unsigned char key_res48[6];
 	unsigned char key_res56[7];
 	unsigned char des_output[8];
-	unsigned char des_48_read[48];
-	unsigned char des_48_res[48];
+	unsigned char des_48_read[65];
+	unsigned char des_48_res[65];
 }					t_args;
 
 typedef struct		s_addition
