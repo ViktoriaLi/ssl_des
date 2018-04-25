@@ -43,6 +43,7 @@ void flags_normalize(char *all_flags, t_args *params, int len)
       (*params).flags[j] = all_flags[i];
     i++;
   }
+  //printf("%s\n", (*params).flags);
 }
 
 int check_b64_flags(int argc, char **argv, t_args *params)

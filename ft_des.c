@@ -731,6 +731,7 @@ if (ft_strcmp((*params).cipher, "des-cbc") == 0 && find_symb((*params).flags, 'd
 		iters.k++;
 	}
 bit_permutations(8, m_end, (*params).des_output, exp_for_s);
+clear_iterators(&iters);
 if (ft_strcmp((*params).cipher, "des-cbc") == 0 && find_symb((*params).flags, 'd', FLAG_LEN) >= 0)
 {
 	while (iters.m < 8)
@@ -760,9 +761,9 @@ if (find_symb((*params).flags, 'd', FLAG_LEN) >= 0)
 if ((find_symb((*params).flags, 'a', FLAG_LEN)) < 0)
 {
 	if ((find_symb((*params).flags, 'o', FLAG_LEN)) >= 0)
-		write((*params).ofd, (*params).des_output, 8);
+		write((*params).ofd, (*params).des_output, 8 - iters.m);
 	else
-		write(1, (*params).des_output, 8);
+		write(1, (*params).des_output, 8 - iters.m);
 }
 else
 {
@@ -822,6 +823,8 @@ void des_read(t_args *params, char **argv, int len)
     {
 			if (ret == len && (find_symb((*params).flags, 'd', FLAG_LEN)) < 0)
 				(*params).if_full = 1;
+			if (len == 65)
+				ret -= 1;
 			i = 0;
 			while (i < ret)
       {
@@ -844,6 +847,7 @@ void des_read(t_args *params, char **argv, int len)
 				}
 				if ((find_symb((*params).flags, 'd', FLAG_LEN)) < 0 && (ret % 8) == 0 && ret != len)
 				{
+					count++;
 					j = 0;
 					while (j < 8)
 						(*params).buf[j++] = 8;
@@ -853,16 +857,16 @@ void des_read(t_args *params, char **argv, int len)
 				{
 					if (find_symb((*params).flags, 'd', FLAG_LEN) >= 0)
 		      {
-						if ((*params).des_48_res[l - 1] > 0 && (*params).des_48_res[l - 1] < 9)
+						/*if ((*params).des_48_res[l - 1] > 0 && (*params).des_48_res[l - 1] < 9)
 						{
-							j = (*params).des_48_res[7] - 48;
+							j = (*params).des_48_res[l - 1] - 48;
 							i = l - 1;
 							while (j > 0)
 							{
 								(*params).des_48_res[i--] = 0;
 								j--;
 							}
-						}
+						}*/
 						i = 0;
 		        while (i < l)
 		        {
@@ -899,6 +903,7 @@ void des_read(t_args *params, char **argv, int len)
     }
 		if ((*params).if_full == 1 && (find_symb((*params).flags, 'd', FLAG_LEN)) < 0)
 		{
+			count++;
 			j = 0;
 			while (j < 8)
 				(*params).buf[j++] = 8;
@@ -911,6 +916,11 @@ void des_read(t_args *params, char **argv, int len)
 			{
 				if (ret == len && (find_symb((*params).flags, 'd', FLAG_LEN)) < 0)
 					(*params).if_full = 1;
+				if (len == 65)
+					ret -= 1;
+				//printf("1%s\n", params->des_48_read);
+				//printf("2%d\n", ret);
+				//printf("3%d\n", (*params).if_full);
 				i = 0;
 				while (i < ret)
 				{
@@ -918,6 +928,8 @@ void des_read(t_args *params, char **argv, int len)
 					while (i < ret && j < 8)
 						(*params).buf[j++] = (*params).des_48_read[i++];
 					count++;
+					//printf("3%s\n", (*params).buf);
+					//printf("4%d\n", j);
 					if ((find_symb((*params).flags, 'd', FLAG_LEN)) < 0)
 					{
 						if (j < 8)
@@ -933,9 +945,11 @@ void des_read(t_args *params, char **argv, int len)
 					}
 					if ((find_symb((*params).flags, 'd', FLAG_LEN)) < 0 && (ret % 8) == 0 && ret != len)
 					{
+						count++;
 						j = 0;
 						while (j < 8)
 							(*params).buf[j++] = 8;
+						//printf("5%s\n", (*params).buf);
 						des_enc(params, count, &l);
 					}
 					if ((find_symb((*params).flags, 'a', FLAG_LEN)) >= 0)
@@ -944,7 +958,7 @@ void des_read(t_args *params, char **argv, int len)
 						{
 							if ((*params).des_48_res[l - 1] > 0 && (*params).des_48_res[l - 1] < 9)
 							{
-								j = (*params).des_48_res[7] - 48;
+								j = (*params).des_48_res[l - 1] - 48;
 								i = l - 1;
 								while (j > 0)
 								{
@@ -988,6 +1002,7 @@ void des_read(t_args *params, char **argv, int len)
 			}
 			if ((*params).if_full == 1 && (find_symb((*params).flags, 'd', FLAG_LEN)) < 0)
 			{
+				count++;
 				j = 0;
 				while (j < 8)
 					(*params).buf[j++] = 8;

@@ -1,5 +1,77 @@
 echo
 echo "des-ecb -e"
+echo "foo bar" | ./a.out des-ecb -k 6162636461626364
+echo
+echo "foo bar" | openssl des-ecb -K 6162636461626364
+echo "toto" | ./a.out des-ecb -k 6162636461626364
+echo
+echo "toto" | openssl des-ecb -K 6162636461626364
+echo "a" | ./a.out des-ecb -k 6162636461626364
+echo
+echo "a" | openssl des-ecb -K 6162636461626364
+echo "bc" | ./a.out des-ecb -k 6162636461626364
+echo
+echo "bc" | openssl des-ecb -K 6162636461626364
+echo "efd" | ./a.out des-ecb -k 6162636461626364
+echo
+echo "efd" | openssl des-ecb -K 6162636461626364
+echo "hijk" | ./a.out des-ecb -k 6162636461626364
+echo
+echo "hijk" | openssl des-ecb -K 6162636461626364
+echo "lmnop" | ./a.out des-ecb -k 6162636461626364
+echo
+echo "lmnop" | openssl des-ecb -K 6162636461626364
+echo "qrstyv" | ./a.out des-ecb -k 6162636461626364
+echo
+echo "qrstyv" | openssl des-ecb -K 6162636461626364
+echo "wxwz123" | ./a.out des-ecb -k 6162636461626364
+echo
+echo "wxwz123" | openssl des-ecb -K 6162636461626364
+echo "4567890Q" | ./a.out des-ecb -k 6162636461626364
+echo
+echo "4567890Q" | openssl des-ecb -K 6162636461626364
+echo "WERTYUIOP" | ./a.out des-ecb -k 6162636461626364
+echo
+echo "WERTYUIOP" | openssl des-ecb -K 6162636461626364
+
+echo
+echo "des-ecb -e -a"
+echo "foo bar" | ./a.out des-ecb -k 6162636461626364 -a
+echo
+echo "foo bar" | openssl des-ecb -K 6162636461626364 -a
+echo "toto" | ./a.out des-ecb -k 6162636461626364 -a
+echo
+echo "toto" | openssl des-ecb -K 6162636461626364 -a
+echo "a" | ./a.out des-ecb -k 6162636461626364 -a
+echo
+echo "a" | openssl des-ecb -K 6162636461626364 -a
+echo "bc" | ./a.out des-ecb -k 6162636461626364 -a
+echo
+echo "bc" | openssl des-ecb -K 6162636461626364 -a
+echo "efd" | ./a.out des-ecb -k 6162636461626364 -a
+echo
+echo "efd" | openssl des-ecb -K 6162636461626364 -a
+echo "hijk" | ./a.out des-ecb -k 6162636461626364 -a
+echo
+echo "hijk" | openssl des-ecb -K 6162636461626364 -a
+echo "lmnop" | ./a.out des-ecb -k 6162636461626364 -a
+echo
+echo "lmnop" | openssl des-ecb -K 6162636461626364 -a
+echo "qrstyv" | ./a.out des-ecb -k 6162636461626364 -a
+echo
+echo "qrstyv" | openssl des-ecb -K 6162636461626364 -a
+echo "wxwz123" | ./a.out des-ecb -k 6162636461626364 -a
+echo
+echo "wxwz123" | openssl des-ecb -K 6162636461626364 -a
+echo "4567890Q" | ./a.out des-ecb -k 6162636461626364 -a
+echo
+echo "4567890Q" | openssl des-ecb -K 6162636461626364 -a
+echo "WERTYUIOP" | ./a.out des-ecb -k 6162636461626364 -a
+echo
+echo "WERTYUIOP" | openssl des-ecb -K 6162636461626364 -a
+
+echo
+echo "des-cbc -e"
 echo "foo bar" | ./a.out des-cbc -k 6162636461626364 -v 0011223344556677
 echo
 echo "foo bar" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677
@@ -33,3 +105,111 @@ echo "4567890Q" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677
 echo "WERTYUIOP" | ./a.out des-cbc -k 6162636461626364 -v 0011223344556677
 echo
 echo "WERTYUIOP" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677
+
+echo
+echo "des-cbc -e -a"
+echo "foo bar" | ./a.out des-cbc -k 6162636461626364 -v 0011223344556677 -a
+echo
+echo "foo bar" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a
+echo "toto" | ./a.out des-cbc -k 6162636461626364 -v 0011223344556677 -a
+echo
+echo "toto" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a
+echo "a" | ./a.out des-cbc -k 6162636461626364 -v 0011223344556677 -a
+echo
+echo "a" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a
+echo "bc" | ./a.out des-cbc -k 6162636461626364 -v 0011223344556677 -a
+echo
+echo "bc" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a
+echo "efd" | ./a.out des-cbc -k 6162636461626364 -v 0011223344556677 -a
+echo
+echo "efd" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a
+echo "hijk" | ./a.out des-cbc -k 6162636461626364 -v 0011223344556677 -a
+echo
+echo "hijk" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a
+echo "lmnop" | ./a.out des-cbc -k 6162636461626364 -v 0011223344556677 -a
+echo
+echo "lmnop" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a
+echo "qrstyv" | ./a.out des-cbc -k 6162636461626364 -v 0011223344556677 -a
+echo
+echo "qrstyv" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a
+echo "wxwz123" | ./a.out des-cbc -k 6162636461626364 -v 0011223344556677 -a
+echo
+echo "wxwz123" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a
+echo "4567890Q" | ./a.out des-cbc -k 6162636461626364 -v 0011223344556677 -a
+echo
+echo "4567890Q" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a
+echo "WERTYUIOP" | ./a.out des-cbc -k 6162636461626364 -v 0011223344556677 -a
+echo
+echo "WERTYUIOP" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a
+
+echo
+echo "des-ecb -d -a"
+echo "YZF3QKaabXUwxNg3obhMfw==" | ./a.out des-ecb -k 6162636461626364 -a -d
+echo
+echo "YZF3QKaabXUwxNg3obhMfw==" | openssl des-ecb -K 6162636461626364 -a -d
+echo "+/K7fdzSYjk=" | ./a.out des-ecb -k 6162636461626364 -a -d
+echo
+echo "+/K7fdzSYjk=" | openssl des-ecb -K 6162636461626364 -a -d
+echo "DoIwIKW8W1g=" | ./a.out des-ecb -k 6162636461626364 -a -d
+echo
+echo "DoIwIKW8W1g=" | openssl des-ecb -K 6162636461626364 -a -d
+echo "tbTbqVwjjRs=" | ./a.out des-ecb -k 6162636461626364 -a -d
+echo
+echo "tbTbqVwjjRs=" | openssl des-ecb -K 6162636461626364 -a -d
+echo "DD0ItFchTpM=" | ./a.out des-ecb -k 6162636461626364 -a -d
+echo
+echo "DD0ItFchTpM=" | openssl des-ecb -K 6162636461626364 -a -d
+echo "ykJKjjrQFb0=" | ./a.out des-ecb -k 6162636461626364 -a -d
+echo
+echo "ykJKjjrQFb0=" | openssl des-ecb -K 6162636461626364 -a -d
+echo "LIKFcRCTH9w=" | ./a.out des-ecb -k 6162636461626364 -a -d
+echo
+echo "LIKFcRCTH9w=" | openssl des-ecb -K 6162636461626364 -a -d
+echo "T0e7Qf+To6c=" | ./a.out des-ecb -k 6162636461626364 -a -d
+echo
+echo "T0e7Qf+To6c=" | openssl des-ecb -K 6162636461626364 -a -d
+echo "IiWG5jIO358wxNg3obhMfw==" | ./a.out des-ecb -k 6162636461626364 -a -d
+echo
+echo "IiWG5jIO358wxNg3obhMfw==" | openssl des-ecb -K 6162636461626364 -a -d
+echo "ZXBPAQBK+6qXPQWipu+ZDA==" | ./a.out des-ecb -k 6162636461626364 -a -d
+echo
+echo "ZXBPAQBK+6qXPQWipu+ZDA==" | openssl des-ecb -K 6162636461626364 -a -d
+echo "zeOLecFiZsRL3L6yInnH7g==" | ./a.out des-ecb -k 6162636461626364 -a -d
+echo
+echo "zeOLecFiZsRL3L6yInnH7g==" | openssl des-ecb -K 6162636461626364 -a -d
+
+echo
+echo "des-cbc -d -a"
+echo "EWTdOkhUA+13TDvLz1hl9Q==" | ./a.out des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
+echo
+echo "EWTdOkhUA+13TDvLz1hl9Q==" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a -d
+echo "qeQUVZ0EcrY=" | ./a.out des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
+echo
+echo "qeQUVZ0EcrY=" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a -d
+echo "MXoVnAkSsCQ=" | ./a.out des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
+echo
+echo "MXoVnAkSsCQ=" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a -d
+echo "5MzwpYAFZMc=" | ./a.out des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
+echo
+echo "5MzwpYAFZMc=" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a -d
+echo "3mAdCHPboWU=" | ./a.out des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
+echo
+echo "3mAdCHPboWU=" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a -d
+echo "xZ6cnwcDXoM=" | ./a.out des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
+echo
+echo "xZ6cnwcDXoM=" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a -d
+echo "sP/NxOTS3/g=" | ./a.out des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
+echo
+echo "sP/NxOTS3/g=" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a -d
+echo "Fnx5gIOloSA=" | ./a.out des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
+echo
+echo "Fnx5gIOloSA=" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a -d
+echo "9W/EzMuq+rqux7tk+BKAOA==" | ./a.out des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
+echo
+echo "9W/EzMuq+rqux7tk+BKAOA==" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a -d
+echo "gr3roSQMp9+YynDvaDEbNA==" | ./a.out des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
+echo
+echo "gr3roSQMp9+YynDvaDEbNA==" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a -d
+echo "nGuSM/dZp0Ospi5BABViQA==" | ./a.out des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
+echo
+echo "nGuSM/dZp0Ospi5BABViQA==" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a -d

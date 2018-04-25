@@ -1,24 +1,11 @@
-2. OpenSSL base64 puts a newline character after every 64 characters.
-You must be able to parse the whitespace.  Recreating it is optional.
 если нет ключа, а есть другой флаг, надо его отклонять?
 дописать в бейс64  & 254
-если месседж длиннее 6 байт, почему то выводит флаги
 сделать обнуление массивов где нужно
 сделать проверку на невалидные файлы
-сделать ожидание чтени из инпута
 Все зафришить
-сделать ноупад дополнение 8 если считано кратное 8 количество байт (еще 8 08 в 16 системе)
-бейс64 - ставить новую строку после каждых 64 байт исходного текста, учитывать ее при дешифровке
 для дешифровки бейс64 читать по 64-65 чтоб игнорировать пустую строку
-для дес -а - учитывать, что нужно брать по 3 -4 байта, тоесть надо сохранять пред вывод, и читать по количеству кратному 3-4 байт
 предусмотреть некоректные флаги и аргументы (которые не предусмотрены для конкретного шифра)
-Реализовать расшифровку, чтение большими блоками
-в какиех то случаях вконце вывода процент
-наверное надо убрать заглушку на новую строку в открытом тексте
-сделать подстановку кодичества недостающих байт не нолями, а цифрой
 в десе выводится без новой строки
-бейс64 разный вывод при декрипшене длинного текста
-с инпута перестало выдавать больше  ответа
 игнорировать паддинг при декрипшене и добавить 8байтовый паддинг, особенно если считано ровно 48 байт и это весь текст
 бесконечный цикл если больше / меньше 8 байт сообщение в дес
 может ошибка в добавлении паддинга
@@ -29,10 +16,9 @@ You must be able to parse the whitespace.  Recreating it is optional.
 
 ebc работает с паддингом, сбс нет, с флагом -a - бесконечный цикл
 сделать обработку ошибок деса, остановилась в мейне
-сделать проверку, что вектор и ключ должны быть 16ричными
+сделать проверку, что вектор и ключ должны быть 16ричными non-hex digit invalid hex iv value invalid hex key value
 без а флага в нет перевода строки, с ним - есть
-работает шифрование бейс64, дес в обоих режимах и с флагом а, но сбс работает только на коротких сообщениях,
-проблема с 8 байтными сообщениями - совпадает первый лок, ошибка в следующем
+не работает декрипшн вообще
 
 m = 1 35 69 103 137 171 205 239+
 m first shift = 204 0 204 255 240 170 240 170+
@@ -132,77 +118,3 @@ echo "101 112 79 1 0 74 251 170 37 205 200 217 159 111 169 242"
 echo WERTYUIOP | ./a.out des-ecb -k 6162636461626364
 echo
 echo "205 227 139 121 193 98 102 196 90 49 225 154 160 234 129 187"
-
-
-echo
-echo "des-ecb -e"
-echo "foo bar" | ./a.out des-ecb -k 6162636461626364
-echo
-echo "foo bar" | openssl des-ecb -K 6162636461626364
-echo "toto" | ./a.out des-ecb -k 6162636461626364
-echo
-echo "toto" | openssl des-ecb -K 6162636461626364
-echo "a" | ./a.out des-ecb -k 6162636461626364
-echo
-echo "a" | openssl des-ecb -K 6162636461626364
-echo "bc" | ./a.out des-ecb -k 6162636461626364
-echo
-echo "bc" | openssl des-ecb -K 6162636461626364
-echo "efd" | ./a.out des-ecb -k 6162636461626364
-echo
-echo "efd" | openssl des-ecb -K 6162636461626364
-echo "hijk" | ./a.out des-ecb -k 6162636461626364
-echo
-echo "hijk" | openssl des-ecb -K 6162636461626364
-echo "lmnop" | ./a.out des-ecb -k 6162636461626364
-echo
-echo "lmnop" | openssl des-ecb -K 6162636461626364
-echo "qrstyv" | ./a.out des-ecb -k 6162636461626364
-echo
-echo "qrstyv" | openssl des-ecb -K 6162636461626364
-echo "wxwz123" | ./a.out des-ecb -k 6162636461626364
-echo
-echo "wxwz123" | openssl des-ecb -K 6162636461626364
-echo "4567890Q" | ./a.out des-ecb -k 6162636461626364
-echo
-echo "4567890Q" | openssl des-ecb -K 6162636461626364
-echo "WERTYUIOP" | ./a.out des-ecb -k 6162636461626364
-echo
-echo "WERTYUIOP" | openssl des-ecb -K 6162636461626364
-
-
-echo
-echo "des-ecb -e -a"
-echo "foo bar" | ./a.out des-ecb -k 6162636461626364 -a
-echo
-echo "foo bar" | openssl des-ecb -K 6162636461626364 -a
-echo "toto" | ./a.out des-ecb -k 6162636461626364 -a
-echo
-echo "toto" | openssl des-ecb -K 6162636461626364 -a
-echo "a" | ./a.out des-ecb -k 6162636461626364 -a
-echo
-echo "a" | openssl des-ecb -K 6162636461626364 -a
-echo "bc" | ./a.out des-ecb -k 6162636461626364 -a
-echo
-echo "bc" | openssl des-ecb -K 6162636461626364 -a
-echo "efd" | ./a.out des-ecb -k 6162636461626364 -a
-echo
-echo "efd" | openssl des-ecb -K 6162636461626364 -a
-echo "hijk" | ./a.out des-ecb -k 6162636461626364 -a
-echo
-echo "hijk" | openssl des-ecb -K 6162636461626364 -a
-echo "lmnop" | ./a.out des-ecb -k 6162636461626364 -a
-echo
-echo "lmnop" | openssl des-ecb -K 6162636461626364 -a
-echo "qrstyv" | ./a.out des-ecb -k 6162636461626364 -a
-echo
-echo "qrstyv" | openssl des-ecb -K 6162636461626364 -a
-echo "wxwz123" | ./a.out des-ecb -k 6162636461626364 -a
-echo
-echo "wxwz123" | openssl des-ecb -K 6162636461626364 -a
-echo "4567890Q" | ./a.out des-ecb -k 6162636461626364 -a
-echo
-echo "4567890Q" | openssl des-ecb -K 6162636461626364 -a
-echo "WERTYUIOP" | ./a.out des-ecb -k 6162636461626364 -a
-echo
-echo "WERTYUIOP" | openssl des-ecb -K 6162636461626364 -a
