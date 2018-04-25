@@ -132,6 +132,10 @@ void base64_read(t_args *params, char **argv, int len)
         (*params).b64_buf[i] = 0;
         i++;
       }
+      if (ret == 64 && (find_symb((*params).flags, 'd', FLAG_LEN)) < 0 && (find_symb((*params).flags, 'o', FLAG_LEN)) >= 0)
+        write((*params).ofd, "\n", 1);
+      else if (ret == 64 && (find_symb((*params).flags, 'd', FLAG_LEN)) < 0)
+        write(1, "\n", 1);
     }
   }
   else
@@ -141,7 +145,7 @@ void base64_read(t_args *params, char **argv, int len)
 			i = 0;
       if (len == 65 && ret == len)
   			ret -= 1;
-      (*params).b64_buf[64] = 0;
+      //(*params).b64_buf[64] = 0;
       //ft_printf("%s\n", (*params).b64_buf);
 			//ft_printf("%d\n", ret);
 			//ft_printf("2%s\n", (*params).b64_buf);
@@ -183,6 +187,10 @@ void base64_read(t_args *params, char **argv, int len)
         (*params).b64_buf[i] = 0;
         i++;
       }
+      if (ret == 64 && (find_symb((*params).flags, 'd', FLAG_LEN)) < 0 && (find_symb((*params).flags, 'o', FLAG_LEN)) >= 0)
+        write((*params).ofd, "\n", 1);
+      else if (ret == 64 && (find_symb((*params).flags, 'd', FLAG_LEN)) < 0)
+        write(1, "\n", 1);
     }
   }
   /*else if ((ret = read(1, &params->b64_buf, len)) > 0)

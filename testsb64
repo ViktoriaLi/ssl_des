@@ -56,7 +56,6 @@ echo YmMK | base64 -D
 echo ZWZkCg== | ./a.out base64 -d
 echo ZWZkCg== | base64 -D
 echo aGlqawo= | ./a.out base64 -d
-echo
 echo aGlqawo= | base64 -D
 echo bG1ub3AK | ./a.out base64 -d
 echo bG1ub3AK | base64 -D

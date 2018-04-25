@@ -19,7 +19,7 @@
 # include <pwd.h>
 
 # define BASE64_STR "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
-# define FLAG_LEN 7
+# define FLAG_LEN 10
 # define DES_BLOCK 8
 # define KEY_LEN 8
 

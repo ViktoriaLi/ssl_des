@@ -60,7 +60,7 @@ int check_b64_flags(int argc, char **argv, t_args *params)
   while (i < argc)
   {
     if (ft_strcmp(argv[i], "-e") == 0 || ft_strcmp(argv[i], "-d") == 0 ||
-    ft_strcmp(argv[i], "-i") == 0 || ft_strcmp(argv[i], "-o") == 0 || ft_strcmp(argv[i], "-D") == 0)
+    ft_strcmp(argv[i], "-i") == 0 || ft_strcmp(argv[i], "-o") == 0)
     {
       all_flags[j] = argv[i][1];
       if (argv[i][1] == 'i')
@@ -114,7 +114,8 @@ int check_des_flags(int argc, char **argv, t_args *params)
   {
     if (ft_strcmp(argv[i], "-e") == 0 || ft_strcmp(argv[i], "-d") == 0 ||
     ft_strcmp(argv[i], "-i") == 0 || ft_strcmp(argv[i], "-o") == 0 || ft_strcmp(argv[i], "-a") == 0
-    || ft_strcmp(argv[i], "-k") == 0 || ft_strcmp(argv[i], "-v") == 0)
+    || ft_strcmp(argv[i], "-k") == 0 || ft_strcmp(argv[i], "-v") == 0 || ft_strcmp(argv[i], "-s") == 0
+   || ft_strcmp(argv[i], "-p") == 0)
     {
       all_flags[j] = argv[i][1];
       if (argv[i][1] == 'i')
@@ -284,9 +285,7 @@ int main (int argc, char **argv)
   }
   else if (((ft_strcmp(params.cipher, "des") == 0) || (ft_strcmp(params.cipher, "des-ecb") == 0)
 || (ft_strcmp(params.cipher, "des-cbc") == 0)) && (find_symb(params.flags, 'd', FLAG_LEN) >= 0))
-  {
-    des_read(&params, argv, 65);
-  }
+    des_read(&params, argv, 64);
   if (params.ifd > 1)
     close(params.ifd);
   if (params.ofd > 1)
