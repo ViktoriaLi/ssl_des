@@ -563,6 +563,8 @@ void des_enc(t_args *params, int count, int *l)
 	}
 
 	//Step 5. XOR key and right part
+	//printf("EEE%d %d %d %d %d %d\n", (*params).key_res48[0], (*params).key_res48[1], (*params).key_res48[2],
+//(*params).key_res48[3], (*params).key_res48[4], (*params).key_res48[5]);
   while (iters.k < 6)
   {
     right48[iters.k] ^= (*params).key_res48[iters.k];

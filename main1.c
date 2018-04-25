@@ -220,6 +220,12 @@ void clear_struct(t_args *params)
     (*params).key_res56[i] = 0;
     i++;
   }
+  i = 0;
+  while (i < 65)
+  {
+    (*params).b64_buf[i] = 0;
+    i++;
+  }
 }
 
 int main (int argc, char **argv)
@@ -232,7 +238,7 @@ int main (int argc, char **argv)
   if (ft_strcmp(params.cipher, "base64") == 0 && find_symb(params.flags, 'd', FLAG_LEN) < 0)
     base64_read(&params, argv, 48);
   else if (ft_strcmp(params.cipher, "base64") == 0 && find_symb(params.flags, 'd', FLAG_LEN) >= 0)
-    base64_read(&params, argv, 65);
+    base64_read(&params, argv, 64);
   else if (((ft_strcmp(params.cipher, "des") == 0) || (ft_strcmp(params.cipher, "des-ecb") == 0)
 || (ft_strcmp(params.cipher, "des-cbc") == 0)) && (find_symb(params.flags, 'd', FLAG_LEN) < 0))
   {

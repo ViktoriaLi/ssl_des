@@ -30,9 +30,30 @@ echo "wxwz123" | openssl des-ecb -K 6162636461626364
 echo "4567890Q" | ./a.out des-ecb -k 6162636461626364
 echo
 echo "4567890Q" | openssl des-ecb -K 6162636461626364
-echo "WERTYUIOP" | ./a.out des-ecb -k 6162636461626364
+echo "WERTYUIOPASDFG" | ./a.out des-ecb -k 6162636461626364
 echo
-echo "WERTYUIOP" | openssl des-ecb -K 6162636461626364
+echo "WERTYUIOPASDFG" | openssl des-ecb -K 6162636461626364
+echo "HJKLZXCVBNMQWER" | ./a.out des-ecb -k 6162636461626364
+echo
+echo "HJKLZXCVBNMQWER" | openssl des-ecb -K 6162636461626364
+echo "1234567890qwerty" | ./a.out des-ecb -k 6162636461626364
+echo
+echo "1234567890qwerty" | openssl des-ecb -K 6162636461626364
+echo "HJKLZXCVBNMQWER1234567890qwerty" | ./a.out des-ecb -k 6162636461626364
+echo
+echo "HJKLZXCVBNMQWER1234567890qwerty" | openssl des-ecb -K 6162636461626364
+echo "HJKLZXCVBNMQWER1234567890qwertyf" | ./a.out des-ecb -k 6162636461626364
+echo
+echo "HJKLZXCVBNMQWER1234567890qwertyf" | openssl des-ecb -K 6162636461626364
+echo "WERTYUIOPASDFGHJKLZXCVBNMQWER1234567890qwertyfg" | ./a.out des-ecb -k 6162636461626364
+echo
+echo "WERTYUIOPASDFGHJKLZXCVBNMQWER1234567890qwertyfg" | openssl des-ecb -K 6162636461626364
+echo "WERTYUIOPASDFGHJKLZXCVBNMQWER1234567890qwertyf" | ./a.out des-ecb -k 6162636461626364
+echo
+echo "WERTYUIOPASDFGHJKLZXCVBNMQWER1234567890qwertyf" | openssl des-ecb -K 6162636461626364
+echo "WERTYUIOPASDFGHJKLZXCVBNMQWER1234567890qwertyffg" | ./a.out des-ecb -k 6162636461626364
+echo
+echo "WERTYUIOPASDFGHJKLZXCVBNMQWER1234567890qwertyffg" | openssl des-ecb -K 6162636461626364
 
 echo
 echo "des-ecb -e -a"
