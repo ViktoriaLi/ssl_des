@@ -16,40 +16,56 @@ void base64_dec(unsigned char *buf, t_args *params)
 {
   unsigned char dest[4];
   unsigned char tmp[4];
+  int j;
 	int len;
 
-	len = 0 ;
 	dest[3] = 0;
   tmp[0] = 0;
   tmp[1] = 0;
   tmp[2] = 0;
   tmp[3] = 0;
+  j = 0;
   dest[0] = find_symb(BASE64_STR, buf[0], 64);
   //printf("%d\n", dest[1]);
   dest[1] = find_symb(BASE64_STR, buf[1], 64);
-	len = 1;
   //printf("%d\n", dest[1]);
   if (buf[2] != '=')
   {
     dest[2] = find_symb(BASE64_STR, buf[2], 64);
-		len = 1;
     //printf("%d\n", dest[1]);
   }
   if (buf[3] != '=')
   {
     dest[3] = find_symb(BASE64_STR, buf[3], 64);
-		len = 3;
     //printf("%d\n", dest[1]);
   }
   tmp[0] = (dest[0] << 2) + (dest[1] >> 4);
+  len = 1;
   if (buf[2] != '=')
+  {
     tmp[1] = (dest[1] << 4) + (dest[2] >> 2);
+    len = 2;
+  }
   if (buf[3] != '=')
+  {
     tmp[2] = (dest[2] << 6) + dest[3];
-  if ((find_symb((*params).flags, 'o', FLAG_LEN)) >= 0)
-    write((*params).ofd, tmp, len);
+    len = 3;
+  }
+  //len = ft_strlen((char *)tmp);
+  if (ft_strcmp((*params).cipher, "base64") == 0)
+  {
+    if ((find_symb((*params).flags, 'o', FLAG_LEN)) >= 0)
+      write((*params).ofd, tmp, len);
+    else
+      write(1, (char *)tmp, len);
+  }
   else
-    write(1, (char *)tmp, len);
+  {
+    j = 0;
+    while (j < len)
+      (*params).des_48_res[(*params).desad_count++] = tmp[j++];
+    //printf("%s\n", );
+  }
 }
 
 void base64_enc(unsigned char *buf, t_args *params, int j)

@@ -19,7 +19,7 @@
 # include <pwd.h>
 
 # define BASE64_STR "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
-# define FLAG_LEN 10
+# define FLAG_LEN 15
 # define DES_BLOCK 8
 # define KEY_LEN 8
 
@@ -27,6 +27,7 @@ typedef struct		s_args
 {
 	char	*cipher;
 	int if_full;
+	int desad_count;
   unsigned char b64_buf[65];
   unsigned char buf[DES_BLOCK];
   unsigned char *vector16;
@@ -37,8 +38,8 @@ typedef struct		s_args
 	unsigned char key_res48[6];
 	unsigned char key_res56[7];
 	unsigned char des_output[8];
-	unsigned char des_48_read[48];
-	unsigned char des_48_res[48];
+	unsigned char des_48_read[64];
+	unsigned char des_48_res[64];
 }					t_args;
 
 typedef struct		s_addition

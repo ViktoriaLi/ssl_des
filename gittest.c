@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_des.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: vlikhotk <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/03/29 15:09:22 by vlikhotk          #+#    #+#             */
-/*   Updated: 2018/03/29 15:09:25 by vlikhotk         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "ft_ssl.h"
 #include <stdio.h>
 
@@ -39,8 +27,8 @@ void finish_key_shift(unsigned char key_56[], t_args *params)
 
 	bit_permutations(6, key_finish, (*params).key_res48, key_56);
   //printf("finish key%s\n", (*params).key_res48);
-	//printf("CODE finish key%d %d %d %d %d %d \n", (*params).key_res48[0], (*params).key_res48[1], (*params).key_res48[2],
-	//(*params).key_res48[3], (*params).key_res48[4], (*params).key_res48[5]);
+	printf("CODE finish key%d %d %d %d %d %d \n", (*params).key_res48[0], (*params).key_res48[1], (*params).key_res48[2],
+	(*params).key_res48[3], (*params).key_res48[4], (*params).key_res48[5]);
 }
 
 void two_bit_shift_right(unsigned char key_56[], t_args *params)
@@ -308,7 +296,7 @@ void make_keys(unsigned char **des_key, t_args *params, int rounds)
   unsigned char key_res[KEY_LEN];
 
 	clear_iterators(&iters);
-  //printf("Original key%s\n", (*params).des_key);
+  printf("Original key%s\n", (*params).des_key);
   while ((*des_key)[iters.j] && iters.i < KEY_LEN)
   {
     if ((*des_key)[iters.j] >= 65 && (*des_key)[iters.j] <= 70)
@@ -323,9 +311,9 @@ void make_keys(unsigned char **des_key, t_args *params, int rounds)
     iters.i++;
     iters.j += 2;
   }
-  //printf("64 bits key%s\n", key_res);
-	//printf("CODE 64 bits key%d %d %d %d %d %d %d %d\n", key_res[0], key_res[1], key_res[2], key_res[3],
-//key_res[4], key_res[5], key_res[6], key_res[7]);
+  printf("64 bits key%s\n", key_res);
+	printf("CODE 64 bits key%d %d %d %d %d %d %d %d\n", key_res[0], key_res[1], key_res[2], key_res[3],
+key_res[4], key_res[5], key_res[6], key_res[7]);
 	if (rounds != -1)
   	remove_8bits(key_res, params, rounds);
 	else
@@ -360,8 +348,64 @@ void message_first_shift(t_args *params)
   }
 }
 
+void des_dec(t_args *params, int count)
+{
+
+}
+
+/*void fill_des_tables(t_des_tables *des_base)
+{
+  (*des_base).m_start = {58, 50, 42, 34, 26, 18, 10, 2,	60,	52,	44,	36,	28	20,	12,	4,\
+  62,	54,	46,	38,	30,	22,	14,	6, 64, 56,	48,	40,	32,	24,	16,	8, 57, 49, 41, 33,\
+  25,	17,	9, 1,	59,	51,	43,	35,	27,	19,	11,	3, 61, 53,	45,	37,	29,	21,	13,	5, 63,\
+  55,	47,	39,	31,	23,	15,	7};
+	(*des_base).m_end = {40, 8, 48, 16, 56, 24, 64, 32, 39, 7, 47, 15, 55, 23, 63, 31, \
+  38, 6, 46, 14, 54, 22, 62, 30, 37, 5, 45, 13, 53, 21, 61, 29, 36, 4, 44, 12, \
+  52, 20, 60, 28, 35, 3, 43, 11, 51, 19, 59, 27, 34, 2, 42, 10, 50, 18, 58, 26, \
+  33, 1, 41, 9, 49, 17, 57, 25};
+	(*des_base).r_to_48 = {32,	1, 2,	3, 4,	5, 4,	5, 6,	7, 8,	9, 8,	9, 10, 11, 12, 13\
+  12,	13,	14,	15,	16,	17, 16,	17,	18,	19,	20,	21, 20,	21,	22,	23,	24,	25, 24,\
+  25,	26,	27,	28,	29, 28,	29,	30,	31,	32,	1};
+	(*des_base).key_start = {57, 49, 41, 33, 25, 17, 9, 1, 58, 50, 42, 34, 26, 18, 10, 2,\
+  	59, 51, 43, 35, 27,	19, 11, 3, 60, 52, 44, 36, 63, 55, 47, 39, 31, 23, 15, 7,\
+  	62, 54, 46, 38, 30, 22, 14, 6, 61, 53, 45, 37, 29, 21, 13, 5, 28, 20, 12, 4};
+  (*des_base).key_finish = {14,	17,	11,	24,	1,	5,	3,	28,	15,	6,	21,	10,	23,	19,	12,\
+  	4, 26,	8,	16,	7,	27,	20,	13,	2,	41,	52,	31,	37,	47,	55,	30,	40,\
+  	51,	45,	33,	48,	44,	49,	39, 56, 34, 53, 46, 42, 50, 36, 29, 32};
+	(*des_base).shift_table_e = {1, 1, 2, 2,	2, 2,	2, 2, 1, 2, 2, 2, 2, 2, 2, 1};
+	(*des_base).shift_table_d = {0, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1};
+	(*des_base).s_1 = {14, 4, 13, 1, 2, 15, 11, 8, 3, 10, 6, 12, 5, 9, 0, 7, 0, 15, 7, 4,\
+  	14, 2, 13, 1, 10, 6, 12, 11, 9, 5, 3, 8, 4, 1, 14, 8, 13, 6, 2, 11, 15, 12,\
+  	9, 7, 3, 10, 5, 0, 15, 12, 8, 2, 4, 9, 1, 7, 5, 11, 3, 14, 10, 0, 6, 13};
+	(*des_base).s_2 = {15, 1, 8, 14, 6, 11, 3, 4, 9, 7, 2, 13, 12, 0, 5, 10, 3, 13, 4, 7,\
+  	15, 2, 8, 14, 12, 0, 1, 10, 6, 9, 11, 5, 0, 14, 7, 11, 10, 4, 13, 1, 5, 8, 12,\
+  	6, 9, 3, 2, 15, 13, 8, 10, 1, 3, 15, 4, 2, 11, 6, 7, 12, 0, 5, 14, 9};
+	(*des_base).s_3 = {10, 0, 9, 14, 6, 3, 15, 5, 1, 13, 12, 7, 11, 4, 2, 8, 13, 7, 0, 9,\
+  	3, 4, 6, 10, 2, 8, 5, 14, 12, 11, 15, 1, 13, 6, 4, 9, 8, 15, 3, 0, 11, 1, 2,\
+  	12, 5, 10, 14, 7, 1, 10, 13, 0, 6, 9, 8, 7, 4, 15, 14, 3, 11, 5, 2, 12};
+	(*des_base).s_4 = {7, 13, 14, 3, 0, 6, 9, 10, 1, 2, 8, 5, 11, 12, 4, 15, 13, 8, 11, 5,\
+  	6, 15, 0, 3, 4, 7, 2, 12, 1, 10, 14, 9, 10, 6, 9, 0, 12, 11, 7, 13, 15, 1, 3,\
+  	14, 5, 2, 8, 4, 3, 15, 0, 6, 10, 1, 13, 8, 9, 4, 5, 11, 12, 7, 2, 14};
+	(*des_base).s_5 = {2, 12, 4, 1, 7, 10, 11, 6, 8, 5, 3, 15, 13, 0, 14, 9, 14, 11, 2, 12,\
+  	4, 7, 13, 1, 5, 0, 15, 10, 3, 9, 8, 6, 4, 2, 1, 11, 10, 13, 7, 8, 15, 9, 12,\
+  	5, 6, 3, 0, 14, 11, 8, 12, 7, 1, 14, 2, 13, 6, 15, 0, 9, 10, 4, 5, 3};
+	(*des_base).s_6 = {12, 1, 10, 15, 9, 2, 6, 8, 0, 13, 3, 4, 14, 7, 5, 11, 10, 15, 4, 2,\
+  	7, 12, 9, 5, 6, 1, 13, 14, 0, 11, 3, 8, 9, 14, 15, 5, 2, 8, 12, 3, 7, 0, 4, 10,\
+  	1, 13, 11, 6, 4, 3, 2, 12, 9, 5, 15, 10, 11, 14, 1, 7, 6, 0, 8, 13};
+	(*des_base).s_7 = {4, 11, 2, 14, 15, 0, 8, 13, 3, 12, 9, 7, 5, 10, 6, 1, 13, 0, 11, 7,\
+  	4, 9, 1, 10, 14, 3, 5, 12, 2, 15, 8, 6, 1, 4, 11, 13, 12, 3, 7, 14, 10, 15, 6,\
+  	8, 0, 5, 9, 2, 6, 11, 13, 8, 1, 4, 10, 7, 9, 5, 0, 15, 14, 2, 3, 12};
+	(*des_base).s_8 = {13, 2, 8, 4, 6, 15, 11, 1, 10, 9, 3, 14, 5, 0, 12, 7, 1, 15, 13, 8,\
+  	10, 3, 7, 4, 12, 5, 6, 11, 0, 14, 9, 2, 7, 11, 4, 1, 9, 12, 14, 2, 0, 6, 10,\
+  	13, 15, 3, 5, 8, 2, 1, 14, 7, 4, 10, 8, 13, 15, 12, 9, 0, 3, 5, 6, 11};
+	(*des_base).shift_32bits = { 6, 7, 20, 21, 29, 12, 28, 17, 1, 15, 23, 26, 5, 18, 31,\
+  	10, 2, 8, 24, 14, 32, 27, 3, 9, 19, 13, 30, 6, 22, 11, 4, 25};
+	(*des_base).p_shift = {16,	7, 20, 21, 29, 12, 28, 17, 1, 15,	23,	26,	5, 18, 31, 10,\
+  	2, 8, 24, 14, 32,	27,	3, 9, 19,	13,	30,	6, 22, 11, 4,	25};
+}*/
+
 /*main des-encryption function */
-void des_enc(t_args *params, int count, int *l)
+void des_enc(t_args *params, int count)
 {
 	t_addition iters;
 
@@ -383,7 +427,8 @@ void des_enc(t_args *params, int count, int *l)
   s_output = 0;
 	four_bits = NULL;
 	clear_iterators(&iters);
-  //printf("6 BUF%s\n", (*params).buf);
+
+  //printf("1BUF%s\n", (*params).buf);
 	//printf("1BUF%d %d %d %d %d %d %d %d\n", (*params).buf[0], (*params).buf[1], (*params).buf[2],
 //(*params).buf[3], (*params).buf[4], (*params).buf[5], (*params).buf[6], (*params).buf[7]);
 	//printf("CODE 1BUF%d %d %d %d %d %d %d %d\n", (*params).buf[0], (*params).buf[1], (*params).buf[2], (*params).buf[3],
@@ -437,11 +482,11 @@ void des_enc(t_args *params, int count, int *l)
   33, 1, 41, 9, 49, 17, 57, 25};
 	if (ft_strcmp((*params).cipher, "des-cbc") == 0 && count == 1)
 		make_keys(&params->vector16, params, -1);
-	/*printf("cipher %s\n", (*params).cipher);
+	printf("cipher %s\n", (*params).cipher);
 	printf("vector %s\n", (*params).des_output);
 	printf("CODE vector %d %d %d %d %d %d %d %d \n", (*params).des_output[0], (*params).des_output[1],
 (*params).des_output[2], (*params).des_output[3], (*params).des_output[4], (*params).des_output[5],
-(*params).des_output[6], (*params).des_output[7]);*/
+(*params).des_output[6], (*params).des_output[7]);
 	//Step 1. Make first bit permutation for message (8 bytes)
 	if (ft_strcmp((*params).cipher, "des-cbc") == 0 && find_symb((*params).flags, 'd', FLAG_LEN) < 0)
 		while (iters.i < 8)
@@ -496,8 +541,9 @@ void des_enc(t_args *params, int count, int *l)
 			if (shift_table_e[rounds] == 2)
 				two_bit_shift_left((*params).key_res56, params);
 		}
-		if (find_symb((*params).flags, 'd', FLAG_LEN) >= 0)
+		else
 		{
+			printf("test%s\n", "test");
 			if (shift_table_d[rounds] == 1)
 			  one_bit_shift_right((*params).key_res56, params);
 			if (shift_table_d[rounds] == 2)
@@ -506,8 +552,6 @@ void des_enc(t_args *params, int count, int *l)
 	}
 
 	//Step 5. XOR key and right part
-	//printf("EEE%d %d %d %d %d %d\n", (*params).key_res48[0], (*params).key_res48[1], (*params).key_res48[2],
-//(*params).key_res48[3], (*params).key_res48[4], (*params).key_res48[5]);
   while (iters.k < 6)
   {
     right48[iters.k] ^= (*params).key_res48[iters.k];
@@ -676,7 +720,6 @@ if (ft_strcmp((*params).cipher, "des-cbc") == 0 && find_symb((*params).flags, 'd
 		iters.k++;
 	}
 bit_permutations(8, m_end, (*params).des_output, exp_for_s);
-clear_iterators(&iters);
 if (ft_strcmp((*params).cipher, "des-cbc") == 0 && find_symb((*params).flags, 'd', FLAG_LEN) >= 0)
 {
 	while (iters.m < 8)
@@ -685,45 +728,19 @@ if (ft_strcmp((*params).cipher, "des-cbc") == 0 && find_symb((*params).flags, 'd
 		iters.m++;
 	}
 }
-//printf("111%.8s", (*params).des_output);
-//write(1, (*params).des_output, 8);
-clear_iterators(&iters);
-if (find_symb((*params).flags, 'd', FLAG_LEN) >= 0)
-{
-	if ((*params).des_output[7] > 0 && (*params).des_output[7] < 9)
-	{
-		iters.k = (*params).des_output[7];
-		iters.m = (*params).des_output[7];
-		//printf("%d\n", iters.m);
-		iters.i = 7;
-		while (iters.k > 0)
-		{
-			(*params).des_output[iters.i--] = 0;
-			iters.k--;
-		}
-	}
-}
-//write(1, (*params).des_output, 8);
-//printf("222%.8s", (*params).des_output);
-//printf("CODE 64 bits m output%d %d %d %d %d %d %d %d\n", (*params).des_output[0], (*params).des_output[1], (*params).des_output[2],
-//(*params).des_output[3], (*params).des_output[4], (*params).des_output[5], (*params).des_output[6], (*params).des_output[7]);
-if ((find_symb((*params).flags, 'a', FLAG_LEN)) < 0 || (find_symb((*params).flags, 'a', FLAG_LEN) >= 0
-&& find_symb((*params).flags, 'd', FLAG_LEN) >= 0))
+printf("%s\n", (*params).des_output);
+printf("CODE 64 bits m output%d %d %d %d %d %d %d %d\n", (*params).des_output[0], (*params).des_output[1], (*params).des_output[2],
+(*params).des_output[3], (*params).des_output[4], (*params).des_output[5], (*params).des_output[6], (*params).des_output[7]);
+if ((find_symb((*params).flags, 'a', FLAG_LEN)) < 0)
 {
 	if ((find_symb((*params).flags, 'o', FLAG_LEN)) >= 0)
-		write((*params).ofd, (*params).des_output, 8 - iters.m);
+		write((*params).ofd, (*params).des_output, ft_strlen((char *)(*params).des_output));
 	else
-		write(1, (*params).des_output, 8 - iters.m);
+		write(1, (*params).des_output, ft_strlen((char *)(*params).des_output));
 }
-else if (find_symb((*params).flags, 'a', FLAG_LEN) >= 0 && find_symb((*params).flags, 'd', FLAG_LEN) < 0)
+else
 {
-	while (iters.j < 8)
-		(*params).des_48_res[(*l)++] = (*params).des_output[iters.j++];
-	//printf("%s\n", (*params).des_48_res);
-	//write(1, (*params).des_48_res, *l);
-	(*l) -= iters.m;
-}
-	/*while (iters.k < 3)
+	while (iters.k < 3)
 	{
 		(*params).b64_buf[iters.k] = (*params).des_output[iters.m];
 		iters.k++;
@@ -749,220 +766,118 @@ else if (find_symb((*params).flags, 'a', FLAG_LEN) >= 0 && find_symb((*params).f
 	}
 	(*params).b64_buf[iters.i++] = 0;
 	(*params).b64_buf[iters.i] = 0;
-	base64_enc((*params).b64_buf, params);*/
+	base64_enc((*params).b64_buf, params);
+}
 }
 
-void des_read(t_args *params, char **argv, int len)
+void des_read(t_args *params, char **argv)
 {
   int i;
-	int j;
-	int k;
 	int count;
   int ret;
-	static unsigned char tmpdes[8];
-	static unsigned char tmpb64[4];
-	unsigned char tmpad[64];
-	int l;
 
-	i = 0;
-	j = 0;
-	k = 0;
   ret = 0;
 	count = 0;
-	l = 0;
   if ((find_symb((*params).flags, 'i', FLAG_LEN)) >= 0)
   {
-    while ((ret = read((*params).ifd, params->des_48_read, len)) > 0)
+    while ((ret = read((*params).ifd, params->buf, DES_BLOCK)) > 0)
     {
-			if (ret == len && (find_symb((*params).flags, 'd', FLAG_LEN)) < 0)
-				(*params).if_full = 1;
-			i = 0;
-			while (i < ret)
-      {
-				j = 0;
-				while (i < ret && j < 8)
-					(*params).buf[j++] = (*params).des_48_read[i++];
-				count++;
-				if ((find_symb((*params).flags, 'd', FLAG_LEN)) < 0 && j < 8)
-				{
-						k = 8 - j;
-						while (j < 8)
-							(*params).buf[j++] = k;
-				}
-				//printf("TEST %d %d %d %d %d %d %d %d\n", (*params).buf[0], (*params).buf[1], (*params).buf[2],
-			//(*params).buf[3], (*params).buf[4], (*params).buf[5], (*params).buf[6], (*params).buf[7]);
-				des_enc(params, count, &l);
-				}
-				if ((find_symb((*params).flags, 'd', FLAG_LEN)) < 0 && (ret % 8) == 0 && ret != len)
-				{
-					count++;
-					j = 0;
-					while (j < 8)
-						(*params).buf[j++] = 8;
-					des_enc(params, count, &l);
-				}
-				if ((find_symb((*params).flags, 'a', FLAG_LEN)) >= 0)
-				{
-					if (find_symb((*params).flags, 'd', FLAG_LEN) >= 0)
-		      {
-						i = 0;
-		        while (i < l)
-		        {
-							j = 0;
-							while (i < l && j < 4)
-								tmpb64[j++] = (*params).des_48_res[i++];
-							//ft_printf("%s\n", tmpb64d);
-		          base64_dec(tmpb64, params);
-							j = 0;
-							while (j < 4)
-								tmpb64[j++] = 0;
-		        }
-		      }
-		      else
-		      {
-						i = 0;
-		        while (i < l)
-		        {
-							j = 0;
-							while (i < l && j < 3)
-								tmpb64[j++] = (*params).des_48_res[i++];
-							//printf("CCC%d %d %d %d \n", tmpb64[0], tmpb64[1], tmpb64[2], tmpb64[3]);
-		          base64_enc(tmpb64, params, j);
-							j = 0;
-				      while (j < 3)
-				        tmpb64[j++] = 0;
-		        }
-					if (ret == 64 && (find_symb((*params).flags, 'o', FLAG_LEN)) >= 0)
-			       write((*params).ofd, "\n", 1);
-			    else if (ret == 48)
-			       write(1, "\n", 1);
-		      }
-		      i = 0;
-		      while (i < l)
-		        (*params).des_48_res[i++] = 0;
-					i = 0;
-		      while (i < ret)
-		        (*params).des_48_read[i++] = 0;
-				}
-    }
-		if ((*params).if_full == 1 && (find_symb((*params).flags, 'd', FLAG_LEN)) < 0)
-		{
+      //ft_printf("BUF %s\n", (*params).buf);
 			count++;
-			j = 0;
-			while (j < 8)
-				(*params).buf[j++] = 8;
-			des_enc(params, count, &l);
-		}
+			i = ret;
+			while (i < DES_BLOCK)
+      {
+        (*params).buf[i] = 0;
+        i++;
+      }
+			if ((*params).buf[ret - 1] == 10)
+				(*params).buf[ret - 1] = 0;
+      if ((find_symb((*params).flags, 'd', FLAG_LEN)) >= 0)
+        des_dec(params, count);
+      else
+        des_enc(params, count);
+      if (ret < DES_BLOCK)
+        break;
+    }
   }
-		else
-		{
-			while ((ret = read(0, params->des_48_read, len)) > 0)
-			{
-				l = 0;
-				if (ret == len && (find_symb((*params).flags, 'd', FLAG_LEN)) < 0)
-					(*params).if_full = 1;
-				if ((find_symb((*params).flags, 'd', FLAG_LEN)) < 0 && (ret % 8) == 0 && ret != len)
-				{
-					j = ret;
-					ret += 8;
-					i = 0;
-					while (i < 8)
-					{
-						(*params).des_48_read[j++] = 8;
-						i++;
-					}
-				}
-				else if ((find_symb((*params).flags, 'd', FLAG_LEN)) < 0 && (ret % 8) != 0 )
-				{
-					i = 0;
-					j = ret;
-					k = 8 - (ret % 8);
-					ret += k;
-					while (i < 8)
-					{
-							(*params).des_48_read[j++] = k;
-							i++;
-					}
-				}
-				printf("0dfg%d\n", ret);
-				if ((find_symb((*params).flags, 'a', FLAG_LEN)) >= 0 && find_symb((*params).flags, 'd', FLAG_LEN) >= 0)
-				{
-						(*params).desad_count = 0;
-						i = 0;
-						while (i < ret)
-						{
-							j = 0;
-							while (i < ret && j < 4)
-								tmpb64[j++] = (*params).des_48_read[i++];
-							//ft_printf("%s\n", tmpb64d);
-							base64_dec(tmpb64, params);
-							j = 0;
-							while (j < 4)
-								tmpb64[j++] = 0;
-						}
-						i = 0;
-						while (i < (*params).desad_count)
-						{
-							(*params).des_48_read[i] = (*params).des_48_res[i];
-							i++;
-						}
-						ret = (*params).desad_count - (*params).desad_count % 8;
-				}
-				//printf("1%s\n", params->des_48_read);
-				printf("2dfg%d\n", (*params).desad_count);
-				printf("1dfg%d\n", ret);
-				//printf("3%d\n", (*params).if_full);
-				i = 0;
-				while (i < ret)
-				{
-					j = 0;
-					while (i < ret && j < 8)
-						(*params).buf[j++] = (*params).des_48_read[i++];
-					count++;
-					//printf("3 %s\n", (*params).buf);
-					//printf("4 %d\n", count);
-					//printf("5 %d\n", l);
-					//printf("4%d\n", j);
-					//printf("TEST %d %d %d %d %d %d %d %d\n", (*params).buf[0], (*params).buf[1], (*params).buf[2],
-				//(*params).buf[3], (*params).buf[4], (*params).buf[5], (*params).buf[6], (*params).buf[7]);
-					des_enc(params, count, &l);
-				}
-				//printf("3 %s\n", (*params).des_48_res);
-				//printf("5 %d\n", l);
-					if ((find_symb((*params).flags, 'a', FLAG_LEN)) >= 0 && find_symb((*params).flags, 'd', FLAG_LEN) < 0)
-					{
-							i = 0;
-							while (i < l)
-							{
-								j = 0;
-								while (i < l && j < 3)
-									tmpb64[j++] = (*params).des_48_res[i++];
-								//printf("CCC%d %d %d %d \n", tmpb64[0], tmpb64[1], tmpb64[2], tmpb64[3]);
-								base64_enc(tmpb64, params, j);
-								j = 0;
-								while (j < 3)
-									tmpb64[j++] = 0;
-							}
-							if (ret == 64 && (find_symb((*params).flags, 'o', FLAG_LEN)) >= 0)
-					       write((*params).ofd, "\n", 1);
-					    else if (ret == 48)
-					       write(1, "\n", 1);
-						i = 0;
-						while (i < l)
-							(*params).des_48_res[i++] = 0;
-						l = 0;
-					}
-					i = 0;
-					while (i < ret)
-						(*params).des_48_read[i++] = 0;
-			}
-			if ((*params).if_full == 1 && (find_symb((*params).flags, 'd', FLAG_LEN)) < 0)
-			{
+  else if ((ret = read(0, params->buf, DES_BLOCK)) > 0)
+  {
+    ft_printf("BUF %s\n", (*params).buf);
+		count++;
+		i = ret;
+    while (i < DES_BLOCK)
+    {
+      (*params).buf[i] = 0;
+      i++;
+    }
+		if ((*params).buf[ret - 1] == 10)
+			(*params).buf[ret - 1] = 0;
+    if ((find_symb((*params).flags, 'd', FLAG_LEN)) >= 0)
+      des_dec(params, count);
+    else
+      des_enc(params, count);
+    /*else if (ft_strcmp(argv[1], "des") == 0)
+      des_enc(buf);
+    else if (ft_strcmp(argv[1], "des-ecb") == 0)
+      des_ecb_enc(buf);
+    else if (ft_strcmp(argv[1], "des-cbc") == 0)
+      des_cbc_enc(buf);*/
+    while ((ret = read(0, params->buf, DES_BLOCK)) > 0)
+    {
+			count++;
+      //ft_printf("BUF %s\n", (*params).buf);
+			i = ret;
+      while (i < DES_BLOCK)
+      {
+        (*params).buf[i] = 0;
+        i++;
+      }
+			if ((*params).buf[ret - 1] == 10)
+				(*params).buf[ret - 1] = 0;
+      if ((find_symb((*params).flags, 'd', FLAG_LEN)) >= 0)
+        des_dec(params, count);
+      else
+        des_enc(params, count);
+      if (ret < DES_BLOCK)
+        break;
+    }
+  }
+  else if ((ret = read(1, params->buf, DES_BLOCK)) > 0)
+  {
+		count++;
+      //ft_printf("%s\n", (*params).buf);
+			i = ret;
+      while (i < DES_BLOCK)
+      {
+        (*params).buf[i] = 0;
+        i++;
+      }
+			if ((*params).buf[ret - 1] == 10)
+				(*params).buf[ret - 1] = 0;
+      if ((find_symb((*params).flags, 'd', FLAG_LEN)) >= 0)
+        des_dec(params, count);
+      else
+        des_enc(params, count);
+      while ((ret = read(1, params->buf, DES_BLOCK)) > 0)
+      {
 				count++;
-				j = 0;
-				while (j < 8)
-					(*params).buf[j++] = 8;
-				des_enc(params, count, &l);
-			}
-}
+        //ft_printf("%s\n", (*params).buf);
+				i = ret;
+        while (i < DES_BLOCK)
+        {
+          (*params).buf[i] = 0;
+          i++;
+        }
+				if ((*params).buf[ret - 1] == 10)
+					(*params).buf[ret - 1] = 0;
+        if ((find_symb((*params).flags, 'd', FLAG_LEN)) >= 0)
+          des_dec(params, count);
+        else
+          des_enc(params, count);
+        if (ret < DES_BLOCK)
+          break;
+      }
+  }
+  if ((find_symb((*params).flags, 'o', FLAG_LEN)) < 0)
+    ft_printf("%s", "\n");
 }
