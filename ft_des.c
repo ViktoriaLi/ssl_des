@@ -444,11 +444,14 @@ void des_enc(t_args *params, int count, int *l)
 (*params).des_output[6], (*params).des_output[7]);*/
 	//Step 1. Make first bit permutation for message (8 bytes)
 	if (ft_strcmp((*params).cipher, "des-cbc") == 0 && find_symb((*params).flags, 'd', FLAG_LEN) < 0)
+	{
 		while (iters.i < 8)
 		{
 			(*params).buf[iters.i] ^= (*params).des_output[iters.i];
 			iters.i++;
 		}
+	}
+	//printf("BUF%s\n", (*params).buf);
   message_first_shift(params);
   //printf("M after first shift%s\n", (*params).buf);
 	//printf("CODE M after first shift%d %d %d %d %d %d %d %d\n", (*params).buf[0], (*params).buf[1], (*params).buf[2], (*params).buf[3],
@@ -685,9 +688,9 @@ if (ft_strcmp((*params).cipher, "des-cbc") == 0 && find_symb((*params).flags, 'd
 		iters.m++;
 	}
 }
-//printf("111%.8s", (*params).des_output);
 //write(1, (*params).des_output, 8);
 clear_iterators(&iters);
+//printf("555%.8s", (*params).des_output);
 if (find_symb((*params).flags, 'd', FLAG_LEN) >= 0)
 {
 	if ((*params).des_output[7] > 0 && (*params).des_output[7] < 9)
@@ -704,7 +707,6 @@ if (find_symb((*params).flags, 'd', FLAG_LEN) >= 0)
 	}
 }
 //write(1, (*params).des_output, 8);
-//printf("222%.8s", (*params).des_output);
 //printf("CODE 64 bits m output%d %d %d %d %d %d %d %d\n", (*params).des_output[0], (*params).des_output[1], (*params).des_output[2],
 //(*params).des_output[3], (*params).des_output[4], (*params).des_output[5], (*params).des_output[6], (*params).des_output[7]);
 if ((find_symb((*params).flags, 'a', FLAG_LEN)) < 0 || (find_symb((*params).flags, 'a', FLAG_LEN) >= 0
@@ -884,11 +886,17 @@ void des_read(t_args *params, char **argv, int len)
 							i++;
 					}
 				}
-				printf("0dfg%d\n", ret);
+				//printf("0dfg%d\n", ret);
 				if ((find_symb((*params).flags, 'a', FLAG_LEN)) >= 0 && find_symb((*params).flags, 'd', FLAG_LEN) >= 0)
 				{
 						(*params).desad_count = 0;
 						i = 0;
+						if ((*params).des_48_read[0] == '\n')
+						{
+							i = 1;
+							ret++;
+							read(0, &params->des_48_read[64], 1);
+						}
 						while (i < ret)
 						{
 							j = 0;
@@ -907,10 +915,12 @@ void des_read(t_args *params, char **argv, int len)
 							i++;
 						}
 						ret = (*params).desad_count - (*params).desad_count % 8;
+						if (ft_strcmp((*params).cipher, "des-cbc") == 0 && ret > 8)
+							ret -= 8;
 				}
 				//printf("1%s\n", params->des_48_read);
-				printf("2dfg%d\n", (*params).desad_count);
-				printf("1dfg%d\n", ret);
+				//printf("2dfg%d\n", (*params).desad_count);
+				//printf("1dfg%d\n", ret);
 				//printf("3%d\n", (*params).if_full);
 				i = 0;
 				while (i < ret)

@@ -44,6 +44,10 @@ echo tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiqwertyuiopjhgfdg | base64
 echo tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiqwertyuiopjhgfdkk | ./a.out base64
 echo
 echo tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiqwertyuiopjhgfdkk | base64
+echo tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiqwertyuiopjhgfdkk123 | ./a.out base64
+echo
+echo tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiqwertyuiopjhgfdkk123 | base64
+echo tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiqwertyuiopjhgfd
 
 echo
 echo "base64 -d"
@@ -81,3 +85,5 @@ echo
 echo dGZoZmdqZ2hraGprdHlmbnVydHluaXV5b2l1eWlidHV0eWludXlvbWl1aWJ0eXRpcXdlcnR5dWlvcGpoZ2ZkZwo= | base64 -D
 echo dGZoZmdqZ2hraGprdHlmbnVydHluaXV5b2l1eWlidHV0eWludXlvbWl1aWJ0eXRpcXdlcnR5dWlvcGpoZ2Zka2sK| ./a.out base64 -d
 echo dGZoZmdqZ2hraGprdHlmbnVydHluaXV5b2l1eWlidHV0eWludXlvbWl1aWJ0eXRpcXdlcnR5dWlvcGpoZ2Zka2sK | base64 -D
+echo dGZoZmdqZ2hraGprdHlmbnVydHluaXV5b2l1eWlidHV0eWludXlvbWl1aWJ0eXRpcXdlcnR5dWlvcGpoZ2Zka2sxMjMK| ./a.out base64 -d
+echo dGZoZmdqZ2hraGprdHlmbnVydHluaXV5b2l1eWlidHV0eWludXlvbWl1aWJ0eXRpcXdlcnR5dWlvcGpoZ2Zka2sxMjMK | base64 -D
