@@ -19,11 +19,6 @@ void base64_dec(unsigned char *buf, t_args *params)
   int j;
 	int len;
 
-	dest[3] = 0;
-  tmp[0] = 0;
-  tmp[1] = 0;
-  tmp[2] = 0;
-  tmp[3] = 0;
   j = 0;
   dest[0] = find_symb(BASE64_STR, buf[0], 64);
   //printf("%d\n", dest[1]);

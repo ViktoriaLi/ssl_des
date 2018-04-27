@@ -70,7 +70,9 @@ int check_b64_flags(int argc, char **argv, t_args *params)
       }
       else if (argv[i][1] == 'o')
       {
-        (*params).ofd = open(argv[i + 1], O_RDWR | O_APPEND);;
+        (*params).ofd = open(argv[i + 1], O_RDWR | O_APPEND);
+        if ((*params).ofd < 0)
+          (*params).ofd = open(argv[i + 1], O_CREAT , O_APPEND | O_RDWR);
         i++;
       }
       j++;
@@ -125,7 +127,9 @@ int check_des_flags(int argc, char **argv, t_args *params)
       }
       if (argv[i][1] == 'o')
       {
-        (*params).ofd = open(argv[i + 1], O_RDWR | O_APPEND);;
+        (*params).ofd = open(argv[i + 1], O_RDWR | O_APPEND);
+        if ((*params).ofd == -1)
+          (*params).ofd = open(argv[i + 1], O_CREAT, S_IRUSR | S_IWUSR);
         i++;
       }
       if (argv[i][1] == 'k')
@@ -152,8 +156,8 @@ int check_des_flags(int argc, char **argv, t_args *params)
   //printf("DDD%d\n", find_flag(params, 'i'));
   //printf("DDD%s\n", (*params).flags);
   //printf("DDD%d\n", (*params).ifd);
-  if (((find_symb((*params).flags, 'i', FLAG_LEN)) >= 0 && (*params).ifd < 0)
-  || ((find_symb((*params).flags, 'o', FLAG_LEN)) >= 0 && (*params).ofd < 0))
+  if (((find_symb((*params).flags, 'i', FLAG_LEN)) >= 0 && (*params).ifd == -1)
+  || ((find_symb((*params).flags, 'o', FLAG_LEN)) >= 0 && (*params).ofd == -1))
   {
     ft_printf("usage: ft_ssl %s [-i file] [-v IV] [-k key] [-o file]\n", argv[1]);
     return (1);
