@@ -129,7 +129,7 @@ int check_des_flags(int argc, char **argv, t_args *params)
       {
         (*params).ofd = open(argv[i + 1], O_RDWR | O_APPEND);
         if ((*params).ofd == -1)
-          (*params).ofd = open(argv[i + 1], O_CREAT, S_IRUSR | S_IWUSR);
+          (*params).ofd = open(argv[i + 1], O_RDWR | O_CREAT | 0666);
         i++;
       }
       if (argv[i][1] == 'k')
@@ -182,13 +182,15 @@ int if_valid_args(int argc, char **argv, t_args *params)
   {
     ft_printf("ft_ssl: Error: %s is an invalid command.\n\n", argv[1]);
     ft_printf("%s\n", "Standard commands:\n\nMessage Digest commands:\n\nCipher commands:");
-    ft_printf("%s\n", "base64\ndes\ndes-ecb\ndes-cbc");
+    ft_printf("%s\n", "base64\ndes\ndes-ecb\ndes-cbc\ndes3\ndes3-ecb\ndes3-cbc");
     return (0);
   }
   if ((ft_strcmp(argv[1], "base64") == 0) && (res = check_b64_flags(argc, argv, params)) > 0)
     return (0);
   else if (((ft_strcmp(argv[1], "des") == 0) || (ft_strcmp(argv[1], "des-ecb") == 0)
-  || (ft_strcmp(argv[1], "des-cbc") == 0)) && (res = check_des_flags(argc, argv, params)) > 0)
+  || (ft_strcmp(argv[1], "des-cbc") == 0) || (ft_strcmp(argv[1], "des3") == 0)
+|| (ft_strcmp(argv[1], "des3-ecb") == 0) || (ft_strcmp(argv[1], "des3-cbc") == 0))
+&& (res = check_des_flags(argc, argv, params)) > 0)
     return (0);
   (*params).cipher = argv[1];
   return (1);
@@ -246,47 +248,7 @@ int main (int argc, char **argv)
     base64_read(&params, argv, 64);
   else if (((ft_strcmp(params.cipher, "des") == 0) || (ft_strcmp(params.cipher, "des-ecb") == 0)
 || (ft_strcmp(params.cipher, "des-cbc") == 0)) && (find_symb(params.flags, 'd', FLAG_LEN) < 0))
-  {
-    /*params.buf[0] = 1;
-    params.buf[1] = 35;
-    params.buf[2] = 69;
-    params.buf[3] = 103;
-    params.buf[4] = 137;
-    params.buf[5] = 171;
-    params.buf[6] = 205;
-    params.buf[7] = 239;*/
-    /*params.buf[0] = 18;
-    params.buf[1] = 52;
-    params.buf[2] = 86;
-    params.buf[3] = 171;
-    params.buf[4] = 205;
-    params.buf[5] = 19;
-    params.buf[6] = 37;
-    params.buf[7] = 54;*/
-    /*params.buf[0] = 192;
-    params.buf[1] = 183;
-    params.buf[2] = 168;
-    params.buf[3] = 208;
-    params.buf[4] = 95;
-    params.buf[5] = 58;
-    params.buf[6] = 130;
-    params.buf[7] = 156;*/
-    /*params.buf[0] = 'f';
-    params.buf[1] = 'o';
-    params.buf[2] = 'o';
-    params.buf[3] = ' ';
-    params.buf[4] = 'b';
-    params.buf[5] = 'a';
-    params.buf[6] = 'r';
-    params.buf[7] = '\n';*/
-    /*params.buf[0] = 't';
-    params.buf[1] = 'o';
-    params.buf[2] = 't';
-    params.buf[3] = 'o';
-    params.buf[4] = '\n';*/
     des_read(&params, argv, 48);
-    //des_enc(&params, 1, 0);
-  }
   else if (((ft_strcmp(params.cipher, "des") == 0) || (ft_strcmp(params.cipher, "des-ecb") == 0)
 || (ft_strcmp(params.cipher, "des-cbc") == 0)) && (find_symb(params.flags, 'd', FLAG_LEN) >= 0))
     des_read(&params, argv, 64);

@@ -938,8 +938,6 @@ void des_read(t_args *params, char **argv, int len)
 							i++;
 							k++;
 						}
-
-
 						(*params).des_48_read[i++];
 					}*/
 
