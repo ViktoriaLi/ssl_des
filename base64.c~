@@ -6,13 +6,27 @@
 /*   By: vlikhotk <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/28 17:16:44 by vlikhotk          #+#    #+#             */
-/*   Updated: 2018/04/30 16:12:12 by vlikhotk         ###   ########.fr       */
+/*   Updated: 2018/04/30 16:08:34 by vlikhotk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
 
-void	print_or_save_res(t_args *params, unsigned char *str, int len)
+int		find_symb(char *str, char flag, int len)
+{
+	int i;
+
+	i = 0;
+	while (i < len)
+	{
+		if (str[i] == flag)
+			return (i);
+		i++;
+	}
+	return (-1);
+}
+
+void print_or_save_res(t_args *params, unsigned char *str, int len)
 {
 	int i;
 
@@ -22,13 +36,13 @@ void	print_or_save_res(t_args *params, unsigned char *str, int len)
 		if ((find_symb((*params).flags, 'o', FLAG_LEN)) >= 0)
 			write((*params).ofd, str, len);
 		else
-			write(1, str, len);
+			write(1, (char *)str, len);
 	}
 	else
 	{
 		while (i < len)
 			(*params).des_48_res[(*params).desad_count++] =
-			str[i++];
+			str[i];
 	}
 }
 
@@ -83,13 +97,12 @@ void	make_short_blocks(t_args *params, int ret, int len)
 
 	clear_iterators(&iters);
 	iters.k = ret;
-	iters.m = ret;
 	if (find_symb((*params).flags, 'd', FLAG_LEN) >= 0)
 		iters.k--;
 	while (iters.i < iters.k)
 	{
 		iters.j = 0;
-		while (iters.j < len && iters.i < iters.m)
+		while (iters.j < len && iters.i < iters.k)
 			tmpb64d[iters.j++] = (*params).b64_buf[iters.i++];
 		if (find_symb((*params).flags, 'd', FLAG_LEN) >= 0)
 			base64_dec(tmpb64d, params);
@@ -126,4 +139,12 @@ void	reading(int fd, t_args *params, int len)
 			(find_symb((*params).flags, 'd', FLAG_LEN)) < 0)
 			write(1, "\n", 1);
 	}
+}
+
+void	base64_read(t_args *params, char **argv, int len)
+{
+	if ((find_symb((*params).flags, 'i', FLAG_LEN)) >= 0)
+		reading((*params).ifd, params, len);
+	else
+		reading(0, params, len);
 }

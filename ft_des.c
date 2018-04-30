@@ -251,13 +251,7 @@ void bit_permutations(int max, const int table[], unsigned char key_56[], unsign
 }
 
 //Step 6.2 Make 56 bits key (remove each 8 bit)
-void clear_iterators(t_addition *iters)
-{
-	(*iters).i = 0;
-	(*iters).j = 0;
-	(*iters).k = 0;
-	(*iters).m = 0;
-}
+
 
 void remove_8bits(unsigned char key_res[], t_args *params, int rounds)
 {
@@ -761,33 +755,6 @@ else if (find_symb((*params).flags, 'a', FLAG_LEN) >= 0 && find_symb((*params).f
 	//write(1, (*params).des_48_res, *l);
 	(*l) -= iters.m;
 }
-	/*while (iters.k < 3)
-	{
-		(*params).b64_buf[iters.k] = (*params).des_output[iters.m];
-		iters.k++;
-		iters.m++;
-	}
-	(*params).b64_buf[iters.k] = 0;
-	base64_enc((*params).b64_buf, params);
-	clear_iterators(&iters);
-	while (iters.i < 3)
-	{
-		(*params).b64_buf[iters.i] = (*params).des_output[iters.j];
-		iters.i++;
-		iters.j++;
-	}
-	(*params).b64_buf[iters.i] = 0;
-	base64_enc((*params).b64_buf, params);
-	iters.i = 0;
-	while (iters.i < 2)
-	{
-		(*params).b64_buf[iters.i] = (*params).des_output[iters.j];
-		iters.i++;
-		iters.j++;
-	}
-	(*params).b64_buf[iters.i++] = 0;
-	(*params).b64_buf[iters.i] = 0;
-	base64_enc((*params).b64_buf, params);*/
 }
 
 void des_read(t_args *params, char **argv, int len)

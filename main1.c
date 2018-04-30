@@ -13,39 +13,6 @@
 #include "ft_ssl.h"
 #include <stdio.h>
 
-int find_symb(char *str, char flag, int len)
-{
-  int i;
-
-  i = 0;
-  while (i < len)
-  {
-    if (str[i] == flag)
-      return (i);
-    i++;
-  }
-  return (-1);
-}
-
-void flags_normalize(char *all_flags, t_args *params, int len)
-{
-  int i;
-  int j;
-
-  i = 0;
-  j = 0;
-  while (i < len)
-  {
-    j = 0;
-    while ((*params).flags[j] && (*params).flags[j] != all_flags[i])
-      j++;
-    if ((*params).flags[j] != all_flags[i])
-      (*params).flags[j] = all_flags[i];
-    i++;
-  }
-  //printf("%s\n", (*params).flags);
-}
-
 int check_b64_flags(int argc, char **argv, t_args *params)
 {
   int i;
@@ -196,56 +163,24 @@ int if_valid_args(int argc, char **argv, t_args *params)
   return (1);
 }
 
-void clear_struct(t_args *params)
-{
-  int i;
-
-  i = 0;
-  (*params).ifd = 0;
-	(*params).ofd = 0;
-  (*params).des_key = NULL;
-  (*params).vector16 = NULL;
-  (*params).cipher = NULL;
-  (*params).if_full = 0;
-  while (i < 8)
-    (*params).des_output[i++] = 0;
-  i = 0;
-  while (i < DES_BLOCK)
-  {
-    (*params).buf[i] = 0;
-    i++;
-  }
-  i = 0;
-  while (i < 6)
-  {
-    (*params).key_res48[i] = 0;
-    i++;
-  }
-  i = 0;
-  while (i < 7)
-  {
-    (*params).key_res56[i] = 0;
-    i++;
-  }
-  i = 0;
-  while (i < 65)
-  {
-    (*params).b64_buf[i] = 0;
-    i++;
-  }
-}
-
 int main (int argc, char **argv)
 {
   t_args params;
 
-  clear_struct(&params);
   if (!if_valid_args(argc, argv, &params))
     return (0);
-  if (ft_strcmp(params.cipher, "base64") == 0 && find_symb(params.flags, 'd', FLAG_LEN) < 0)
-    base64_read(&params, argv, 48);
-  else if (ft_strcmp(params.cipher, "base64") == 0 && find_symb(params.flags, 'd', FLAG_LEN) >= 0)
-    base64_read(&params, argv, 64);
+  if (ft_strcmp(params.cipher, "base64") == 0 && find_symb(params.flags, 'd', FLAG_LEN) < 0
+&& (find_symb(params.flags, 'i', FLAG_LEN)) >= 0)
+reading(params.ifd, &params, 48);
+  else if (ft_strcmp(params.cipher, "base64") == 0 && find_symb(params.flags, 'd', FLAG_LEN) < 0
+&& (find_symb(params.flags, 'i', FLAG_LEN)) < 0)
+    reading(0, &params, 48);
+  else if (ft_strcmp(params.cipher, "base64") == 0 && find_symb(params.flags, 'd', FLAG_LEN) >= 0
+&& (find_symb(params.flags, 'i', FLAG_LEN)) >= 0)
+    reading(params.ifd, &params, 64);
+    else if (ft_strcmp(params.cipher, "base64") == 0 && find_symb(params.flags, 'd', FLAG_LEN) >= 0
+  && (find_symb(params.flags, 'i', FLAG_LEN)) < 0)
+      reading(0, &params, 64);
   else if (((ft_strcmp(params.cipher, "des") == 0) || (ft_strcmp(params.cipher, "des-ecb") == 0)
 || (ft_strcmp(params.cipher, "des-cbc") == 0)) && (find_symb(params.flags, 'd', FLAG_LEN) < 0))
     des_read(&params, argv, 48);
