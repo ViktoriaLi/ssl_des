@@ -76,7 +76,7 @@ void	base64_enc(unsigned char *buf, t_args *params, int j)
 		write(1, dest, 4);
 }
 
-void	make_short_blocks(t_args *params, int ret, int len)
+void	make_short_blocks(t_args *params, int ret, int len, unsigned char *str)
 {
 	t_addition				iters;
 	static unsigned char	tmpb64d[4];
@@ -84,13 +84,14 @@ void	make_short_blocks(t_args *params, int ret, int len)
 	clear_iterators(&iters);
 	iters.k = ret;
 	iters.m = ret;
-	if (find_symb((*params).flags, 'd', FLAG_LEN) >= 0)
+	if (find_symb((*params).flags, 'd', FLAG_LEN) >= 0 &&
+	ft_strcmp((*params).cipher, "base64") == 0)
 		iters.k--;
 	while (iters.i < iters.k)
 	{
 		iters.j = 0;
 		while (iters.j < len && iters.i < iters.m)
-			tmpb64d[iters.j++] = (*params).b64_buf[iters.i++];
+			tmpb64d[iters.j++] = str[iters.i++];
 		if (find_symb((*params).flags, 'd', FLAG_LEN) >= 0)
 			base64_dec(tmpb64d, params);
 		else
@@ -101,7 +102,7 @@ void	make_short_blocks(t_args *params, int ret, int len)
 	}
 }
 
-void	reading(int fd, t_args *params, int len)
+void	base64_reading(int fd, t_args *params, int len)
 {
 	t_addition				iters;
 
@@ -110,12 +111,10 @@ void	reading(int fd, t_args *params, int len)
 	{
 		iters.i = 0;
 		(*params).b64_buf[64] = 0;
-		if (len == 65 && iters.k == len)
-			iters.k -= 1;
 		if (find_symb((*params).flags, 'd', FLAG_LEN) >= 0)
-			make_short_blocks(params, iters.k, 4);
+			make_short_blocks(params, iters.k, 4, (*params).b64_buf);
 		else
-			make_short_blocks(params, iters.k, 3);
+			make_short_blocks(params, iters.k, 3, (*params).b64_buf);
 		iters.i = 0;
 		while (iters.i < iters.k)
 			(*params).b64_buf[iters.i++] = 0;

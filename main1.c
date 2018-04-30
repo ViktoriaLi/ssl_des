@@ -169,24 +169,35 @@ int main (int argc, char **argv)
 
   if (!if_valid_args(argc, argv, &params))
     return (0);
-  if (ft_strcmp(params.cipher, "base64") == 0 && find_symb(params.flags, 'd', FLAG_LEN) < 0
-&& (find_symb(params.flags, 'i', FLAG_LEN)) >= 0)
-reading(params.ifd, &params, 48);
-  else if (ft_strcmp(params.cipher, "base64") == 0 && find_symb(params.flags, 'd', FLAG_LEN) < 0
-&& (find_symb(params.flags, 'i', FLAG_LEN)) < 0)
-    reading(0, &params, 48);
-  else if (ft_strcmp(params.cipher, "base64") == 0 && find_symb(params.flags, 'd', FLAG_LEN) >= 0
-&& (find_symb(params.flags, 'i', FLAG_LEN)) >= 0)
-    reading(params.ifd, &params, 64);
-    else if (ft_strcmp(params.cipher, "base64") == 0 && find_symb(params.flags, 'd', FLAG_LEN) >= 0
+    if (ft_strcmp(params.cipher, "base64") == 0 && find_symb(params.flags, 'd', FLAG_LEN) < 0
+  && (find_symb(params.flags, 'i', FLAG_LEN)) >= 0)
+  base64_reading(params.ifd, &params, 48);
+    else if (ft_strcmp(params.cipher, "base64") == 0 && find_symb(params.flags, 'd', FLAG_LEN) < 0
   && (find_symb(params.flags, 'i', FLAG_LEN)) < 0)
-      reading(0, &params, 64);
+      base64_reading(0, &params, 48);
+    else if (ft_strcmp(params.cipher, "base64") == 0 && find_symb(params.flags, 'd', FLAG_LEN) >= 0
+  && (find_symb(params.flags, 'i', FLAG_LEN)) >= 0)
+      base64_reading(params.ifd, &params, 64);
+      else if (ft_strcmp(params.cipher, "base64") == 0 && find_symb(params.flags, 'd', FLAG_LEN) >= 0
+    && (find_symb(params.flags, 'i', FLAG_LEN)) < 0)
+      base64_reading(0, &params, 64);
+
   else if (((ft_strcmp(params.cipher, "des") == 0) || (ft_strcmp(params.cipher, "des-ecb") == 0)
-|| (ft_strcmp(params.cipher, "des-cbc") == 0)) && (find_symb(params.flags, 'd', FLAG_LEN) < 0))
-    des_read(&params, argv, 48);
+|| (ft_strcmp(params.cipher, "des-cbc") == 0)) && (find_symb(params.flags, 'd', FLAG_LEN) < 0)
+&& (find_symb(params.flags, 'i', FLAG_LEN)) < 0)
+    des_reading(0, &params, 48);
+    else if (((ft_strcmp(params.cipher, "des") == 0) || (ft_strcmp(params.cipher, "des-ecb") == 0)
+  || (ft_strcmp(params.cipher, "des-cbc") == 0)) && (find_symb(params.flags, 'd', FLAG_LEN) < 0)
+&& (find_symb(params.flags, 'i', FLAG_LEN)) >= 0)
+    des_reading(params.ifd, &params, 48);
   else if (((ft_strcmp(params.cipher, "des") == 0) || (ft_strcmp(params.cipher, "des-ecb") == 0)
-|| (ft_strcmp(params.cipher, "des-cbc") == 0)) && (find_symb(params.flags, 'd', FLAG_LEN) >= 0))
-    des_read(&params, argv, 64);
+|| (ft_strcmp(params.cipher, "des-cbc") == 0)) && (find_symb(params.flags, 'd', FLAG_LEN) >= 0)
+&& (find_symb(params.flags, 'i', FLAG_LEN)) < 0)
+    des_reading(0, &params, 64);
+    else if (((ft_strcmp(params.cipher, "des") == 0) || (ft_strcmp(params.cipher, "des-ecb") == 0)
+  || (ft_strcmp(params.cipher, "des-cbc") == 0)) && (find_symb(params.flags, 'd', FLAG_LEN) >= 0)
+&& (find_symb(params.flags, 'i', FLAG_LEN)) >= 0)
+    des_reading(params.ifd, &params, 64);
   if (params.ifd > 1)
     close(params.ifd);
   if (params.ofd > 1)
