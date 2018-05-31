@@ -27,22 +27,14 @@ void	if_next(char **line, char **tmp, char **next_s, int i)
 {
 	char	*rem;
 
-	while ((*next_s)[i] != '\n' && (*next_s)[i] != '\0')
+	while ((*next_s)[i] != '\n' && (*next_s)[i])
 		i++;
 	if ((*next_s)[i] == '\n')
 	{
 		*line = ft_strsub((*next_s), 0, i);
-		if (i != (int)ft_strlen((*next_s)) && (*next_s)[i + 1])
-		{
 			rem = (*next_s);
-			(*next_s) = ft_strsub((*next_s), i + 1, ft_strlen((*next_s)) - i);
+			(*next_s) = ft_strsub((*next_s), i + 1, ft_strlen((*next_s)) - i - 1);
 			ft_strdel(&rem);
-		}
-		else
-		{
-			if ((*next_s))
-				ft_strdel(next_s);
-		}
 	}
 	else
 	{
@@ -81,9 +73,6 @@ int		reading(char **line, char **all_fd, char **tmp, int fd)
 	int		i;
 	int		ret;
 	char	buf[BUFF_SIZE + 1];
-	char	*swap;
-
-	swap = NULL;
 	while ((ret = read(fd, &buf, BUFF_SIZE)) > 0)
 	{
 		buf[ret] = 0;
@@ -96,6 +85,7 @@ int		reading(char **line, char **all_fd, char **tmp, int fd)
 		}
 		else
 			swap_and_join(tmp, buf);
+
 	}
 	return (0);
 }

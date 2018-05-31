@@ -15,10 +15,8 @@
 int		ft_strnequ(char const *s1, char const *s2, size_t n)
 {
 	size_t		i;
-	size_t		j;
 
 	i = 0;
-	j = 0;
 	if (n == 0)
 		return (1);
 	if (s1 && s2)

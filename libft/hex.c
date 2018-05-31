@@ -10,17 +10,15 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "includes/ft_printf.h"
 
 void	print_hex(char **res, uintmax_t nbr, t_argc params, unsigned int base)
 {
-	int			i;
 	int			len;
 	uintmax_t	d;
 
 	d = nbr;
 	len = 1;
-	i = 0;
 	while (d > base - 1)
 	{
 		d = d / base;

@@ -10,19 +10,16 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "includes/ft_printf.h"
 
 int		medium_flags(char argv, int *i, t_argc *params)
 {
-	char	tmp;
 	int		j;
 
-	tmp = 0;
 	j = 0;
 	if (argv == '+' || argv == '#' || argv == '0' ||
 		argv == '-' || argv == ' ' || argv == '\'')
 	{
-		tmp = argv;
 		if (!if_flag((*params).flag, argv, FLAG_LIMIT))
 		{
 			while ((*params).flag[j] != 0)

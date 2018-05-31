@@ -10,13 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "includes/ft_printf.h"
 
 int		precision_finder(char *argv, int *i, t_argc *params)
 {
-	int j;
-
-	j = 0;
 	if (argv[*i] == '.')
 	{
 		(*params).precision = 0;

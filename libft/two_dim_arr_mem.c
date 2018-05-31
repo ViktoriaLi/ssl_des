@@ -12,23 +12,23 @@
 
 #include "includes/libft.h"
 
-char	**two_dim_arr_mem(char **field, int numb, char c)
+char	**two_dim_arr_mem(char **field, int x, int y, char c)
 {
 	int i;
 	int j;
 
 	i = 0;
-	field = (char **)malloc(sizeof(char *) * numb);
-	while (i < numb)
+	field = (char **)malloc(sizeof(char *) * x);
+	while (i < x)
 	{
-		field[i] = (char *)malloc(numb);
+		field[i] = (char *)malloc(y);
 		i++;
 	}
 	i = 0;
-	while (i < numb)
+	while (i < x)
 	{
 		j = 0;
-		while (j < numb)
+		while (j < y)
 		{
 			field[i][j] = c;
 			j++;
