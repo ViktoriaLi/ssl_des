@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "includes/get_next_line.h"
 
 void	swap_and_join(char **tmp, char *buf)
 {
@@ -32,9 +32,9 @@ void	if_next(char **line, char **tmp, char **next_s, int i)
 	if ((*next_s)[i] == '\n')
 	{
 		*line = ft_strsub((*next_s), 0, i);
-			rem = (*next_s);
-			(*next_s) = ft_strsub((*next_s), i + 1, ft_strlen((*next_s)) - i - 1);
-			ft_strdel(&rem);
+		rem = (*next_s);
+		(*next_s) = ft_strsub((*next_s), i + 1, ft_strlen((*next_s)) - i - 1);
+		ft_strdel(&rem);
 	}
 	else
 	{
@@ -73,6 +73,7 @@ int		reading(char **line, char **all_fd, char **tmp, int fd)
 	int		i;
 	int		ret;
 	char	buf[BUFF_SIZE + 1];
+
 	while ((ret = read(fd, &buf, BUFF_SIZE)) > 0)
 	{
 		buf[ret] = 0;
@@ -85,7 +86,6 @@ int		reading(char **line, char **all_fd, char **tmp, int fd)
 		}
 		else
 			swap_and_join(tmp, buf);
-
 	}
 	return (0);
 }

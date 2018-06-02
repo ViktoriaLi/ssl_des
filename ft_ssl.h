@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_ssl.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vlikhotk <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/12/22 13:15:59 by vlikhotk          #+#    #+#             */
-/*   Updated: 2018/03/01 18:21:51 by vlikhotk         ###   ########.fr       */
+/*   Created: 2018/06/02 11:36:48 by vlikhotk          #+#    #+#             */
+/*   Updated: 2018/06/02 11:36:52 by vlikhotk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <pwd.h>
+# include "libft/includes/libft.h"
+# include "libft/includes/ft_printf.h"
 
 # define BASE64_STR "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 # define FLAG_LEN 15
@@ -44,7 +46,6 @@ typedef struct		s_args
 	char			*filename;
 	unsigned char	*md5_str;
 	unsigned char	md5_buf[128];
-	char			**argvs;
 	int				if_no_file;
 	unsigned int	words[64];
 
@@ -137,36 +138,40 @@ void	base64_reading(int fd, t_args *params, int len);
 void make_keys(unsigned char **des_key, t_args *params, int rounds);
 void message_first_shift(t_args *params);
 void des_dec(t_args *params, int count);
-
-//libft
-int					ft_strcmp(const char *s1, const char *s2);
-int					ft_printf(const char *format, ...);
-size_t				ft_strlen(const char *s);
-void	ft_strdel(char **as);
-char	*ft_strncpy(char *dst, const char *src, size_t len);
-
+int if_valid_args_des(int argc, char **argv, t_args *params);
 void	make_short_blocks(t_args *params, int ret, int len, unsigned char *str);
+
+
 void clear_iterators(t_addition *iters);
 void clear_struct(t_args *params);
-int find_symb(char *str, char flag, int len);
-int if_valid_args(int argc, char **argv, t_args *params);
+//int find_symb(char *str, char flag, int len);
+
 void flags_normalize(char *all_flags, t_args *params, int len);
 
-void				clear_struct(t_args *params);
-void				clear_iterators(t_addition *iters);
+//void				clear_struct(t_args *params);
+//void				clear_iterators(t_addition *iters);
 int					find_symb(char *str, char flag, int len);
 void				flags_normalize(char *all_flags, t_args *params, int len);
-int					if_valid_args(int argc, char **argv, t_args *params, t_addition *iters);
+
 int		save_ssl_flags(char **argv, t_addition *iters, t_args *params,
 char **all_flags);
 
 
 //md5
+int					ft_strcmp(const char *s1, const char *s2);
+int					ft_printf(const char *format, ...);
+size_t				ft_strlen(const char *s);
+void				clear_iterators(t_addition *iters);
 void				make_short_blocks_md5(t_args *params, int ret,
 						unsigned char *str,
 						t_addition *iters);
-int					check_md5_and_sha256_flags(int argc, char **argv,
+int					find_symb(char *str, char flag, int len);
+void				flags_normalize(char *all_flags, t_args *params, int len);
+char				*check_md5_and_sha256_flags(int argc, char **argv,
 						t_args *params, t_addition *iters);
+int					if_valid_args(int argc, char **argv, t_args *params,
+						t_addition *iters);
+void				clear_struct(t_args *params);
 void				start_md5(t_args *params, t_addition *iters, int iflast);
 void				add_padding_md5(t_args *params, int len, int count);
 void				md5_reading(int fd, t_args *params, int len,
@@ -180,12 +185,15 @@ void				round3_func(t_args *params, t_addition *iters, int i,
 						int iflast);
 void				round4_func(t_args *params, t_addition *iters, int i,
 						int iflast);
-void				md5_cycle_shift(unsigned int *word, int rounds, t_addition *iters);
+void				md5_cycle_shift(unsigned int *word, int rounds,
+						t_addition *iters);
 unsigned long long	cycle_shift(unsigned long long nbr, int count, int len);
 void				print_md5_result(t_addition *iters, t_args *params,
 						int source);
-void				print_sha256_result(t_addition *iters, t_args *params, int source);
-void				print_sha512_result(t_addition *iters, t_args *params, int source);
+void				print_sha256_result(t_addition *iters, t_args *params,
+						int source);
+void				print_sha512_result(t_addition *iters, t_args *params,
+						int source);
 unsigned long long	made_words_for_sha512(t_args *params, t_addition *iters);
 void				init_sha256_vectors (t_addition *iters);
 void				start_sha256(t_args *params, t_addition *iters, int iflast);
@@ -195,9 +203,18 @@ void				round1_1_func(t_addition *iters, int i, int tmp);
 void				round2_1_func(t_addition *iters, int i, int tmp);
 void				round3_1_func(t_addition *iters, int i, int tmp);
 void				round4_1_func(t_addition *iters, int i, int tmp);
-unsigned int make_word_md5(t_args *params, int iflast, t_addition *iters);
-void reading_cases(t_args *params, t_addition	*iters, int len);
-void vectors_initiation(t_args *params, t_addition	*iters);
-void	when_file_found(char **argv, t_args *params, int i, int argc);
+unsigned int		make_word_md5(t_args *params, int iflast,
+						t_addition *iters);
+void				reading_cases(t_args *params, t_addition	*iters,
+						int len);
+void				vectors_initiation(t_args *params, t_addition	*iters);
+void				when_file_found(char **argv, t_args *params, int i,
+						int argc);
+int					save_ssl_flags(char **argv, t_addition *iters,
+						t_args *params, char **all_flags);
+void				print_with_flags(int source, t_args *params, int place,
+						char *cipher);
+char				*ft_strnew(size_t size);
+
 
 #endif

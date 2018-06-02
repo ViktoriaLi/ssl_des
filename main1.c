@@ -132,7 +132,7 @@ int check_des_flags(int argc, char **argv, t_args *params)
   return (0);
 }
 
-int if_valid_args(int argc, char **argv, t_args *params)
+int if_valid_args_des(int argc, char **argv, t_args *params)
 {
   int res;
 
@@ -167,7 +167,8 @@ int main (int argc, char **argv)
 {
   t_args params;
 
-  if (!if_valid_args(argc, argv, &params))
+  clear_struct(&params);
+  if (!if_valid_args_des(argc, argv, &params))
     return (0);
     if (ft_strcmp(params.cipher, "base64") == 0 && find_symb(params.flags, 'd', FLAG_LEN) < 0
   && (find_symb(params.flags, 'i', FLAG_LEN)) >= 0)

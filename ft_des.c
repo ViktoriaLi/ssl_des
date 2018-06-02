@@ -823,7 +823,7 @@ void des_reading(int fd, t_args *params, int len)
 						i = 0;
 						while (i < (*params).desad_count)
 						{
-							(*params).des_48_read[i] = (*params).des_48_res[i++];
+							(*params).des_48_read[i] = (*params).des_48_res[i];
 							i++;
 						}
 						ret = (*params).desad_count - (*params).desad_count % 8;

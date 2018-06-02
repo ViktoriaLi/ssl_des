@@ -64,8 +64,16 @@ void	init_md5_vectors(t_addition *iters)
 	(*iters).d1 = 0;
 }
 
-void	clear_iterators(t_addition *iters)
+void clear_iterators(t_addition *iters)
 {
+	int i;
+
+	i = 0;
+	while (i < 4)
+		(*iters).str1[i++] = 0;
+	i = 0;
+	while (i < 4)
+		(*iters).str2[i++] = 0;
 	(*iters).i = 0;
 	(*iters).j = 0;
 	(*iters).k = 0;
@@ -76,8 +84,13 @@ void	clear_struct(t_args *params)
 {
 	(*params).bytes_read = 0;
 	(*params).ifd = 0;
+	(*params).ofd = 0;
 	(*params).if_no_file = 0;
 	(*params).cipher = NULL;
 	(*params).md5_str = NULL;
 	(*params).filename = NULL;
+	(*params).if_full = 0;
+	(*params).desad_count = 0;
+	(*params).vector16 = NULL;
+	(*params).des_key = NULL;
 }

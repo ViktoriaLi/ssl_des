@@ -36,7 +36,7 @@ static char	**oneword(char const *s, char **dest, char c, int i)
 	return (dest);
 }
 
-static char	**free_mem(char **dest, int i, int j, int start)
+static char	**ft_free_mem(char **dest, int i, int j, int start)
 {
 	if (!(dest[j] = (char *)malloc(sizeof(char) * (i - start + 1))))
 	{
@@ -66,7 +66,7 @@ static char	**mainsplit(char const *s, char **dest, char c, int i)
 			start = i;
 			while (s[i] != c && s[i] != 0)
 				i++;
-			if (!(free_mem(dest, i, j, start)))
+			if (!(ft_free_mem(dest, i, j, start)))
 				return (NULL);
 			k = 0;
 			while (k < i - start)

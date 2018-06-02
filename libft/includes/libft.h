@@ -83,5 +83,10 @@ void			ft_lstdel(t_list **alst, void (*del)(void *, size_t));
 void			ft_lstadd(t_list **alst, t_list *new);
 void			ft_lstiter(t_list *lst, void (*f)(t_list *elem));
 t_list			*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
+void			free_mem(char **field, int num);
+void			two_dim_arr_mem(char ***field, int x, int y, char c);
+char			***multi_arr_mem(int n, int r, int w);
+int				simple_hash(unsigned char *string, int length, int table_size);
+int				to_multi_arr(char *buf, char ****mult_ar, int strs, int symbs);
 
 #endif

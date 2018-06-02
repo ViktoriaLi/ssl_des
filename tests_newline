@@ -1,0 +1,16 @@
+echo toto | ./a.out base64
+echo
+echo toto | base64
+echo
+echo "foo bar" | ./a.out des-ecb -k 6162636461626364 -a
+echo
+echo "foo bar" | openssl des-ecb -K 6162636461626364 -a
+echo "foo bar" | ./a.out des-cbc -k 6162636461626364 -v 0011223344556677 -a
+echo
+echo "foo bar" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a
+echo "YZF3QKaabXUwxNg3obhMfw==" | ./a.out des-ecb -k 6162636461626364 -a -d
+echo
+echo "YZF3QKaabXUwxNg3obhMfw==" | openssl des-ecb -K 6162636461626364 -a -d
+echo "EWTdOkhUA+13TDvLz1hl9Q==" | ./a.out des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
+echo
+echo "EWTdOkhUA+13TDvLz1hl9Q==" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a -d
