@@ -785,6 +785,48 @@ void add_padding(t_args *params, int *ret, int len)
 	}
 }
 
+void ignore_newline(t_args *params, int fd, int ret, int j)
+{
+	int i;
+	int k;
+	int l;
+	int tmp;
+
+	i = 0;
+	l = 0;
+	k = 0;
+	tmp = j;
+	if (j == -1)
+		j = 0;
+	//ft_printf("111%s\n", (*params).des_48_read);
+	while ((*params).des_48_read[i] != '\0' && i < ret)
+	{
+		if ((*params).des_48_read[i] != '\n' /*|| ((*params).des_48_read[i] == '\n' &&
+	i == 63)*/)
+	{
+		(*params).tmpad[j++] = (*params).des_48_read[i++];
+
+	}
+
+		else
+		{
+			//ft_printf("test%d\n", i);
+			i++;
+		}
+
+	}
+	if (i != ret)
+	{
+		l = 0;
+		while (l < ret)
+			(*params).des_48_read[l++] = 0;
+		k = read(fd, params, ret - i);
+		ignore_newline(params, fd, k, j);
+	}
+	else
+		return ;
+}
+
 void des_reading(int fd, t_args *params, int len)
 {
   int i;
@@ -794,7 +836,6 @@ void des_reading(int fd, t_args *params, int len)
   int ret;
 	static unsigned char tmpdes[8];
 	static unsigned char tmpb64[4];
-	unsigned char tmpad[64];
 	int l;
 
 	i = 0;
@@ -805,6 +846,27 @@ void des_reading(int fd, t_args *params, int len)
 	l = 0;
 			while ((ret = read(fd, params->des_48_read, len)) > 0)
 			{
+				if (len == 64)
+				{
+						ignore_newline(params, fd, ret, 0);
+
+				if ((*params).tmpad[0] != 0)
+				{
+					i = 0;
+					while ((*params).tmpad[i])
+					{
+						(*params).des_48_read[i] = (*params).tmpad[i];
+						i++;
+					}
+					while (i < len)
+						(*params).des_48_read[i++] = 0;
+					i = 0;
+					while (i < len)
+						(*params).tmpad[i++] = 0;
+				}
+			}
+				//ft_printf("222%s\n", (*params).des_48_read);
+				i = 0;
 				l = 0;
 				if (ret == len && (find_symb((*params).flags, 'd', FLAG_LEN)) < 0)
 					(*params).if_full = 1;
@@ -813,12 +875,6 @@ void des_reading(int fd, t_args *params, int len)
 				if ((find_symb((*params).flags, 'a', FLAG_LEN)) >= 0 && find_symb((*params).flags, 'd', FLAG_LEN) >= 0)
 				{
 						(*params).desad_count = 0;
-						i = 0;
-						if ((*params).des_48_read[0] == '\n')
-						{
-							i = 1;
-							read(0, &params->des_48_read[64], 1);
-						}
 						make_short_blocks(params, ret, 4, (*params).des_48_read);
 						i = 0;
 						while (i < (*params).desad_count)

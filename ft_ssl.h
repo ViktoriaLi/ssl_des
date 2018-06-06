@@ -42,6 +42,7 @@ typedef struct		s_args
 	unsigned char key_res56[7];
 	unsigned char des_output[8];
 	unsigned char des_48_read[65];
+	unsigned char tmpad[65];
 	unsigned char des_48_res[65];
 	char			*filename;
 	unsigned char	*md5_str;

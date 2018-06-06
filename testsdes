@@ -213,7 +213,8 @@ echo "gr3roSQMp9+YynDvaDEbNA==" | openssl des-cbc -K 6162636461626364 -iv 001122
 echo "nGuSM/dZp0Ospi5BABViQA==" | ./a.out des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
 echo
 echo "nGuSM/dZp0Ospi5BABViQA==" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a -d
-echo "Ffmdlmn7jsC251bTcNVfWA7nhdV9gwcFTOhh+mq4RrNQO+sWG/zuH5Zz6KQTZ2MNaojY9ObiANlwd/3r0fa2dQSvVmc5C1PQ" | ./a.out des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
+echo "Ffmdlmn7jsC251bTcNVfWA7nhdV9gwcFTOhh+mq4RrNQO+sWG/zuH5Zz6KQTZ2M
+NaojY9ObiANlwd/3r0fa2dQSvVmc5C1PQ" | ./a.out des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
 echo
 echo "Ffmdlmn7jsC251bTcNVfWA7nhdV9gwcFTOhh+mq4RrNQO+sWG/zuH5Zz6KQTZ2M
 NaojY9ObiANlwd/3r0fa2dQSvVmc5C1PQ" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a -d
