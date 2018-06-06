@@ -139,7 +139,7 @@ void	base64_reading(int fd, t_args *params, int len);
 void make_keys(unsigned char **des_key, t_args *params, int rounds);
 void message_first_shift(t_args *params);
 void des_dec(t_args *params, int count);
-int if_valid_args_des(int argc, char **argv, t_args *params);
+int if_valid_args_des(int argc, char **argv, t_args *params, int res);
 void	make_short_blocks(t_args *params, int ret, int len, unsigned char *str);
 
 

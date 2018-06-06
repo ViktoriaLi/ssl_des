@@ -12,40 +12,45 @@
 
 #include "ft_ssl.h"
 
-int check_b64_flags(int argc, char **argv, t_args *params)
+int b64_save_flags(int argc, char **all_flags, char **argv, t_args *params)
 {
-  int i;
-  int j;
-  char *all_flags;
+  t_addition	iters;
 
-  j = 0;
-  i = 2;
-  if (!(all_flags = (char *)malloc(argc - 1)))
-		return (1);
-  all_flags[argc - 1] = 0;
-  while (i < argc)
+  clear_iterators(&iters);
+  iters.i = 2;
+  while (iters.i < argc)
   {
-    if (ft_strcmp(argv[i], "-e") == 0 || ft_strcmp(argv[i], "-d") == 0 ||
-    ft_strcmp(argv[i], "-i") == 0 || ft_strcmp(argv[i], "-o") == 0)
+    if (ft_strcmp(argv[iters.i], "-e") == 0 || ft_strcmp(argv[iters.i], "-d") == 0 ||
+    ft_strcmp(argv[iters.i], "-i") == 0 || ft_strcmp(argv[iters.i], "-o") == 0)
     {
-      all_flags[j++] = argv[i][1];
-      if (argv[i][1] == 'i')
-        (*params).ifd = open(argv[i++], O_RDONLY);
-      else if (argv[i][1] == 'o')
+      (*all_flags)[iters.j++] = argv[iters.i][1];
+      if (argv[iters.i][1] == 'i')
+        (*params).ifd = open(argv[iters.i++], O_RDONLY);
+      else if (argv[iters.i][1] == 'o')
       {
-        (*params).ofd = open(argv[i + 1], O_RDWR | O_APPEND);
-        if ((*params).ofd < 0)
-          (*params).ofd = open(argv[i + 1], O_CREAT , O_APPEND | O_RDWR);
-        i++;
+        (*params).ofd = open(argv[iters.i + 1], O_WRONLY | O_APPEND | O_CREAT, 0666);
+        iters.i++;
       }
-      i++;
+      iters.i++;
     }
     else
     {
-      ft_printf("base64: invalid option -- %c\n", argv[i][1]);
-      return (1);
+      ft_printf("base64: invalid option -- %c\n", argv[iters.i][1]);
+      return (0);
     }
   }
+  return (1);
+}
+
+int check_b64_flags(int argc, char **argv, t_args *params)
+{
+  char *all_flags;
+
+  if (!(all_flags = (char *)malloc(argc - 1)))
+		return (1);
+  all_flags[argc - 1] = 0;
+  if (!b64_save_flags(argc, &all_flags, argv, params))
+    return (1);
   flags_normalize(all_flags, params, argc - 1);
   if ((find_symb((*params).flags, 'i', FLAG_LEN)) >= 0 && (*params).ifd < 0)
   {
@@ -60,61 +65,64 @@ int check_b64_flags(int argc, char **argv, t_args *params)
   return (0);
 }
 
+void save_des_flags(char **all_flags, char **argv, t_args *params, t_addition	*iters)
+{
+  (*all_flags)[(*iters).j] = argv[(*iters).i][1];
+  if (argv[(*iters).i][1] == 'i')
+  {
+    (*params).ifd = open(argv[(*iters).i + 1], O_RDONLY);
+    (*iters).i++;
+  }
+  if (argv[(*iters).i][1] == 'o')
+  {
+    (*params).ofd = open(argv[(*iters).i + 1], O_WRONLY | O_APPEND | O_CREAT, 0666);
+    (*iters).i++;
+  }
+  if (argv[(*iters).i][1] == 'k')
+  {
+    (*params).des_key = (unsigned char *)argv[(*iters).i + 1];
+    (*iters).i++;
+  }
+  if (argv[(*iters).i][1] == 'v')
+  {
+    (*params).vector16 = (unsigned char *)argv[(*iters).i + 1];
+    (*iters).i++;
+  }
+  (*iters).j++;
+  (*iters).i++;
+}
+
+int if_correct_des_flag(char *flag)
+{
+  if (ft_strcmp(flag, "-e") == 0 || ft_strcmp(flag, "-d") == 0 ||
+  ft_strcmp(flag, "-i") == 0 || ft_strcmp(flag, "-o") == 0 || ft_strcmp(flag, "-a") == 0
+  || ft_strcmp(flag, "-k") == 0 || ft_strcmp(flag, "-v") == 0 || ft_strcmp(flag, "-s") == 0
+ || ft_strcmp(flag, "-p") == 0)
+    return (1);
+  return (0);
+}
+
 int check_des_flags(int argc, char **argv, t_args *params)
 {
-  int i;
-  int j;
-  char *all_flags;
+  t_addition	iters;
 
-  j = 0;
-  i = 2;
+  char *all_flags;
+  clear_iterators(&iters);
+  iters.i = 2;
   if (!(all_flags = (char *)malloc(argc - 1)))
 		return (1);
   all_flags[argc - 1] = 0;
-  while (i < argc)
+  while (iters.i < argc)
   {
-    if (ft_strcmp(argv[i], "-e") == 0 || ft_strcmp(argv[i], "-d") == 0 ||
-    ft_strcmp(argv[i], "-i") == 0 || ft_strcmp(argv[i], "-o") == 0 || ft_strcmp(argv[i], "-a") == 0
-    || ft_strcmp(argv[i], "-k") == 0 || ft_strcmp(argv[i], "-v") == 0 || ft_strcmp(argv[i], "-s") == 0
-   || ft_strcmp(argv[i], "-p") == 0)
-    {
-      all_flags[j] = argv[i][1];
-      if (argv[i][1] == 'i')
-      {
-        (*params).ifd = open(argv[i + 1], O_RDONLY);
-        i++;
-      }
-      if (argv[i][1] == 'o')
-      {
-        (*params).ofd = open(argv[i + 1], O_RDWR | O_APPEND);
-        if ((*params).ofd == -1)
-          (*params).ofd = open(argv[i + 1], O_RDWR | O_CREAT | 0666);
-        i++;
-      }
-      if (argv[i][1] == 'k')
-      {
-        (*params).des_key = (unsigned char *)argv[i + 1];
-        i++;
-      }
-      if (argv[i][1] == 'v')
-      {
-        (*params).vector16 = (unsigned char *)argv[i + 1];
-        i++;
-      }
-      j++;
-      i++;
-    }
+    if (if_correct_des_flag(argv[iters.i]))
+      save_des_flags(&all_flags, argv, params, &iters);
     else
     {
-      ft_printf("ft_ssl:Error: '%s' is an invalid command.\n", argv[i]);
+      ft_printf("ft_ssl:Error: '%s' is an invalid command.\n", argv[iters.i]);
       return (1);
     }
-    //printf("%s\n", (*params).vector16);
   }
   flags_normalize(all_flags, params, argc - 1);
-  //printf("DDD%d\n", find_flag(params, 'i'));
-  //printf("DDD%s\n", (*params).flags);
-  //printf("DDD%d\n", (*params).ifd);
   if (((find_symb((*params).flags, 'i', FLAG_LEN)) >= 0 && (*params).ifd == -1)
   || ((find_symb((*params).flags, 'o', FLAG_LEN)) >= 0 && (*params).ofd == -1))
   {
@@ -124,11 +132,8 @@ int check_des_flags(int argc, char **argv, t_args *params)
   return (0);
 }
 
-int if_valid_args_des(int argc, char **argv, t_args *params)
+int if_valid_args_des(int argc, char **argv, t_args *params, int res)
 {
-  int res;
-
-  res = 0;
   if (argc == 1)
   {
     ft_printf("%s\n", "usage: ft_ssl command [command opts] [command args]");
@@ -211,7 +216,7 @@ int main (int argc, char **argv)
   }
   else
   {
-    if (!if_valid_args_des(argc, argv, &params))
+    if (!if_valid_args_des(argc, argv, &params, 0))
       return (0);
   }
   if (ft_strcmp(argv[1], "md5") == 0 || ft_strcmp(argv[1], "sha256") == 0
