@@ -14,11 +14,13 @@ NAME = ft_ssl
 
 LIB_DIR = ./libft/
 
-SFILES = main.c reading.c init_vectors.c md5.c sha256.c sha512.c printing.c \
- 				 bits_shifting.c last_rounds_md5.c flags_ssl.c 
+SFILES = main.c init_vectors.c md5.c sha256.c sha512.c printing.c \
+ 				 bits_shifting.c last_rounds_md5.c flags_ssl.c base64.c ft_des.c \
+				 start_md5.c reading.c
 
-OFILES = main.o reading.o init_vectors.o md5.o sha256.o sha512.o printing.o \
-				 bits_shifting.o last_rounds_md5.o flags_ssl.o
+OFILES = main.o init_vectors.o md5.o sha256.o sha512.o printing.o \
+				 bits_shifting.o last_rounds_md5.o flags_ssl.o base64.o ft_des.o \
+				 start_md5.o reading.o
 
 LIBFT = $(LIBFT_DIR)libftprintf.a
 LIBFT_DIR = $(LIB_DIR)

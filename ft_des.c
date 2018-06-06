@@ -13,7 +13,7 @@
 #include "ft_ssl.h"
 #include <stdio.h>
 
-void	to_binary(int **res, int nbr, unsigned int base)
+void	to_binary(int **res, int nbr, int base)
 {
 	int	len;
 
@@ -834,7 +834,6 @@ void des_reading(int fd, t_args *params, int len)
 	int k;
 	int count;
   int ret;
-	static unsigned char tmpdes[8];
 	static unsigned char tmpb64[4];
 	int l;
 

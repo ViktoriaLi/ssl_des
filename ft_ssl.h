@@ -126,7 +126,7 @@ int check_b64_flags(int argc, char **argv, t_args *params);
 int check_des_flags(int argc, char **argv, t_args *params);
 void des_reading(int fd, t_args *params, int len);
 void des_enc(t_args *params, int count, int *l);
-void	to_binary(int **res, int nbr, unsigned int base);
+void	to_binary(int **res, int nbr, int base);
 void finish_key_shift(unsigned char key_56[], t_args *params);
 void remove_8bits(unsigned char key_res[], t_args *params, int rounds);
 void one_bit_shift_right(unsigned char key_56[], t_args *params);
