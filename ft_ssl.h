@@ -123,7 +123,7 @@ typedef struct		s_sha512_vars
 void base64_enc(unsigned char *buf, t_args *params, int j);
 void base64_dec(unsigned char *buf, t_args *params);
 int check_b64_flags(int argc, char **argv, t_args *params);
-int check_des_flags(int argc, char **argv, t_args *params);
+int check_des_flags(int argc, char **argv, t_args *params, t_addition iters);
 void des_reading(int fd, t_args *params, int len);
 void des_enc(t_args *params, int count, int *l);
 void	to_binary(int **res, int nbr, int base);
@@ -141,7 +141,11 @@ void message_first_shift(t_args *params);
 void des_dec(t_args *params, int count);
 int if_valid_args_des(int argc, char **argv, t_args *params, int res);
 void	make_short_blocks(t_args *params, int ret, int len, unsigned char *str);
-
+int		b64_save_flags(int argc, char **all_flags, char **argv, t_args *params);
+void	save_des_flags(char **all_flags, char **argv,
+	t_args *params, t_addition *iters);
+int		if_correct_des_flag(char *flag);
+int		check_des_flags(int argc, char **argv, t_args *params, t_addition iters);
 
 void clear_iterators(t_addition *iters);
 void clear_struct(t_args *params);

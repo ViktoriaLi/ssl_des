@@ -12,7 +12,6 @@
 
 #include "ft_ssl.h"
 
-
 int		find_symb(char *str, char flag, int len)
 {
 	int i;

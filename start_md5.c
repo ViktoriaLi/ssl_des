@@ -70,20 +70,6 @@ t_addition *iters)
 	char *res;
 
 	res = NULL;
-	if (argc == 1)
-	{
-		ft_printf("%s ", "usage: ft_ssl command");
-		ft_printf("%s\n", "[command opts] [command args]");
-		return (0);
-	}
-	if (ft_strcmp(argv[1], "md5") != 0 && ft_strcmp(argv[1], "sha256")
-		!= 0 && ft_strcmp(argv[1], "sha512") != 0)
-	{
-		ft_printf("ft_ssl: Error: %s is an invalid command.\n\n", argv[1]);
-		ft_printf("%s\n", "Standard commands:\n\nMessage Digest commands:");
-		ft_printf("%s\n", "md5\nsha256\nsha512\n\nCipher commands:");
-		return (0);
-	}
 	if (((ft_strcmp(argv[1], "md5") == 0 || ft_strcmp(argv[1], "sha256") == 0
 	|| ft_strcmp(argv[1], "sha512") == 0) &&
 	!(res = check_md5_and_sha256_flags(argc, argv, params, iters))))

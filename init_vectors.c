@@ -6,7 +6,7 @@
 /*   By: vlikhotk <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/09 16:47:04 by vlikhotk          #+#    #+#             */
-/*   Updated: 2018/05/09 16:48:11 by vlikhotk         ###   ########.fr       */
+/*   Updated: 2018/06/07 18:13:25 by vlikhotk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	init_md5_vectors(t_addition *iters)
 	(*iters).d1 = 0;
 }
 
-void clear_iterators(t_addition *iters)
+void	clear_iterators(t_addition *iters)
 {
 	int i;
 

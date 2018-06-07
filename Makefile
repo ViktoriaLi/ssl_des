@@ -16,11 +16,11 @@ LIB_DIR = ./libft/
 
 SFILES = main.c init_vectors.c md5.c sha256.c sha512.c printing.c \
  				 bits_shifting.c last_rounds_md5.c flags_ssl.c base64.c ft_des.c \
-				 start_md5.c reading.c
+				 start_md5.c reading.c des_flags.c
 
 OFILES = main.o init_vectors.o md5.o sha256.o sha512.o printing.o \
 				 bits_shifting.o last_rounds_md5.o flags_ssl.o base64.o ft_des.o \
-				 start_md5.o reading.o
+				 start_md5.o reading.o des_flags.o
 
 LIBFT = $(LIBFT_DIR)libftprintf.a
 LIBFT_DIR = $(LIB_DIR)
