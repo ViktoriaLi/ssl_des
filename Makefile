@@ -10,7 +10,7 @@
 #                                                                              #
 #******************************************************************************#
 
-NAME = ft_ssl
+NAME = a.out
 
 LIB_DIR = ./libft/
 
@@ -29,7 +29,6 @@ LIBFT_INC = $(LIBFT_DIR)includes/
 CC_FLAGS = -Wall -Wextra -Werror
 HEADER_FLAGS = -I $(LIBFT_INC)
 
-CC_FLAGS = -Wall -Wextra -Werror
 CC = gcc
 
 all: $(NAME)
@@ -38,7 +37,7 @@ $(NAME): $(LIBFT) $(OFILES)
 	$(CC) $(OFILES) $(LIBFT) -o $(NAME)
 
 $(OFILES): %.o:%.c
-	$(CC) -c $< -o $@ $(CC_FLAGS) $(HEADER_FLAGS)
+	$(CC) -c $< -o $@ $(HEADER_FLAGS)
 
 $(LIBFT):
 	make -C $(LIBFT_DIR)

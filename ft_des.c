@@ -106,6 +106,7 @@ int bit0, int bit1)
   else
     key_res[6] &= ~(1 << 0);
 }
+
 void	two_bit_shift_left(unsigned char key_56[], t_args *params)
 {
 	int				i;
@@ -208,7 +209,8 @@ void one_bit_shift_left(unsigned char key_56[], t_args *params)
   finish_key_shift(key_res, params);
 }
 
-void	bit_permutations(int max, const int table[], unsigned char key_56[], unsigned char *src)
+void	bit_permutations(int max, const int table[],
+	unsigned char key_56[], unsigned char *src)
 {
 	t_addition iters;
 
@@ -240,12 +242,30 @@ void	bit_permutations(int max, const int table[], unsigned char key_56[], unsign
 	}
 }
 
-//Step 6.2 Make 56 bits key (remove each 8 bit)
-void	remove_8bits(unsigned char key_res[], t_args *params, int rounds)
+void start_shifting(t_args *params, const int shift_table_d[],
+	unsigned char key_56[], int rounds)
 {
 	int i;
 
 	i = 0;
+	if (shift_table_d[rounds] == 0)
+	{
+		while (i < 7)
+		{
+			(*params).key_res56[i] = key_56[i];
+			i++;
+		}
+		finish_key_shift(key_56, params);
+	}
+	if (shift_table_d[rounds] == 1)
+		one_bit_shift_right(key_56, params);
+	if (shift_table_d[rounds] == 2)
+		two_bit_shift_right(key_56, params);
+}
+
+//Step 6.2 Make 56 bits key (remove each 8 bit)
+void	remove_8bits(unsigned char key_res[], t_args *params, int rounds)
+{
 	static unsigned char key_56[7];
 	const int key_start[56] = {57, 49, 41, 33, 25, 17, 9, 1, 58, 50, 42,
 	34, 26, 18, 10, 2, 59, 51, 43, 35, 27, 19, 11, 3, 60, 52, 44, 36, 63,
@@ -262,22 +282,8 @@ void	remove_8bits(unsigned char key_res[], t_args *params, int rounds)
 		if (shift_table_e[rounds] == 2)
 			two_bit_shift_left(key_56, params);
 	}
-	else
-	{
-		if (shift_table_d[rounds] == 0)
-		{
-			while (i < 7)
-			{
-				(*params).key_res56[i] = key_56[i];
-				i++;
-			}
-			finish_key_shift(key_56, params);
-		}
-		if (shift_table_d[rounds] == 1)
-			one_bit_shift_right(key_56, params);
-		if (shift_table_d[rounds] == 2)
-			two_bit_shift_right(key_56, params);
-	}
+	else	
+		start_shifting(params, shift_table_d, key_56, rounds);
 }
 
 //Step 6.1 Receive binary representation for hrxadecimal key and cut or lengthen to 64 bits
@@ -297,8 +303,8 @@ void	make_keys(unsigned char **des_key, t_args *params, int rounds)
 			(*des_key)[iters.j + 1] = (*des_key)[iters.j + 1] - 7;
 		else if ((*des_key)[iters.j + 1] >= 97 && (*des_key)[iters.j + 1] <= 102)
 			(*des_key)[iters.j + 1] = (*des_key)[iters.j + 1] - 49;
-		key_res[iters.i] = (((*des_key)[iters.j] - '0') * 16) + ((*des_key)[iters.j + 1] - '0');
-		iters.i++;
+		key_res[iters.i++] = (((*des_key)[iters.j] - '0') * 16) +
+		((*des_key)[iters.j + 1] - '0');
 		iters.j += 2;
 	}
 	if (rounds != -1)
@@ -331,15 +337,82 @@ void message_first_shift(t_args *params)
   }
 }
 
+void vectors_preparing(t_args *params, int count, unsigned char save_res[])
+{
+	int k;
+
+	k = 0;
+	if (ft_strcmp((*params).cipher, "des-cbc") == 0)
+	{
+		if (count == 1)
+		{
+			make_keys(&params->vector16, params, -1);
+			k = 0;
+			while (k < 8)
+			{
+				save_res[k] = (*params).des_output[k];
+				k++;
+			}
+			k = 0;
+			while (k < 8)
+			{
+				(*params).b64_buf[k] = (*params).buf[k];
+				k++;
+			}
+		}
+		else
+		{
+			k = 0;
+			while (k < 8)
+			{
+				save_res[k] = (*params).b64_buf[k];
+				k++;
+			}
+			k = 0;
+			while (k < 8)
+			{
+				(*params).b64_buf[k] = (*params).buf[k];
+				k++;
+			}
+		}
+	}
+}
+
+/*Divide block into left and right*/
+void block_dividing(unsigned char left[], unsigned char right[],
+	unsigned char tmp[], t_args *params)
+{
+	t_addition iters;
+	
+	clear_iterators(&iters);
+  while (iters.i < 4)
+  {
+    left[iters.i] = (*params).buf[iters.j];
+    iters.i++;
+    iters.j++;
+  }
+  while (iters.k < 4)
+  {
+  	right[iters.k] = (*params).buf[iters.j];
+    iters.k++;
+    iters.j++;
+  }
+  while (iters.m < 4)
+  {
+		tmp[iters.m] = right[iters.m];
+    iters.m++;
+  }
+}
+
 /*main des-encryption function */
 void des_enc(t_args *params, int count, int *l)
 {
 	t_addition iters;
 
-  unsigned char left[4];
-  unsigned char right[4];
+  static unsigned char left[4];
+  static unsigned char right[4];
 	static unsigned char right_f[4];
-	unsigned char tmp[4];
+	static unsigned char tmp[4];
   static unsigned char right48[6];
 	unsigned char exp_for_s[8];
 	static unsigned char save_res[8];
@@ -401,43 +474,12 @@ void des_enc(t_args *params, int count, int *l)
   38, 6, 46, 14, 54, 22, 62, 30, 37, 5, 45, 13, 53, 21, 61, 29, 36, 4, 44, 12, \
   52, 20, 60, 28, 35, 3, 43, 11, 51, 19, 59, 27, 34, 2, 42, 10, 50, 18, 58, 26, \
   33, 1, 41, 9, 49, 17, 57, 25};
-	if (ft_strcmp((*params).cipher, "des-cbc") == 0)
-	{
-		if (count == 1)
-		{
-			make_keys(&params->vector16, params, -1);
-			iters.k = 0;
-			while (iters.k < 8)
-			{
-				save_res[iters.k] = (*params).des_output[iters.k];
-				iters.k++;
-			}
-			iters.k = 0;
-			while (iters.k < 8)
-			{
-				(*params).b64_buf[iters.k] = (*params).buf[iters.k];
-				iters.k++;
-			}
-		}
-		else
-		{
-			iters.k = 0;
-			while (iters.k < 8)
-			{
-				save_res[iters.k] = (*params).b64_buf[iters.k];
-				iters.k++;
-			}
-			iters.k = 0;
-			while (iters.k < 8)
-			{
-				(*params).b64_buf[iters.k] = (*params).buf[iters.k];
-				iters.k++;
-			}
-		}
-		iters.k = 0;
-	}
+
+  vectors_preparing(params, count, save_res);
+	
 	//Step 1. Make first bit permutation for message (8 bytes)
-	if (ft_strcmp((*params).cipher, "des-cbc") == 0 && find_symb((*params).flags, 'd', FLAG_LEN) < 0)
+	if (ft_strcmp((*params).cipher, "des-cbc") == 0 &&
+		find_symb((*params).flags, 'd', FLAG_LEN) < 0)
 	{
 		while (iters.i < 8)
 		{
@@ -447,24 +489,7 @@ void des_enc(t_args *params, int count, int *l)
 	}
   message_first_shift(params);
 	//Step 2. Message division into 2 parts
-	iters.i = 0;
-  while (iters.i < 4)
-  {
-    left[iters.i] = (*params).buf[iters.j];
-    iters.i++;
-    iters.j++;
-  }
-  while (iters.k < 4)
-  {
-  	right[iters.k] = (*params).buf[iters.j];
-    iters.k++;
-    iters.j++;
-  }
-  while (iters.m < 4)
-  {
-		tmp[iters.m] = right[iters.m];
-    iters.m++;
-  }
+	block_dividing(left, right, tmp, params);
   //start cycle with 16 rounds for message encryption (f-function)
 	while (rounds < 16)
   {
@@ -473,7 +498,7 @@ void des_enc(t_args *params, int count, int *l)
 	bit_permutations(6, r_to_48, right48, right);
 	//Step 4. One key generation for current round
 	if (rounds == 0)
-  	make_keys(&params->des_key, params, rounds);
+  		make_keys(&params->des_key, params, rounds);
 	else
 	{
 		if (find_symb((*params).flags, 'd', FLAG_LEN) < 0)
