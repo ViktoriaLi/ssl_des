@@ -56,7 +56,7 @@ void des_main_funcs(int rounds, t_args *params, t_des_enc *des_params)
 	make_64_bits((*des_params).exp_for_s, (*des_params).right48, des_params);
 
 	//Step 6.3 Make s-blocks permutation
-	s_blocks_proccessing(des_params);
+	s_blocks_proccessing(des_params, iters);
 
 	clear_iterators(&iters);
 	//Step 7. Final bits permutation for right part

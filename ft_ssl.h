@@ -197,7 +197,7 @@ void make_64_bits(unsigned char exp_for_s[], unsigned char right48[], t_des_enc 
 void block_dividing(t_des_enc *des_params, t_args *params);
 void vectors_preparing(t_args *params, int count, unsigned char save_res[]);
 void	to_binary(int **res, int nbr, int base);
-void s_blocks_proccessing(t_des_enc *des_params);
+void s_blocks_proccessing(t_des_enc *des_params, t_addition iters);
 void xor_left_right(t_des_enc *des_params);
 void add_padding(t_args *params, int *ret, int len);
 void make_64_bits_output(t_des_enc *des_params, t_addition iters, t_args *params);

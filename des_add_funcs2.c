@@ -29,33 +29,30 @@ void	change_right_block(int *four_bits, t_des_enc *des_params, int m)
 	}
 }
 
-void	s_blocks_proccessing(t_des_enc *des_params)
+void	s_blocks_proccessing(t_des_enc *des_params, t_addition iters)
 {
 	int			*four_bits;
-	int			s_output;
-	t_addition	iters;
 
-	s_output = 0;
 	four_bits = NULL;
 	clear_iterators(&iters);
 	while (iters.m < 4)
 	{
 		if (iters.i == 0)
-			s_output = s1_block((*des_params).str_col[iters.i][0],
+			iters.j = s1_block((*des_params).str_col[iters.i][0],
 			(*des_params).str_col[iters.i][1]);
 		else if (iters.i == 2)
-			s_output = s3_block((*des_params).str_col[iters.i][0],
+			iters.j = s3_block((*des_params).str_col[iters.i][0],
 			(*des_params).str_col[iters.i][1]);
 		else if (iters.i == 4)
-			s_output = s5_block((*des_params).str_col[iters.i][0],
+			iters.j = s5_block((*des_params).str_col[iters.i][0],
 			(*des_params).str_col[iters.i][1]);
 		else if (iters.i == 6)
-			s_output = s7_block((*des_params).str_col[iters.i][0],
+			iters.j = s7_block((*des_params).str_col[iters.i][0],
 			(*des_params).str_col[iters.i][1]);
 		iters.i++;
-		to_binary(&four_bits, s_output, 2);
+		to_binary(&four_bits, iters.j, 2);
 		change_right_block(four_bits, des_params, iters.m);
-		repeat_s_blocks_proccessing(des_params, &s_output, &iters,
+		repeat_s_blocks_proccessing(des_params, &iters.j, &iters,
 		&four_bits);
 		iters.m++;
 	}
