@@ -49,9 +49,19 @@ typedef struct		s_args
 	unsigned char	md5_buf[128];
 	int				if_no_file;
 	unsigned int	words[64];
-
-
 }					t_args;
+
+typedef struct		s_des_enc
+{
+	int str_col[8][2];
+	unsigned char left[4];
+  unsigned char right[4];
+	unsigned char right_f[4];
+	unsigned char tmp[4];
+  unsigned char right48[6];
+	unsigned char exp_for_s[8];
+	unsigned char save_res[8];
+}					t_des_enc;
 
 typedef struct		s_addition
 {
@@ -146,20 +156,58 @@ void	save_des_flags(char **all_flags, char **argv,
 	t_args *params, t_addition *iters);
 int		if_correct_des_flag(char *flag);
 int		check_des_flags(int argc, char **argv, t_args *params, t_addition iters);
-
 void clear_iterators(t_addition *iters);
 void clear_struct(t_args *params);
-//int find_symb(char *str, char flag, int len);
-
 void flags_normalize(char *all_flags, t_args *params, int len);
-
-//void				clear_struct(t_args *params);
-//void				clear_iterators(t_addition *iters);
 int					find_symb(char *str, char flag, int len);
 void				flags_normalize(char *all_flags, t_args *params, int len);
-
 int		save_ssl_flags(char **argv, t_addition *iters, t_args *params,
 char **all_flags);
+int s1_block(int str, int col);
+int s2_block(int str, int col);
+int s3_block(int str, int col);
+int s4_block(int str, int col);
+int s5_block(int str, int col);
+int s6_block(int str, int col);
+int s7_block(int str, int col);
+int s8_block(int str, int col);
+void repeat_s_blocks_proccessing(t_des_enc *des_params, int *s_output, t_addition *iters, int **four_bits);
+void s_blocks_coords(t_des_enc *des_params, unsigned char exp_for_s[]);
+void set_two_right_bits(unsigned char key_res[], unsigned char key_56[],
+int bit0, int bit1);
+void	two_bit_shift_right(unsigned char key_56[], t_args *params);
+void set_two_left_bits(unsigned char key_res[], unsigned char key_56[],
+int bit0, int bit1);
+void	two_bit_shift_left(unsigned char key_56[], t_args *params);
+void set_one_right_bit(unsigned char key_res[], unsigned char key_56[],
+int bit2);
+void one_bit_shift_right(unsigned char key_56[], t_args *params);
+void one_bit_shift_left(unsigned char key_56[], t_args *params);
+
+void	bit_permutations(int max, const int table[],
+	unsigned char key_56[], unsigned char *src);
+void start_shifting(t_args *params, const int shift_table_d[],
+		unsigned char key_56[], int rounds);
+void start_keys_shifting(int rounds, t_args *params);
+void message_first_shift(t_args *params);
+void	make_keys(unsigned char **des_key, t_args *params, int rounds);
+void	remove_8bits(unsigned char key_res[], t_args *params, int rounds);
+void	finish_key_shift(unsigned char key_56[], t_args *params);
+void make_64_bits(unsigned char exp_for_s[], unsigned char right48[], t_des_enc *des_params);
+void block_dividing(t_des_enc *des_params, t_args *params);
+void vectors_preparing(t_args *params, int count, unsigned char save_res[]);
+void	to_binary(int **res, int nbr, int base);
+void s_blocks_proccessing(t_des_enc *des_params);
+void xor_left_right(t_des_enc *des_params);
+void add_padding(t_args *params, int *ret, int len);
+void make_64_bits_output(t_des_enc *des_params, t_addition iters, t_args *params);
+void remove_padding_and_merge_blocks(t_des_enc *des_params,
+	t_addition iters, t_args *params);
+	void des_reading(int fd, t_args *params, int len);
+	void make_des_output(t_des_enc *des_params, t_args *params, int *l);
+	void des_enc(t_args *params, int count, int *l);
+	void ignore_newline(t_args *params, int fd, int ret, int j);
+
 
 
 //md5

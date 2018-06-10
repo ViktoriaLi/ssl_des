@@ -1,0 +1,143 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   des_add_funcs2.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vlikhotk <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/06/10 16:05:07 by vlikhotk          #+#    #+#             */
+/*   Updated: 2018/06/10 16:15:09 by vlikhotk         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "ft_ssl.h"
+
+void	change_right_block(int *four_bits, t_des_enc *des_params, int m)
+{
+	t_addition	iters;
+
+	clear_iterators(&iters);
+	iters.j = 7;
+	while (iters.k < 4)
+	{
+		if (four_bits[iters.k])
+			(*des_params).right[m] |= (1 << iters.j);
+		else
+			(*des_params).right[m] &= ~(1 << iters.j);
+		iters.k++;
+		iters.j--;
+	}
+}
+
+void	s_blocks_proccessing(t_des_enc *des_params)
+{
+	int			*four_bits;
+	int			s_output;
+	t_addition	iters;
+
+	s_output = 0;
+	four_bits = NULL;
+	clear_iterators(&iters);
+	while (iters.m < 4)
+	{
+		if (iters.i == 0)
+			s_output = s1_block((*des_params).str_col[iters.i][0],
+			(*des_params).str_col[iters.i][1]);
+		else if (iters.i == 2)
+			s_output = s3_block((*des_params).str_col[iters.i][0],
+			(*des_params).str_col[iters.i][1]);
+		else if (iters.i == 4)
+			s_output = s5_block((*des_params).str_col[iters.i][0],
+			(*des_params).str_col[iters.i][1]);
+		else if (iters.i == 6)
+			s_output = s7_block((*des_params).str_col[iters.i][0],
+			(*des_params).str_col[iters.i][1]);
+		iters.i++;
+		to_binary(&four_bits, s_output, 2);
+		change_right_block(four_bits, des_params, iters.m);
+		repeat_s_blocks_proccessing(des_params, &s_output, &iters,
+		&four_bits);
+		iters.m++;
+	}
+}
+
+/*
+** Step 9. Left part becomes prev right part
+** Step 10. Save right part for next round
+*/
+
+void	xor_left_right(t_des_enc *des_params)
+{
+	t_addition iters;
+
+	clear_iterators(&iters);
+	while (iters.j < 4)
+	{
+		(*des_params).right[iters.j] = (*des_params).left[iters.j]
+			^ (*des_params).right_f[iters.j];
+		iters.j++;
+	}
+	while (iters.k < 4)
+	{
+		(*des_params).left[iters.k] = (*des_params).tmp[iters.k];
+		iters.k++;
+	}
+	while (iters.m < 4)
+	{
+		(*des_params).tmp[iters.m] = (*des_params).right[iters.m];
+		iters.m++;
+	}
+}
+
+void	make_64_bits_output(t_des_enc *des_params, t_addition iters,
+t_args *params)
+{
+	const int m_end[64] = {40, 8, 48, 16, 56, 24, 64, 32, 39, 7, 47,
+	15, 55, 23, 63, 31, 38, 6, 46, 14, 54, 22, 62, 30, 37, 5, 45, 13,
+	53, 21, 61, 29, 36, 4, 44, 12, 52, 20, 60, 28, 35, 3, 43, 11, 51,
+	19, 59, 27, 34, 2, 42, 10, 50, 18, 58, 26, 33, 1, 41, 9, 49, 17,
+	57, 25};
+
+	while (iters.i < 4)
+	{
+		(*des_params).exp_for_s[iters.j] = (*des_params).right[iters.i];
+		iters.j++;
+		iters.i++;
+	}
+	iters.i = 0;
+	while (iters.i < 4)
+	{
+		(*des_params).exp_for_s[iters.j] = (*des_params).left[iters.i];
+		iters.j++;
+		iters.i++;
+	}
+	bit_permutations(8, m_end, (*params).des_output, (*des_params).exp_for_s);
+}
+
+void	remove_padding_and_merge_blocks(t_des_enc *des_params,
+	t_addition iters, t_args *params)
+{
+	if (ft_strcmp((*params).cipher, "des-cbc") == 0 &&
+	find_symb((*params).flags, 'd', FLAG_LEN) >= 0)
+	{
+		while (iters.m < 8)
+		{
+			(*params).des_output[iters.m] ^= (*des_params).save_res[iters.m];
+			iters.m++;
+		}
+	}
+	clear_iterators(&iters);
+	if (find_symb((*params).flags, 'd', FLAG_LEN) >= 0)
+	{
+		if ((*params).des_output[7] > 0 && (*params).des_output[7] < 9)
+		{
+			iters.k = (*params).des_output[7];
+			iters.i = 7;
+			while (iters.k > 0)
+			{
+				(*params).des_output[iters.i--] = 0;
+				iters.k--;
+			}
+		}
+	}
+}

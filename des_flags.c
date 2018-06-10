@@ -29,7 +29,7 @@ int		b64_save_flags(int argc, char **all_flags, char **argv, t_args *params)
 				(*params).ifd = open(argv[iters.i++], O_RDONLY);
 			else if (argv[iters.i][1] == 'o')
 				(*params).ofd = open(argv[iters.i++],
-				O_WRONLY | O_APPEND | O_CREAT, 0666);
+				O_WRONLY | O_APPEND | O_CREAT, 0777);
 			iters.i++;
 		}
 		else
