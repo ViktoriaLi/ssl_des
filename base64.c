@@ -37,12 +37,12 @@ void	base64_dec(unsigned char *buf, t_args *params)
 	t_addition				iters;
 
 	clear_iterators(&iters);
-	iters.str1[0] = find_symb(BASE64_STR, buf[0], 64);
-	iters.str1[1] = find_symb(BASE64_STR, buf[1], 64);
+	iters.str1[0] = find_symb(BAS, buf[0], 64);
+	iters.str1[1] = find_symb(BAS, buf[1], 64);
 	if (buf[2] != '=')
-		iters.str1[2] = find_symb(BASE64_STR, buf[2], 64);
+		iters.str1[2] = find_symb(BAS, buf[2], 64);
 	if (buf[3] != '=')
-		iters.str1[3] = find_symb(BASE64_STR, buf[3], 64);
+		iters.str1[3] = find_symb(BAS, buf[3], 64);
 	iters.str2[0] = (iters.str1[0] << 2) + (iters.str1[1] >> 4);
 	iters.j = 1;
 	if (buf[2] != '=')
@@ -64,12 +64,12 @@ void	base64_enc(unsigned char *buf, t_args *params, int j)
 
 	dest[2] = '=';
 	dest[3] = '=';
-	dest[0] = BASE64_STR[buf[0] >> 2];
-	dest[1] = BASE64_STR[((buf[0] & 3) << 4) + ((buf[1]) >> 4)];
+	dest[0] = BAS[buf[0] >> 2];
+	dest[1] = BAS[((buf[0] & 3) << 4) + ((buf[1]) >> 4)];
 	if (j > 1)
-		dest[2] = BASE64_STR[((buf[1] & 15) << 2) + ((buf[2]) >> 6)];
+		dest[2] = BAS[((buf[1] & 15) << 2) + ((buf[2]) >> 6)];
 	if (j > 2)
-		dest[3] = BASE64_STR[buf[2] & 63];
+		dest[3] = BAS[buf[2] & 63];
 	if ((find_symb((*params).flags, 'o', FLAG_LEN)) >= 0)
 		write((*params).ofd, dest, 4);
 	else

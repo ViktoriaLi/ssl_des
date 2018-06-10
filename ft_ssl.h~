@@ -6,7 +6,7 @@
 /*   By: vlikhotk <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/02 11:36:48 by vlikhotk          #+#    #+#             */
-/*   Updated: 2018/06/10 19:09:50 by vlikhotk         ###   ########.fr       */
+/*   Updated: 2018/06/02 11:36:52 by vlikhotk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,22 +28,22 @@
 typedef struct		s_args
 {
 	unsigned int	bytes_read;
-	char			*cipher;
-	int				if_full;
-	int				desad_count;
-	unsigned char	b64_buf[65];
-	unsigned char	buf[DES_BLOCK];
-	unsigned char	*vector16;
-	char			flags[FLAG_LEN];
-	int				ifd;
-	int				ofd;
-	unsigned char	*des_key;
-	unsigned char	key_res48[6];
-	unsigned char	key_res56[7];
-	unsigned char	des_output[8];
-	unsigned char	des_48_read[65];
-	unsigned char	tmpad[65];
-	unsigned char	des_48_res[65];
+	char	*cipher;
+	int if_full;
+	int desad_count;
+	unsigned char b64_buf[65];
+	unsigned char buf[DES_BLOCK];
+	unsigned char *vector16;
+	char flags[FLAG_LEN];
+	int ifd;
+	int ofd;
+	unsigned char *des_key;
+	unsigned char key_res48[6];
+	unsigned char key_res56[7];
+	unsigned char des_output[8];
+	unsigned char des_48_read[65];
+	unsigned char tmpad[65];
+	unsigned char des_48_res[65];
 	char			*filename;
 	unsigned char	*md5_str;
 	unsigned char	md5_buf[128];
@@ -53,22 +53,22 @@ typedef struct		s_args
 
 typedef struct		s_des_enc
 {
-	int				str_col[8][2];
-	unsigned char	left[4];
-	unsigned char	right[4];
-	unsigned char	right_f[4];
-	unsigned char	tmp[4];
-	unsigned char	right48[6];
-	unsigned char	exp_for_s[8];
-	unsigned char	save_res[8];
+	int str_col[8][2];
+	unsigned char left[4];
+	unsigned char right[4];
+	unsigned char right_f[4];
+	unsigned char tmp[4];
+	unsigned char right48[6];
+	unsigned char exp_for_s[8];
+	unsigned char save_res[8];
 }					t_des_enc;
 
 typedef struct		s_addition
 {
-	int					i;
-	int					j;
-	int					k;
-	int					m;
+	int i;
+	int j;
+	int k;
+	int m;
 	unsigned int		a0;
 	unsigned int		b0;
 	unsigned int		c0;
@@ -101,8 +101,8 @@ typedef struct		s_addition
 	unsigned long long	ff1;
 	unsigned long long	gg1;
 	unsigned long long	hh1;
-	unsigned char		str1[4];
-	unsigned char		str2[4];
+	unsigned char str1[4];
+	unsigned char str2[4];
 }					t_addition;
 
 typedef struct		s_sha256
