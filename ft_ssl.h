@@ -19,6 +19,7 @@
 # include <pwd.h>
 # include "libft/includes/libft.h"
 # include "libft/includes/ft_printf.h"
+# include "libft/includes/get_next_line.h"
 
 # define BAS "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 # define FLAG_LEN 15
@@ -33,11 +34,11 @@ typedef struct		s_args
 	int				desad_count;
 	unsigned char	b64_buf[65];
 	unsigned char	buf[DES_BLOCK];
-	unsigned char	*vector16;
+	char	*vector16;
 	char			flags[FLAG_LEN];
 	int				ifd;
 	int				ofd;
-	unsigned char	*des_key;
+	char	*des_key;
 	unsigned char	key_res48[6];
 	unsigned char	key_res56[7];
 	unsigned char	des_output[8];
@@ -157,18 +158,17 @@ void				bit_permutations(int max, const int table[],
 void				print_or_save_res(t_args *params, unsigned char *str,
 						int len);
 void				base64_reading(int fd, t_args *params, int len);
-void				make_keys(unsigned char **des_key, t_args *params,
+void				make_keys(char **des_key, t_args *params,
 						int rounds);
 void				message_first_shift(t_args *params, t_des_enc	*des_params,
 						t_addition	iters);
 void				des_dec(t_args *params, int count);
-int					if_valid_args_des(int argc, char **argv, t_args *params,
-						int res);
+int					if_valid_args_des(int argc, char **argv, t_args *params);
 void				make_short_blocks(t_args *params, int ret, int len,
 						unsigned char *str);
 int					b64_save_flags(int argc, char **all_flags, char **argv,
 						t_args *params);
-void				save_des_flags(char **all_flags, char **argv,
+int					save_des_flags(char **all_flags, char **argv,
 						t_args *params, t_addition *iters);
 int					if_correct_des_flag(char *flag);
 void				clear_iterators(t_addition *iters);

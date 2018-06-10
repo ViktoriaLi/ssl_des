@@ -27,7 +27,7 @@ int		b64_save_flags(int argc, char **all_flags, char **argv, t_args *params)
 			(*all_flags)[iters.j++] = argv[iters.i][1];
 			if (argv[iters.i][1] == 'i')
 				(*params).ifd = open(argv[iters.i++], O_RDONLY);
-			else if (argv[iters.i][1] == 'o')
+			if (argv[iters.i][1] == 'o')
 				(*params).ofd = open(argv[iters.i++],
 				O_WRONLY | O_APPEND | O_CREAT, 0777);
 			iters.i++;
@@ -66,7 +66,7 @@ int		check_b64_flags(int argc, char **argv, t_args *params)
 	return (0);
 }
 
-void	save_des_flags(char **all_flags, char **argv,
+int	save_des_flags(char **all_flags, char **argv,
 	t_args *params, t_addition *iters)
 {
 	(*all_flags)[(*iters).j] = argv[(*iters).i][1];
@@ -83,17 +83,28 @@ void	save_des_flags(char **all_flags, char **argv,
 	}
 	if (argv[(*iters).i][1] == 'k')
 	{
-		(*params).des_key = (unsigned char *)argv[(*iters).i + 1];
+		(*params).des_key = argv[(*iters).i + 1];
+		if (!(*params).des_key)
+		{
+			ft_printf("%s\n", "missing argument for -k");
+			return (0);
+		}
 		(*iters).i++;
 	}
 	if (argv[(*iters).i][1] == 'v')
 	{
-		(*params).vector16 = (unsigned char *)argv[(*iters).i + 1];
+		(*params).vector16 = argv[(*iters).i + 1];
+		if (!(*params).vector16)
+		{
+			ft_printf("%s\n", "missing IV argument for -v");
+			return (0);
+		}
 		(*iters).i++;
 	}
 	(*iters).j++;
 	(*iters).i++;
 	(*all_flags)[(*iters).j] = 0;
+	return (1);
 }
 
 int		if_correct_des_flag(char *flag)
@@ -117,7 +128,10 @@ int		check_des_flags(int argc, char **argv, t_args *params,
 	while (iters.i < argc)
 	{
 		if (if_correct_des_flag(argv[iters.i]))
-			save_des_flags(&all_flags, argv, params, &iters);
+		{
+			if (!save_des_flags(&all_flags, argv, params, &iters))
+				return (1);
+		}
 		else
 		{
 			ft_printf("ft_ssl:Error: '%s' ", argv[iters.i]);
@@ -126,6 +140,17 @@ int		check_des_flags(int argc, char **argv, t_args *params,
 		}
 	}
 	flags_normalize(all_flags, params, argc - 1);
+	/*if (find_symb((*params).flags, 'k', FLAG_LEN) < 0)
+	{
+		ft_printf("%s\n", "enter des-cbc password:");
+		get_next_line(0, &params->des_key);
+	}
+	if (find_symb((*params).flags, 'v', FLAG_LEN) < 0
+	&& ft_strcmp((*params).cipher, "des-cbc") == 0)
+	{
+		ft_printf("%s\n", "enter des-cbc IV:");
+		get_next_line(0, &params->vector16);
+	}*/
 	if (((find_symb((*params).flags, 'i', FLAG_LEN)) >= 0
 	&& (*params).ifd == -1) || ((find_symb((*params).flags,
 		'o', FLAG_LEN)) >= 0 && (*params).ofd == -1))

@@ -36,23 +36,26 @@ int		if_no_args(int argc, char **argv)
 	return (1);
 }
 
-int		if_valid_args_des(int argc, char **argv, t_args *params, int res)
+int		if_valid_args_des(int argc, char **argv, t_args *params)
 {
 	t_addition	iters;
 
 	clear_iterators(&iters);
 	iters.i = 2;
 	if ((ft_strcmp(argv[1], "base64") == 0) &&
-		(res = check_b64_flags(argc, argv, params)) > 0)
-		return (0);
-	else if (((ft_strcmp(argv[1], "des") == 0) ||
+		check_b64_flags(argc, argv, params) > 0)
+			return (0);
+	else if ((ft_strcmp(argv[1], "des") == 0) ||
 	(ft_strcmp(argv[1], "des-ecb") == 0) ||
 	(ft_strcmp(argv[1], "des-cbc") == 0) ||
 	(ft_strcmp(argv[1], "des3") == 0) ||
 	(ft_strcmp(argv[1], "des3-ecb") == 0) ||
-	(ft_strcmp(argv[1], "des3-cbc") == 0)) &&
-	(res = check_des_flags(argc, argv, params, iters)) > 0)
-		return (0);
+	(ft_strcmp(argv[1], "des3-cbc") == 0))
+	{
+		(*params).cipher = argv[1];
+		if (check_des_flags(argc, argv, params, iters) > 0)
+			return (0);
+	}
 	(*params).cipher = argv[1];
 	return (1);
 }
@@ -116,7 +119,7 @@ int		main(int argc, char **argv)
 		return (0);
 	else
 	{
-		if (!if_valid_args_des(argc, argv, &params, 0))
+		if (!if_valid_args_des(argc, argv, &params))
 			return (0);
 	}
 	if (ft_strcmp(argv[1], "md5") == 0 || ft_strcmp(argv[1], "sha256")

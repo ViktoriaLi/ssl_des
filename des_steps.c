@@ -63,7 +63,7 @@ void	remove_8bits(unsigned char key_res[], t_args *params, int rounds)
 ** key and cut or lengthen to 64 bits
 */
 
-void	make_keys(unsigned char **des_key, t_args *params, int rounds)
+void	make_keys(char **des_key, t_args *params, int rounds)
 {
 	t_addition		iters;
 	unsigned char	key_res[KEY_LEN];
