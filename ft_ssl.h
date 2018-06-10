@@ -147,7 +147,7 @@ void bit_permutations(int max, const int table[], unsigned char key_56[], unsign
 void	print_or_save_res(t_args *params, unsigned char *str, int len);
 void	base64_reading(int fd, t_args *params, int len);
 void make_keys(unsigned char **des_key, t_args *params, int rounds);
-void message_first_shift(t_args *params);
+void message_first_shift(t_args *params, t_des_enc	*des_params, t_addition	iters);
 void des_dec(t_args *params, int count);
 int if_valid_args_des(int argc, char **argv, t_args *params, int res);
 void	make_short_blocks(t_args *params, int ret, int len, unsigned char *str);
@@ -189,7 +189,6 @@ void	bit_permutations(int max, const int table[],
 void start_shifting(t_args *params, const int shift_table_d[],
 		unsigned char key_56[], int rounds);
 void start_keys_shifting(int rounds, t_args *params);
-void message_first_shift(t_args *params);
 void	make_keys(unsigned char **des_key, t_args *params, int rounds);
 void	remove_8bits(unsigned char key_res[], t_args *params, int rounds);
 void	finish_key_shift(unsigned char key_56[], t_args *params);

@@ -6,13 +6,13 @@
 /*   By: vlikhotk <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/29 15:09:22 by vlikhotk          #+#    #+#             */
-/*   Updated: 2018/06/06 17:51:52 by vlikhotk         ###   ########.fr       */
+/*   Updated: 2018/06/10 17:19:31 by vlikhotk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
 
-void make_des_output(t_des_enc *des_params, t_args *params, int *l)
+void	make_des_output(t_des_enc *des_params, t_args *params, int *l)
 {
 	t_addition iters;
 
@@ -37,105 +37,95 @@ void make_des_output(t_des_enc *des_params, t_args *params, int *l)
 	}
 }
 
-void des_main_funcs(int rounds, t_args *params, t_des_enc *des_params)
+/*
+** Step 5. XOR key and right part
+** Step 6. Make bits permutation with s-blocks
+** Step 6.1 Make 8 grops per 6 main bits
+** Step 6.3 Make s-blocks permutation
+** Step 7. Final bits permutation for right part
+** Step 8. XOR between left part and f_function result.
+** Right part becomes new right part
+*/
+
+void	des_main_funcs(int rounds, t_args *params, t_des_enc *des_params)
 {
-	t_addition iters;
-	const int p_shift[32] = {16,	7, 20, 21, 29, 12, 28, 17, 1, 15,	23,	26,	5, 18, 31, 10,\
-  	2, 8, 24, 14, 32,	27,	3, 9, 19,	13,	30,	6, 22, 11, 4,	25};
+	t_addition	iters;
+	const int	p_shift[32] = {16, 7, 20, 21, 29, 12, 28, 17, 1, 15,
+	23, 26, 5, 18, 31, 10, 2, 8, 24, 14, 32, 27, 3, 9, 19, 13, 30, 6,
+	22, 11, 4, 25};
 
 	clear_iterators(&iters);
 	start_keys_shifting(rounds, params);
-	//Step 5. XOR key and right part
-  while (iters.k < 6)
-  {
-    (*des_params).right48[iters.k] ^= (*params).key_res48[iters.k];
-    iters.k++;
-  }
-	//Step 6. Make bits permutation with s-blocks
-	//Step 6.1 Make 8 grops per 6 main bits
+	while (iters.k < 6)
+	{
+		(*des_params).right48[iters.k] ^= (*params).key_res48[iters.k];
+		iters.k++;
+	}
 	make_64_bits((*des_params).exp_for_s, (*des_params).right48, des_params);
-
-	//Step 6.3 Make s-blocks permutation
 	s_blocks_proccessing(des_params, iters);
-
 	clear_iterators(&iters);
-	//Step 7. Final bits permutation for right part
 	bit_permutations(4, p_shift, (*des_params).right_f, (*des_params).right);
-	//Step 8. XOR between left part and f_function result. Right part becomes new right part
 	xor_left_right(des_params);
 }
 
-/*main des-encryption function */
-void des_enc(t_args *params, int count, int *l)
+/*
+** main des-encryption function
+** Step 1. Make first bit permutation for message (8 bytes)
+** Step 2. Message division into 2 parts
+** start cycle with 16 rounds for message encryption (f-function)
+** Step 3. Make expansion of right part to 48 bits
+** Step 4. One key generation for current round
+** Step 11. Make final encrypted output for message
+*/
+
+void	des_enc(t_args *params, int count, int *l)
 {
-	t_addition iters;
-	t_des_enc des_params;
-	int rounds;
-	const int r_to_48[48] = {32,	1, 2,	3, 4,	5, 4,	5, 6,	7, 8,	9, 8,	9, 10, 11, 12, 13,\
-  12,	13,	14,	15,	16,	17, 16,	17,	18,	19,	20,	21, 20,	21,	22,	23,	24,	25, 24,\
-  25,	26,	27,	28,	29, 28,	29,	30,	31,	32,	1};
+	t_addition	iters;
+	t_des_enc	des_params;
+	int			rounds;
+	const int	r_to_48[48] = {32, 1, 2, 3, 4, 5, 4, 5, 6, 7, 8,
+	9, 8, 9, 10, 11, 12, 13, 12, 13, 14, 15, 16, 17, 16, 17, 18,
+	19, 20, 21, 20, 21, 22, 23, 24, 25, 24, 25, 26, 27, 28, 29,
+	28, 29, 30, 31, 32, 1};
 
 	rounds = 0;
 	clear_iterators(&iters);
 	if (ft_strcmp((*params).cipher, "des-cbc") == 0)
-  	vectors_preparing(params, count, des_params.save_res);
-	//Step 1. Make first bit permutation for message (8 bytes)
-	if (ft_strcmp((*params).cipher, "des-cbc") == 0 &&
-		find_symb((*params).flags, 'd', FLAG_LEN) < 0)
-	{
-		while (iters.i < 8)
-		{
-			(*params).buf[iters.i] ^= (*params).des_output[iters.i];
-			iters.i++;
-		}
-	}
-  message_first_shift(params);
-	//Step 2. Message division into 2 parts
-	block_dividing(&des_params, params);
-  //start cycle with 16 rounds for message encryption (f-function)
+		vectors_preparing(params, count, des_params.save_res);
+	message_first_shift(params, &des_params, iters);
 	while (rounds < 16)
-  {
-	//Step 3. Make expansion of right part to 48 bits
-	bit_permutations(6, r_to_48, des_params.right48, des_params.right);
-	//Step 4. One key generation for current round
-	des_main_funcs(rounds, params, &des_params);
-	rounds++;
-}
-//Step 11. Make final encrypted output for message
-make_des_output(&des_params, params, l);
+	{
+		bit_permutations(6, r_to_48, des_params.right48, des_params.right);
+		des_main_funcs(rounds, params, &des_params);
+		rounds++;
+	}
+	make_des_output(&des_params, params, l);
 }
 
-void ignore_newline(t_args *params, int fd, int ret, int j)
+void	ignore_newline(t_args *params, int fd, int ret, int j)
 {
-	int i;
-	int k;
-	int l;
-	int tmp;
+	t_addition iters;
 
-	i = 0;
-	l = 0;
-	k = 0;
-	tmp = j;
+	clear_iterators(&iters);
 	if (j == -1)
 		j = 0;
-	while ((*params).des_48_read[i] != '\0' && i < ret)
+	while ((*params).des_48_read[iters.i] != '\0' && iters.i < ret)
 	{
-		if ((*params).des_48_read[i] != '\n' /*|| ((*params).des_48_read[i] == '\n' &&
+		if ((*params).des_48_read[iters.i] != '\n' /*|| ((*params).des_48_read[i] == '\n' &&
 	i == 63)*/)
-	{
-		(*params).tmpad[j++] = (*params).des_48_read[i++];
-
-	}
+		{
+			(*params).tmpad[j++] = (*params).des_48_read[iters.i++];
+		}
 		else
-			i++;
+			iters.i++;
 	}
-	if (i != ret)
+	if (iters.i != ret)
 	{
-		l = 0;
-		while (l < ret)
-			(*params).des_48_read[l++] = 0;
-		k = read(fd, params, ret - i);
-		ignore_newline(params, fd, k, j);
+		iters.m = 0;
+		while (iters.m < ret)
+			(*params).des_48_read[iters.m++] = 0;
+		iters.k = read(fd, params, ret - iters.i);
+		ignore_newline(params, fd, iters.k, j);
 	}
 	else
 		return ;

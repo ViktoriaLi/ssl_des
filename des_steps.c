@@ -96,9 +96,9 @@ void	make_keys(unsigned char **des_key, t_args *params, int rounds)
 **initial bit permutation
 */
 
-void	message_first_shift(t_args *params)
+void	message_first_shift(t_args *params, t_des_enc *des_params,
+	t_addition iters)
 {
-	int						i;
 	static unsigned char	buf_res[DES_BLOCK];
 	const int				m_start[64] = {58, 50, 42, 34, 26, 18, 10, 2,
 	60, 52, 44, 36, 28, 20, 12, 4, 62, 54, 46, 38, 30, 22, 14, 6, 64, 56,
@@ -106,13 +106,22 @@ void	message_first_shift(t_args *params)
 	27, 19, 11, 3, 61, 53, 45, 37, 29, 21, 13, 5, 63, 55, 47, 39, 31,
 	23, 15, 7};
 
-	i = 0;
-	bit_permutations(DES_BLOCK, m_start, buf_res, (*params).buf);
-	while (i < 8)
+	if (ft_strcmp((*params).cipher, "des-cbc") == 0 &&
+		find_symb((*params).flags, 'd', FLAG_LEN) < 0)
 	{
-		(*params).buf[i] = buf_res[i];
-		i++;
+		while (iters.i < 8)
+		{
+			(*params).buf[iters.i] ^= (*params).des_output[iters.i];
+			iters.i++;
+		}
 	}
+	bit_permutations(DES_BLOCK, m_start, buf_res, (*params).buf);
+	while (iters.j < 8)
+	{
+		(*params).buf[iters.j] = buf_res[iters.j];
+		iters.j++;
+	}
+	block_dividing(des_params, params);
 }
 
 void	start_keys_shifting(int rounds, t_args *params)
