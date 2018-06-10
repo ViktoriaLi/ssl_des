@@ -206,7 +206,7 @@ void remove_padding_and_merge_blocks(t_des_enc *des_params,
 	void make_des_output(t_des_enc *des_params, t_args *params, int *l);
 	void des_enc(t_args *params, int count, int *l);
 	void ignore_newline(t_args *params, int fd, int ret, int j);
-
+void	add_padding(t_args *params, int *ret, int len);
 
 
 //md5

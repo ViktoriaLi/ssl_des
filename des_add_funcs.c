@@ -12,6 +12,33 @@
 
 #include "ft_ssl.h"
 
+void	add_padding(t_args *params, int *ret, int len)
+{
+	t_addition iters;
+
+	clear_iterators(&iters);
+	if ((find_symb((*params).flags, 'd', FLAG_LEN)) < 0 &&
+		(*ret % 8) == 0 && *ret != len)
+	{
+		iters.j = *ret;
+		*ret += 8;
+		while (iters.i < 8)
+		{
+			(*params).des_48_read[iters.j++] = 8;
+			iters.i++;
+		}
+	}
+	else if ((find_symb((*params).flags, 'd', FLAG_LEN)) < 0
+	&& (*ret % 8) != 0)
+	{
+		iters.j = *ret;
+		iters.k = 8 - (*ret % 8);
+		*ret += iters.k;
+		while (iters.i++ < 8)
+			(*params).des_48_read[iters.j++] = iters.k;
+	}
+}
+
 void	to_binary(int **res, int nbr, int base)
 {
 	int	len;
