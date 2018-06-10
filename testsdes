@@ -48,7 +48,7 @@ echo "tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiqwertyuiopjhgfd" | openssl
 echo "tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiqwertyuiopjhgfdg" | ./ft_ssl des-ecb -k 6162636461626364 -a
 echo
 echo "tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiqwertyuiopjhgfdg" | openssl des-ecb -K 6162636461626364 -a
-echo "tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiqwertyuiopjhgfdkk" | ./ des-ecb -k 6162636461626364 -a
+echo "tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiqwertyuiopjhgfdkk" | ./ft_ssl des-ecb -k 6162636461626364 -a
 echo
 echo "tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiqwertyuiopjhgfdkk" | openssl des-ecb -K 6162636461626364 -a
 
