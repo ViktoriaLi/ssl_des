@@ -122,16 +122,19 @@ int		check_des_flags(int argc, char **argv, t_args *params,
 		if (if_correct_des_flag(argv[iters.i]))
 		{
 			if (!save_des_flags(&all_flags, argv, params, &iters))
+			{
+				ft_strdel(&all_flags);
 				return (1);
+			}
 		}
 		else
 		{
+			ft_strdel(&all_flags);
 			ft_printf("ft_ssl:Error: '%s' ", argv[iters.i]);
 			ft_printf("%s\n", "is an invalid command.");
 			return (1);
 		}
 	}
-
 	flags_normalize(all_flags, params, argc - 1);
 	if (((find_symb((*params).flags, 'i', FLAG_LEN)) >= 0
 	&& (*params).ifd < 0) || ((find_symb((*params).flags,

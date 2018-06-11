@@ -1,44 +1,29 @@
-echo "to
-to" | ./a.out base64
-echo
-echo "to
-to" | base64
-echo
-echo "foo
-bar" | ./a.out des-ecb -k 6162636461626364 -a
-echo
-echo "foo
-bar" | openssl des-ecb -K 6162636461626364 -a
-
-echo "foo
-bar" | ./a.out des-cbc -k 6162636461626364 -v 0011223344556677 -a
-echo
-echo "foo
-bar" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a
-
 echo "YZF3QKaabXUwx
-Ng3obhMfw==" | ./a.out des-ecb -k 6162636461626364 -a -d
+Ng3obhMfw==" | ./ft_ssl des-ecb -k 6162636461626364 -a -d
 echo
 echo "YZF3QKaabXUwx
 Ng3obhMfw==" | openssl des-ecb -K 6162636461626364 -a -d
 
 echo "EWTdOkhUA+13T
-DvLz1hl9Q==" | ./a.out des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
+DvLz1hl9Q==" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
 echo
 echo "EWTdOkhUA+13T
 DvLz1hl9Q==" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a -d
 echo
 echo "Ffmdlmn7jsC251bTcNVfW
-A7nhdV9gwcFTOhh+mq4RrNQO+sWG/zuH5Zz6KQTZ2MNZ6p7rNhHzLhLGh2jJcfeAZ8M7BtcYqkl" | ./a.out des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
+A7nhdV9gwcFTOhh+mq4RrNQO+sWG/zuH5Zz6KQTZ2MNZ6p7rNhHzLhLGh2jJcfeAZ8M7BtcYqkl" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
 echo
 echo "Ffmdlmn7jsC251bTcNVfWA7nhdV9gwcFTOhh+mq4RrNQO+s
-WG/zuH5Zz6KQTZ2MNZ6p7rNhHzLhLGh2jJcfeAZ8M7BtcYqkl" | ./a.out des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
+WG/zuH5Zz6KQTZ2MNZ6p7rNhHzLhLGh2jJcfeAZ8M7BtcYqkl" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
 echo
 echo "Ffmdlmn7jsC251bTcNVfWA7nhdV9gwcFTOhh+mq4RrNQO+sWG/zuH5Zz6KQTZ2
-MNZ6p7rNhHzLhLGh2jJcfeAZ8M7BtcYqkl" | ./a.out des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
+MNZ6p7rNhHzLhLGh2jJcfeAZ8M7BtcYqkl" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
 echo
 echo "Ffmdlmn7jsC251bTcNVfWA7nhdV9gwcFTOhh+mq4RrNQO+sWG/zuH5Zz6KQTZ2M
-NZ6p7rNhHzLhLGh2jJcfeAZ8M7BtcYqkl" | ./a.out des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
+NZ6p7rNhHzLhLGh2jJcfeAZ8M7BtcYqkl" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
 echo
 echo "Ffmdlmn7jsC251bTcNVfWA7nhdV9gwcFTOhh+mq4RrNQO+sWG/zuH5Zz6KQTZ2MN
-Z6p7rNhHzLhLGh2jJcfeAZ8M7BtcYqkl" | ./a.out des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
+Z6p7rNhHzLhLGh2jJcfeAZ8M7BtcYqkl" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
+echo
+echo "jL/B1KNMV6rI6G3AKgbftOk2+6Lvm7gU2YWNg
+l7QuDYTdQeiF1H7OrPYT1NTIT7CUOMBlcJmD1lZRVckRPL/6DDE2DehuEx/" | ./ft_ssl des-ecb -k 6162636461626364 -a -d

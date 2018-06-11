@@ -27,6 +27,7 @@ void	change_right_block(int *four_bits, t_des_enc *des_params, int m)
 		iters.k++;
 		iters.j--;
 	}
+	free(four_bits);
 }
 
 void	s_blocks_proccessing(t_des_enc *des_params, t_addition iters)
@@ -52,9 +53,9 @@ void	s_blocks_proccessing(t_des_enc *des_params, t_addition iters)
 		iters.i++;
 		to_binary(&four_bits, iters.j, 2);
 		change_right_block(four_bits, des_params, iters.m);
-		repeat_s_blocks_proccessing(des_params, &iters.j, &iters,
-		&four_bits);
+		re_s_blocks_proc(des_params, &iters.j, &iters, &four_bits);
 		iters.m++;
+		free(four_bits);
 	}
 }
 

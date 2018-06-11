@@ -76,8 +76,7 @@ void	a_encr(t_args *params, int ret, t_addition *iters)
 		}
 		if (ret == 64 && (find_symb((*params).flags, 'o', FLAG_LEN)) >= 0)
 			write((*params).ofd, "\n", 1);
-		else if (/*(find_symb((*params).flags, 'd', FLAG_LEN)) < 0 &&*/
-		(find_symb((*params).flags, 'o', FLAG_LEN)) < 0)
+		else if ((find_symb((*params).flags, 'o', FLAG_LEN)) < 0)
 			write(1, "\n", 1);
 		(*iters).i = 0;
 		while ((*iters).i < (*iters).m)
@@ -130,5 +129,4 @@ void	des_reading(int fd, t_args *params, int len)
 			(*params).buf[iters.j++] = 8;
 		des_enc(params, count, &iters.m);
 	}
-
 }

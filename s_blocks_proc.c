@@ -45,7 +45,7 @@ int		s3_block(int str, int col)
 	return (s_3[str][col]);
 }
 
-void	repeat_s_blocks_proccessing(t_des_enc *des_params,
+void	re_s_blocks_proc(t_des_enc *des_params,
 int *s_output, t_addition *iters, int **four_bits)
 {
 	if ((*iters).i == 1)

@@ -162,7 +162,6 @@ void	base64_reading(int fd, t_args *params, int len)
 	clear_iterators(&iters);
 	while ((iters.k = read(fd, &params->b64_buf, len)) > 0)
 	{
-
 		iters.i = 0;
 		(*params).b64_buf[64] = 0;
 		b64_remove_whitespaces(params, len, fd, iters.k);
@@ -177,8 +176,8 @@ void	base64_reading(int fd, t_args *params, int len)
 		if (iters.k == 64 && (find_symb((*params).flags, 'd', FLAG_LEN)) < 0
 			&& (find_symb((*params).flags, 'o', FLAG_LEN)) >= 0)
 			write((*params).ofd, "\n", 1);
-		else if (iters.k == 64 && (find_symb((*params).flags, 'd', FLAG_LEN)) < 0 &&
-		(find_symb((*params).flags, 'o', FLAG_LEN)) < 0)
+		else if (iters.k == 64 && (find_symb((*params).flags, 'd', FLAG_LEN))
+		< 0 && (find_symb((*params).flags, 'o', FLAG_LEN)) < 0)
 			write(1, "\n", 1);
 	}
 }
