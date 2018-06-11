@@ -26,9 +26,9 @@ int		b64_save_flags(int argc, char **all_flags, char **argv, t_args *params)
 		{
 			(*all_flags)[iters.j++] = argv[iters.i][1];
 			if (argv[iters.i][1] == 'i')
-				(*params).ifd = open(argv[iters.i++], O_RDONLY);
+				(*params).ifd = open(argv[++iters.i], O_RDONLY);
 			if (argv[iters.i][1] == 'o')
-				(*params).ofd = open(argv[iters.i++],
+				(*params).ofd = open(argv[++iters.i],
 				O_WRONLY | O_APPEND | O_CREAT, 0777);
 			iters.i++;
 		}
@@ -140,7 +140,7 @@ int		check_des_flags(int argc, char **argv, t_args *params,
 		}
 	}
 	flags_normalize(all_flags, params, argc - 1);
-	/*if (find_symb((*params).flags, 'k', FLAG_LEN) < 0)
+	if (find_symb((*params).flags, 'k', FLAG_LEN) < 0)
 	{
 		ft_printf("%s\n", "enter des-cbc password:");
 		get_next_line(0, &params->des_key);
@@ -150,7 +150,7 @@ int		check_des_flags(int argc, char **argv, t_args *params,
 	{
 		ft_printf("%s\n", "enter des-cbc IV:");
 		get_next_line(0, &params->vector16);
-	}*/
+	}
 	if (((find_symb((*params).flags, 'i', FLAG_LEN)) >= 0
 	&& (*params).ifd == -1) || ((find_symb((*params).flags,
 		'o', FLAG_LEN)) >= 0 && (*params).ofd == -1))
