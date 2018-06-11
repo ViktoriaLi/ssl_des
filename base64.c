@@ -165,11 +165,8 @@ void	base64_reading(int fd, t_args *params, int len)
 
 		iters.i = 0;
 		(*params).b64_buf[64] = 0;
-		//if ((*params).b64_buf[iters.k - 1] == '\0')
-			//(*params).b64_buf[iters.k - 1] = '\n';
 		b64_remove_whitespaces(params, len, fd, iters.k);
 		iters.k = ft_strlen((const char *)(*params).b64_buf);
-		//ft_printf("%s\n", (*params).b64_buf);
 		if (find_symb((*params).flags, 'd', FLAG_LEN) >= 0)
 			make_short_blocks(params, iters.k, 4, (*params).b64_buf);
 		else

@@ -36,6 +36,39 @@ int		if_no_args(int argc, char **argv)
 	return (1);
 }
 
+int if_hex(t_args *params)
+{
+	int i;
+
+	i = 0;
+	while (i < 16)
+	{
+		if ((*params).des_key[i] < 48 || ((*params).des_key[i] > 57 &&
+		(*params).des_key[i] < 65) || ((*params).des_key[i] > 70 &&
+		(*params).des_key[i] < 97) || (*params).des_key[i] > 102)
+		{
+			ft_printf("%s\n", "non-hex digit\ninvalid hex key value");
+			return (0);
+		}
+
+		i++;
+	}
+	i = 0;
+	if (ft_strcmp((*params).cipher, "des-cbc") == 0)
+	while (i < 16)
+	{
+		if ((*params).vector16[i] < 48 || ((*params).vector16[i] > 57 &&
+		(*params).vector16[i] < 65) || ((*params).vector16[i] > 70 &&
+		(*params).vector16[i] < 97) || (*params).vector16[i] > 102 )
+		{
+			ft_printf("%s\n", "non-hex digit\ninvalid hex iv value");
+			return (0);
+		}
+		i++;
+	}
+	return (1);
+}
+
 int		if_valid_args_des(int argc, char **argv, t_args *params)
 {
 	t_addition	iters;
@@ -54,6 +87,8 @@ int		if_valid_args_des(int argc, char **argv, t_args *params)
 	{
 		(*params).cipher = argv[1];
 		if (check_des_flags(argc, argv, params, iters) > 0)
+			return (0);
+		if (!if_hex(params))
 			return (0);
 	}
 	(*params).cipher = argv[1];
