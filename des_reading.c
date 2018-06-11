@@ -112,7 +112,9 @@ void	des_reading(int fd, t_args *params, int len)
 	clear_iterators(&iters);
 	while ((ret = read(fd, params->des_48_read, len)) > 0)
 	{
+		(*params).des_48_read[64] = 0;
 		if_decr_block(params, len, fd, ret);
+		ret = ft_strlen((const char *)(*params).des_48_read);
 		if (ret == len && (find_symb((*params).flags, 'd', FLAG_LEN)) < 0)
 			(*params).if_full = 1;
 		add_padding(params, &ret, len);

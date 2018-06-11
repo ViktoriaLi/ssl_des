@@ -71,35 +71,27 @@ int	save_des_flags(char **all_flags, char **argv,
 {
 	(*all_flags)[(*iters).j] = argv[(*iters).i][1];
 	if (argv[(*iters).i][1] == 'i')
-	{
-		(*params).ifd = open(argv[(*iters).i + 1], O_RDONLY);
-		(*iters).i++;
-	}
-	if (argv[(*iters).i][1] == 'o')
-	{
-		(*params).ofd = open(argv[(*iters).i + 1], O_WRONLY
+		(*params).ifd = open(argv[++(*iters).i], O_RDONLY);
+	else if (argv[(*iters).i][1] == 'o')
+		(*params).ofd = open(argv[++(*iters).i], O_WRONLY
 		| O_APPEND | O_CREAT, 0666);
-		(*iters).i++;
-	}
-	if (argv[(*iters).i][1] == 'k')
+	else if (argv[(*iters).i][1] == 'k')
 	{
-		(*params).des_key = argv[(*iters).i + 1];
+		(*params).des_key = argv[++(*iters).i];
 		if (!(*params).des_key)
 		{
 			ft_printf("%s\n", "missing argument for -k");
 			return (0);
 		}
-		(*iters).i++;
 	}
-	if (argv[(*iters).i][1] == 'v')
+	else if (argv[(*iters).i][1] == 'v')
 	{
-		(*params).vector16 = argv[(*iters).i + 1];
+		(*params).vector16 = argv[++(*iters).i];
 		if (!(*params).vector16)
 		{
 			ft_printf("%s\n", "missing IV argument for -v");
 			return (0);
 		}
-		(*iters).i++;
 	}
 	(*iters).j++;
 	(*iters).i++;
@@ -139,7 +131,16 @@ int		check_des_flags(int argc, char **argv, t_args *params,
 			return (1);
 		}
 	}
+
 	flags_normalize(all_flags, params, argc - 1);
+	if (((find_symb((*params).flags, 'i', FLAG_LEN)) >= 0
+	&& (*params).ifd < 0) || ((find_symb((*params).flags,
+		'o', FLAG_LEN)) >= 0 && (*params).ofd < 0))
+	{
+		ft_printf("usage: ft_ssl %s ", argv[1]);
+		ft_printf("%s\n", "[-i file] [-v IV] [-k key] [-o file]");
+		return (1);
+	}
 	if (find_symb((*params).flags, 'k', FLAG_LEN) < 0)
 	{
 		ft_printf("%s\n", "enter des-cbc password:");
@@ -150,14 +151,6 @@ int		check_des_flags(int argc, char **argv, t_args *params,
 	{
 		ft_printf("%s\n", "enter des-cbc IV:");
 		get_next_line(0, &params->vector16);
-	}
-	if (((find_symb((*params).flags, 'i', FLAG_LEN)) >= 0
-	&& (*params).ifd == -1) || ((find_symb((*params).flags,
-		'o', FLAG_LEN)) >= 0 && (*params).ofd == -1))
-	{
-		ft_printf("usage: ft_ssl %s ", argv[1]);
-		ft_printf("%s\n", "[-i file] [-v IV] [-k key] [-o file]");
-		return (1);
 	}
 	return (0);
 }

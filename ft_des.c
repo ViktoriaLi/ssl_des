@@ -111,15 +111,14 @@ void	ignore_newline(t_args *params, int fd, int ret, int j)
 		j = 0;
 	while ((*params).des_48_read[iters.i] != '\0' && iters.i < ret)
 	{
-		if ((*params).des_48_read[iters.i] != '\n' /*|| ((*params).des_48_read[i] == '\n' &&
-	i == 63)*/)
+		if ((*params).des_48_read[iters.i] != '\n')
 		{
 			(*params).tmpad[j++] = (*params).des_48_read[iters.i++];
 		}
 		else
 			iters.i++;
 	}
-	if (iters.i != ret)
+	if (iters.i != ret && ret == 64)
 	{
 		iters.m = 0;
 		while (iters.m < ret)
