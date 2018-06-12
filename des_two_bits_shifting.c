@@ -12,6 +12,20 @@
 
 #include "ft_ssl.h"
 
+/*
+** Step 6.3 Final key bits permutation
+*/
+
+void	finish_key_shift(unsigned char key_56[], t_args *params)
+{
+	const int key_finish[48] = {14, 17, 11, 24, 1, 5, 3, 28, 15, 6,
+	21, 10, 23, 19, 12, 4, 26, 8, 16, 7, 27, 20, 13, 2, 41, 52,
+	31, 37, 47, 55, 30, 40, 51, 45, 33, 48, 44, 49, 39, 56, 34, 53,
+	46, 42, 50, 36, 29, 32};
+
+	bit_permutations(6, key_finish, (*params).key_res48, key_56);
+}
+
 void	set_two_right_bits(unsigned char key_res[], unsigned char key_56[],
 int bit0, int bit1)
 {

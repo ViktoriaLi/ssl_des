@@ -95,6 +95,7 @@ void	b64_remove_whitespaces(t_args *params, int len, int fd, int ret)
 	int i;
 
 	i = 0;
+	(*params).b64_buf[ret] = 0;
 	if (len == 64)
 	{
 		ignore_whitespaces(params, fd, ret, 0);

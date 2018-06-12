@@ -110,7 +110,6 @@ void	base64_reading(int fd, t_args *params, int len)
 	while ((iters.k = read(fd, &params->b64_buf, len)) > 0)
 	{
 		iters.i = 0;
-		(*params).b64_buf[iters.k] = 0;
 		b64_remove_whitespaces(params, len, fd, iters.k);
 		iters.k = ft_strlen((const char *)(*params).b64_buf);
 		if (find_symb((*params).flags, 'd', FLAG_LEN) >= 0)

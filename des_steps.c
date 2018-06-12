@@ -13,20 +13,6 @@
 #include "ft_ssl.h"
 
 /*
-** Step 6.3 Final key bits permutation
-*/
-
-void	finish_key_shift(unsigned char key_56[], t_args *params)
-{
-	const int key_finish[48] = {14, 17, 11, 24, 1, 5, 3, 28, 15, 6,
-	21, 10, 23, 19, 12, 4, 26, 8, 16, 7, 27, 20, 13, 2, 41, 52,
-	31, 37, 47, 55, 30, 40, 51, 45, 33, 48, 44, 49, 39, 56, 34, 53,
-	46, 42, 50, 36, 29, 32};
-
-	bit_permutations(6, key_finish, (*params).key_res48, key_56);
-}
-
-/*
 ** Step 6.2 Make 56 bits key (remove each 8 bit)
 ** Step 6.3 Key cycle shift
 */
@@ -63,6 +49,19 @@ void	remove_8bits(unsigned char key_res[], t_args *params, int rounds)
 ** key and cut or lengthen to 64 bits
 */
 
+void	start_key_change(unsigned char key_res[], t_args *params, int rounds)
+{
+	int m;
+
+	m = 0;
+	remove_8bits(key_res, params, rounds);
+	while (m < 8)
+	{
+		(*params).des_output[m] = key_res[m];
+		m++;
+	}
+}
+
 void	make_keys(char **des_key, t_args *params, int rounds)
 {
 	t_addition		iters;
@@ -87,12 +86,7 @@ void	make_keys(char **des_key, t_args *params, int rounds)
 		((*des_key)[iters.j + 1] - '0');
 		iters.j += 2;
 	}
-	remove_8bits(key_res, params, rounds);
-	while (iters.m < 8)
-	{
-		(*params).des_output[iters.m] = key_res[iters.m];
-		iters.m++;
-	}
+	start_key_change(key_res, params, rounds);
 }
 
 /*
