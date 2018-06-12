@@ -20,22 +20,20 @@ SFILES = main.c init_vectors.c md5.c sha256.c sha512.c printing.c \
 				 des_two_bits_shifting.c des_one_bit_shift.c des_steps.c \
 				 des_add_funcs.c des_add_funcs2.c des_reading.c b64_flags_spaces.c
 
-
 OFILES = main.o init_vectors.o md5.o sha256.o sha512.o printing.o \
 				 bits_shifting.o last_rounds_md5.o flags_ssl.o base64.o ft_des.o \
 				 start_md5.o reading.o des_flags.o s_blocks.o s_blocks_proc.o \
 				 des_two_bits_shifting.o des_one_bit_shift.o des_steps.o \
 				 des_add_funcs.o des_add_funcs2.o des_reading.o b64_flags_spaces.o
 
-
 LIBFT = $(LIBFT_DIR)libftprintf.a
 LIBFT_DIR = $(LIB_DIR)
 LIBFT_INC = $(LIBFT_DIR)includes/
 
+CC = gcc
 CC_FLAGS = -Wall -Wextra -Werror
 HEADER_FLAGS = -I $(LIBFT_INC)
 
-CC = gcc
 
 all: $(NAME)
 

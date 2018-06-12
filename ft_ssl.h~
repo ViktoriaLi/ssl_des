@@ -6,7 +6,7 @@
 /*   By: vlikhotk <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/02 11:36:48 by vlikhotk          #+#    #+#             */
-/*   Updated: 2018/06/02 11:36:52 by vlikhotk         ###   ########.fr       */
+/*   Updated: 2018/06/10 19:09:50 by vlikhotk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <pwd.h>
 # include "libft/includes/libft.h"
 # include "libft/includes/ft_printf.h"
+# include "libft/includes/get_next_line.h"
 
 # define BAS "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 # define FLAG_LEN 15
@@ -28,22 +29,22 @@
 typedef struct		s_args
 {
 	unsigned int	bytes_read;
-	char	*cipher;
-	int if_full;
-	int desad_count;
-	unsigned char b64_buf[65];
-	unsigned char buf[DES_BLOCK];
-	unsigned char *vector16;
-	char flags[FLAG_LEN];
-	int ifd;
-	int ofd;
-	unsigned char *des_key;
-	unsigned char key_res48[6];
-	unsigned char key_res56[7];
-	unsigned char des_output[8];
-	unsigned char des_48_read[65];
-	unsigned char tmpad[65];
-	unsigned char des_48_res[65];
+	char			*cipher;
+	int				if_full;
+	int				desad_count;
+	unsigned char	b64_buf[65];
+	unsigned char	buf[DES_BLOCK];
+	char	*vector16;
+	char			flags[FLAG_LEN];
+	int				ifd;
+	int				ofd;
+	char	*des_key;
+	unsigned char	key_res48[6];
+	unsigned char	key_res56[7];
+	unsigned char	des_output[8];
+	unsigned char	des_48_read[65];
+	unsigned char	tmpad[65];
+	unsigned char	des_48_res[65];
 	char			*filename;
 	unsigned char	*md5_str;
 	unsigned char	md5_buf[128];
@@ -53,22 +54,22 @@ typedef struct		s_args
 
 typedef struct		s_des_enc
 {
-	int str_col[8][2];
-	unsigned char left[4];
-	unsigned char right[4];
-	unsigned char right_f[4];
-	unsigned char tmp[4];
-	unsigned char right48[6];
-	unsigned char exp_for_s[8];
-	unsigned char save_res[8];
+	int				str_col[8][2];
+	unsigned char	left[4];
+	unsigned char	right[4];
+	unsigned char	right_f[4];
+	unsigned char	tmp[4];
+	unsigned char	right48[6];
+	unsigned char	exp_for_s[8];
+	unsigned char	save_res[8];
 }					t_des_enc;
 
 typedef struct		s_addition
 {
-	int i;
-	int j;
-	int k;
-	int m;
+	int					i;
+	int					j;
+	int					k;
+	int					m;
 	unsigned int		a0;
 	unsigned int		b0;
 	unsigned int		c0;
@@ -101,8 +102,8 @@ typedef struct		s_addition
 	unsigned long long	ff1;
 	unsigned long long	gg1;
 	unsigned long long	hh1;
-	unsigned char str1[4];
-	unsigned char str2[4];
+	unsigned char		str1[4];
+	unsigned char		str2[4];
 }					t_addition;
 
 typedef struct		s_sha256
@@ -135,8 +136,7 @@ typedef struct		s_sha512_vars
 void				base64_enc(unsigned char *buf, t_args *params, int j);
 void				base64_dec(unsigned char *buf, t_args *params);
 int					check_b64_flags(int argc, char **argv, t_args *params);
-int					check_des_flags(int argc, char **argv, t_args *params,
-						t_addition iters);
+int					check_des_flags(int argc, char **argv, t_args *params);
 void				des_reading(int fd, t_args *params, int len);
 void				des_enc(t_args *params, int count, int *l);
 void				to_binary(int **res, int nbr, int base);
@@ -157,18 +157,17 @@ void				bit_permutations(int max, const int table[],
 void				print_or_save_res(t_args *params, unsigned char *str,
 						int len);
 void				base64_reading(int fd, t_args *params, int len);
-void				make_keys(unsigned char **des_key, t_args *params,
+void				make_keys(char **des_key, t_args *params,
 						int rounds);
 void				message_first_shift(t_args *params, t_des_enc	*des_params,
 						t_addition	iters);
 void				des_dec(t_args *params, int count);
-int					if_valid_args_des(int argc, char **argv, t_args *params,
-						int res);
+int					if_valid_args_des(int argc, char **argv, t_args *params);
 void				make_short_blocks(t_args *params, int ret, int len,
 						unsigned char *str);
 int					b64_save_flags(int argc, char **all_flags, char **argv,
 						t_args *params);
-void				save_des_flags(char **all_flags, char **argv,
+int					save_des_flags(char **all_flags, char **argv,
 						t_args *params, t_addition *iters);
 int					if_correct_des_flag(char *flag);
 void				clear_iterators(t_addition *iters);
@@ -185,7 +184,7 @@ int					s5_block(int str, int col);
 int					s6_block(int str, int col);
 int					s7_block(int str, int col);
 int					s8_block(int str, int col);
-void				repeat_s_blocks_proccessing(t_des_enc *des_params,
+void				re_s_blocks_proc(t_des_enc *des_params,
 						int *s_output, t_addition *iters, int **four_bits);
 void				s_blocks_coords(t_des_enc *des_params,
 						unsigned char exp_for_s[]);
@@ -211,6 +210,9 @@ void				make_des_output(t_des_enc *des_params, t_args *params,
 						int *l);
 void				ignore_newline(t_args *params, int fd, int ret, int j);
 void				add_padding(t_args *params, int *ret, int len);
+int					if_hex(char *hex_str, char *print_str);
+void				ignore_whitespaces(t_args *params, int fd, int ret, int j);
+void				b64_remove_whitespaces(t_args *params, int len, int fd, int ret);
 
 /*
 ** md5

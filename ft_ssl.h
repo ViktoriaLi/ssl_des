@@ -6,7 +6,7 @@
 /*   By: vlikhotk <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/02 11:36:48 by vlikhotk          #+#    #+#             */
-/*   Updated: 2018/06/10 19:09:50 by vlikhotk         ###   ########.fr       */
+/*   Updated: 2018/06/12 12:52:20 by vlikhotk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,11 @@ typedef struct		s_args
 	int				desad_count;
 	unsigned char	b64_buf[65];
 	unsigned char	buf[DES_BLOCK];
-	char	*vector16;
+	char			*vector16;
 	char			flags[FLAG_LEN];
 	int				ifd;
 	int				ofd;
-	char	*des_key;
+	char			*des_key;
 	unsigned char	key_res48[6];
 	unsigned char	key_res56[7];
 	unsigned char	des_output[8];
@@ -212,7 +212,8 @@ void				ignore_newline(t_args *params, int fd, int ret, int j);
 void				add_padding(t_args *params, int *ret, int len);
 int					if_hex(char *hex_str, char *print_str);
 void				ignore_whitespaces(t_args *params, int fd, int ret, int j);
-void				b64_remove_whitespaces(t_args *params, int len, int fd, int ret);
+void				b64_remove_whitespaces(t_args *params, int len, int fd,
+						int ret);
 
 /*
 ** md5
