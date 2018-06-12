@@ -69,7 +69,10 @@ void	make_keys(char **des_key, t_args *params, int rounds)
 	unsigned char	key_res[KEY_LEN];
 
 	clear_iterators(&iters);
-	while ((*des_key)[iters.j] && iters.i < KEY_LEN)
+	iters.k = ft_strlen((*des_key));
+	while (iters.k < 16)
+		(*des_key)[iters.k++] = 48;
+	while (iters.i < KEY_LEN)
 	{
 		if ((*des_key)[iters.j] >= 65 && (*des_key)[iters.j] <= 70)
 			(*des_key)[iters.j] = (*des_key)[iters.j] - 7;

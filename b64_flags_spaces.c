@@ -25,7 +25,7 @@ int		b64_save_flags(int argc, char **all_flags, char **argv, t_args *params)
 		ft_strcmp(argv[iters.i], "-o") == 0)
 		{
 			(*all_flags)[iters.j++] = argv[iters.i][1];
-			if (argv[iters.i][1] == 'i')
+			if (argv[iters.i][1] == 'i' && argv[iters.i + 1])
 				(*params).ifd = open(argv[++iters.i], O_RDONLY);
 			if (argv[iters.i][1] == 'o')
 				(*params).ofd = open(argv[++iters.i],
@@ -52,7 +52,7 @@ int		check_b64_flags(int argc, char **argv, t_args *params)
 		return (1);
 	flags_normalize(all_flags, params, argc - 1);
 	if ((find_symb((*params).flags, 'i', FLAG_LEN)) >= 0 &&
-		(*params).ifd < 0)
+		(*params).ifd <= 0)
 	{
 		ft_printf("%s\n", "base64: option requires an argument -- i");
 		return (1);
