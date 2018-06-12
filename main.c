@@ -22,74 +22,35 @@ int		if_no_args(int argc, char **argv)
 	}
 	if (ft_strcmp(argv[1], "base64") != 0 && ft_strcmp(argv[1],
 	"des") != 0 && ft_strcmp(argv[1], "des-ecb") != 0 &&
-	ft_strcmp(argv[1], "des-cbc") != 0 && ft_strcmp(argv[1], "des3")
-	!= 0 && ft_strcmp(argv[1], "des3-ecb") != 0 && ft_strcmp(argv[1],
-	"des3-cbc") != 0 && ft_strcmp(argv[1], "md5") != 0 && ft_strcmp(argv[1],
+	ft_strcmp(argv[1], "des-cbc") != 0 && ft_strcmp(argv[1], "md5")
+	!= 0 && ft_strcmp(argv[1],
 	"sha256") != 0 && ft_strcmp(argv[1], "sha512") != 0)
 	{
 		ft_printf("ft_ssl: Error: %s is an invalid command.\n\n", argv[1]);
 		ft_printf("%s\n", "Standard commands:\n\nMessage Digest commands:");
-		ft_printf("%s", "\nmd5\nsha256\nsha512\n\nCipher commands:\nbase64");
-		ft_printf("%s\n", "\ndes\ndes-ecb\ndes-cbc\ndes3\ndes3-ecb\ndes3-cbc");
+		ft_printf("%s", "md5\nsha256\nsha512\n\nCipher commands:\nbase64");
+		ft_printf("%s\n", "\ndes\ndes-ecb\ndes-cbc");
 		return (0);
-	}
-	return (1);
-}
-
-int		if_hex(t_args *params)
-{
-	int i;
-
-	i = 0;
-	while ((*params).des_key[i])
-	{
-		if ((*params).des_key[i] < 48 || ((*params).des_key[i] > 57 &&
-		(*params).des_key[i] < 65) || ((*params).des_key[i] > 70 &&
-		(*params).des_key[i] < 97) || (*params).des_key[i] > 102)
-		{
-			ft_printf("%s\n", "non-hex digit\ninvalid hex key value");
-			return (0);
-		}
-		i++;
-	}
-	i = 0;
-	if (ft_strcmp((*params).cipher, "des-cbc") == 0)
-	{
-		while ((*params).vector16[i])
-		{
-			if ((*params).vector16[i] < 48 || ((*params).vector16[i] > 57 &&
-			(*params).vector16[i] < 65) || ((*params).vector16[i] > 70 &&
-			(*params).vector16[i] < 97) || (*params).vector16[i] > 102)
-			{
-				ft_printf("%s\n", "non-hex digit\ninvalid hex iv value");
-				return (0);
-			}
-			i++;
-		}
 	}
 	return (1);
 }
 
 int		if_valid_args_des(int argc, char **argv, t_args *params)
 {
-	t_addition	iters;
-
-	clear_iterators(&iters);
-	iters.i = 2;
 	if ((ft_strcmp(argv[1], "base64") == 0) &&
 	check_b64_flags(argc, argv, params) > 0)
 		return (0);
 	else if ((ft_strcmp(argv[1], "des") == 0) ||
 	(ft_strcmp(argv[1], "des-ecb") == 0) ||
-	(ft_strcmp(argv[1], "des-cbc") == 0) ||
-	(ft_strcmp(argv[1], "des3") == 0) ||
-	(ft_strcmp(argv[1], "des3-ecb") == 0) ||
-	(ft_strcmp(argv[1], "des3-cbc") == 0))
+	(ft_strcmp(argv[1], "des-cbc") == 0))
 	{
 		(*params).cipher = argv[1];
-		if (check_des_flags(argc, argv, params, iters) > 0)
+		if (check_des_flags(argc, argv, params) > 0)
 			return (0);
-		if (!if_hex(params))
+		if (!if_hex((*params).des_key, "non-hex digit\ninvalid hex key value"))
+			return (0);
+		if (ft_strcmp(argv[1], "des-cbc") == 0 && !if_hex((*params).vector16,
+		"non-hex digit\ninvalid hex iv value"))
 			return (0);
 	}
 	(*params).cipher = argv[1];
@@ -153,11 +114,8 @@ int		main(int argc, char **argv)
 	== 0 || ft_strcmp(argv[1], "sha512") == 0) &&
 	!if_valid_args(argc, argv, &params, &iters))
 		return (0);
-	else
-	{
-		if (!if_valid_args_des(argc, argv, &params))
-			return (0);
-	}
+	else if (!if_valid_args_des(argc, argv, &params))
+		return (0);
 	if (ft_strcmp(argv[1], "md5") == 0 || ft_strcmp(argv[1], "sha256")
 	== 0 || ft_strcmp(argv[1], "sha512") == 0)
 		md5_main(&params, &iters, argc, argv);
@@ -167,5 +125,4 @@ int		main(int argc, char **argv)
 		close(params.ifd);
 	if (params.ofd > 1)
 		close(params.ofd);
-	//system("leaks ft_ssl");
 }

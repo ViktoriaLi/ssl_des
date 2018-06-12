@@ -1,256 +1,183 @@
 echo
 echo "des-ecb -e -a"
 echo "foo bar" | ./ft_ssl des-ecb -k 6162636461626364 -a
-echo
 echo "foo bar" | openssl des-ecb -K 6162636461626364 -a
 echo "toto" | ./ft_ssl des-ecb -k 6162636461626364 -a
-echo
 echo "toto" | openssl des-ecb -K 6162636461626364 -a
 echo "a" | ./ft_ssl des-ecb -k 6162636461626364 -a
-echo
 echo "a" | openssl des-ecb -K 6162636461626364 -a
 echo "bc" | ./ft_ssl des-ecb -k 6162636461626364 -a
-echo
 echo "bc" | openssl des-ecb -K 6162636461626364 -a
 echo "efd" | ./ft_ssl des-ecb -k 6162636461626364 -a
-echo
 echo "efd" | openssl des-ecb -K 6162636461626364 -a
 echo "hijk" | ./ft_ssl des-ecb -k 6162636461626364 -a
-echo
 echo "hijk" | openssl des-ecb -K 6162636461626364 -a
 echo "lmnop" | ./ft_ssl des-ecb -k 6162636461626364 -a
-echo
 echo "lmnop" | openssl des-ecb -K 6162636461626364 -a
 echo "qrstyv" | ./ft_ssl des-ecb -k 6162636461626364 -a
-echo
 echo "qrstyv" | openssl des-ecb -K 6162636461626364 -a
 echo "wxwz123" | ./ft_ssl des-ecb -k 6162636461626364 -a
-echo
 echo "wxwz123" | openssl des-ecb -K 6162636461626364 -a
 echo "4567890Q" | ./ft_ssl des-ecb -k 6162636461626364 -a
-echo
 echo "4567890Q" | openssl des-ecb -K 6162636461626364 -a
 echo "WERTYUIOP" | ./ft_ssl des-ecb -k 6162636461626364 -a
-echo
 echo "WERTYUIOP" | openssl des-ecb -K 6162636461626364 -a
 echo "tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiuyouyityuhtyhuty" | ./ft_ssl des-ecb -k 6162636461626364 -a
-echo
 echo "tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiuyouyityuhtyhuty" | openssl des-ecb -K 6162636461626364 -a
 echo "tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtyti" | ./ft_ssl des-ecb -k 6162636461626364 -a
-echo
 echo "tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtyti" | openssl des-ecb -K 6162636461626364 -a
 echo "tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytig" | ./ft_ssl des-ecb -k 6162636461626364 -a
-echo
 echo "tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytig" | openssl des-ecb -K 6162636461626364 -a
 echo "tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiqwertyuiopjhgfd" | ./ft_ssl des-ecb -k 6162636461626364 -a
-echo
 echo "tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiqwertyuiopjhgfd" | openssl des-ecb -K 6162636461626364 -a
 echo "tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiqwertyuiopjhgfdg" | ./ft_ssl des-ecb -k 6162636461626364 -a
-echo
 echo "tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiqwertyuiopjhgfdg" | openssl des-ecb -K 6162636461626364 -a
 echo "tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiqwertyuiopjhgfdkk" | ./ft_ssl des-ecb -k 6162636461626364 -a
-echo
 echo "tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiqwertyuiopjhgfdkk" | openssl des-ecb -K 6162636461626364 -a
 
 echo
 echo "des-cbc -e -a"
 echo "foo bar" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a
-echo
 echo "foo bar" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a
 echo "toto" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a
-echo
 echo "toto" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a
 echo "a" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a
-echo
 echo "a" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a
 echo "bc" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a
-echo
 echo "bc" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a
 echo "efd" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a
-echo
 echo "efd" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a
 echo "hijk" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a
-echo
 echo "hijk" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a
 echo "lmnop" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a
-echo
 echo "lmnop" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a
 echo "qrstyv" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a
-echo
 echo "qrstyv" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a
 echo "wxwz123" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a
-echo
 echo "wxwz123" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a
 echo "4567890Q" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a
-echo
 echo "4567890Q" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a
 echo "WERTYUIOP" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a
-echo
 echo "WERTYUIOP" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a
 echo "tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiuyouyityuhtyhuty" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a
-echo
 echo "tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiuyouyityuhtyhuty" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a
 echo "tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtyti" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a
-echo
 echo "tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtyti" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a
 echo "tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytig" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a
-echo
 echo "tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytig" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a
 echo "tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiqwertyuiopjhgfd" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a
-echo
 echo "tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiqwertyuiopjhgfd" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a
 echo "tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiqwertyuiopjhgfdg" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a
-echo
 echo "tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiqwertyuiopjhgfdg" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a
 echo "tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiqwertyuiopjhgfdkk" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a
-echo
 echo "tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiqwertyuiopjhgfdkk" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a
 echo "aaaaaaaabbbbbbbbccccccccddddddddeeeeeeeeffffffffgggggggg" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a
-echo
 echo "aaaaaaaabbbbbbbbccccccccddddddddeeeeeeeeffffffffgggggggg" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a
 echo "aaaaaaaabbbbbbbbccccccccddddddddeeeeeeeeffffffffgggggggghhhhhhhh" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a
-echo
 echo "aaaaaaaabbbbbbbbccccccccddddddddeeeeeeeeffffffffgggggggghhhhhhhh" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a
 
 echo
 echo "des-ecb -d -a"
 echo "YZF3QKaabXUwxNg3obhMfw==" | ./ft_ssl des-ecb -k 6162636461626364 -a -d
-echo
 echo "YZF3QKaabXUwxNg3obhMfw==" | openssl des-ecb -K 6162636461626364 -a -d
 echo "+/K7fdzSYjk=" | ./ft_ssl des-ecb -k 6162636461626364 -a -d
-echo
 echo "+/K7fdzSYjk=" | openssl des-ecb -K 6162636461626364 -a -d
 echo "DoIwIKW8W1g=" | ./ft_ssl des-ecb -k 6162636461626364 -a -d
-echo
 echo "DoIwIKW8W1g=" | openssl des-ecb -K 6162636461626364 -a -d
 echo "tbTbqVwjjRs=" | ./ft_ssl des-ecb -k 6162636461626364 -a -d
-echo
 echo "tbTbqVwjjRs=" | openssl des-ecb -K 6162636461626364 -a -d
 echo "DD0ItFchTpM=" | ./ft_ssl des-ecb -k 6162636461626364 -a -d
-echo
 echo "DD0ItFchTpM=" | openssl des-ecb -K 6162636461626364 -a -d
 echo "ykJKjjrQFb0=" | ./ft_ssl des-ecb -k 6162636461626364 -a -d
-echo
 echo "ykJKjjrQFb0=" | openssl des-ecb -K 6162636461626364 -a -d
 echo "LIKFcRCTH9w=" | ./ft_ssl des-ecb -k 6162636461626364 -a -d
-echo
 echo "LIKFcRCTH9w=" | openssl des-ecb -K 6162636461626364 -a -d
 echo "T0e7Qf+To6c=" | ./ft_ssl des-ecb -k 6162636461626364 -a -d
-echo
 echo "T0e7Qf+To6c=" | openssl des-ecb -K 6162636461626364 -a -d
 echo "IiWG5jIO358wxNg3obhMfw==" | ./ft_ssl des-ecb -k 6162636461626364 -a -d
-echo
 echo "IiWG5jIO358wxNg3obhMfw==" | openssl des-ecb -K 6162636461626364 -a -d
 echo "ZXBPAQBK+6qXPQWipu+ZDA==" | ./ft_ssl des-ecb -k 6162636461626364 -a -d
-echo
 echo "ZXBPAQBK+6qXPQWipu+ZDA==" | openssl des-ecb -K 6162636461626364 -a -d
 echo "zeOLecFiZsRL3L6yInnH7g==" | ./ft_ssl des-ecb -k 6162636461626364 -a -d
-echo
 echo "zeOLecFiZsRL3L6yInnH7g==" | openssl des-ecb -K 6162636461626364 -a -d
 echo "jL/B1KNMV6rI6G3AKgbftOk2+6Lvm7gU2YWNgl7QuDYTdQeiF1H7OrPYT1NTIT7C
 WsmjjakJVOlPxX4KLDr6UZc9BaKm75kM" | ./ft_ssl des-ecb -k 6162636461626364 -a -d
-echo
 echo "jL/B1KNMV6rI6G3AKgbftOk2+6Lvm7gU2YWNgl7QuDYTdQeiF1H7OrPYT1NTIT7C
 WsmjjakJVOlPxX4KLDr6UZc9BaKm75kM" | openssl des-ecb -K 6162636461626364 -a -d
 echo "jL/B1KNMV6rI6G3AKgbftOk2+6Lvm7gU2YWNgl7QuDYTdQeiF1H7OrPYT1NTIT7C
 lz0FoqbvmQw=" | ./ft_ssl des-ecb -k 6162636461626364 -a -d
-echo
 echo "jL/B1KNMV6rI6G3AKgbftOk2+6Lvm7gU2YWNgl7QuDYTdQeiF1H7OrPYT1NTIT7C
 lz0FoqbvmQw=" | openssl des-ecb -K 6162636461626364 -a -d
 echo "jL/B1KNMV6rI6G3AKgbftOk2+6Lvm7gU2YWNgl7QuDYTdQeiF1H7OrPYT1NTIT7Ceskt
 IrY5G7s=" | ./ft_ssl des-ecb -k 6162636461626364 -a -d
-echo
 echo "jL/B1KNMV6rI6G3AKgbftOk2+6Lvm7gU2YWNgl7QuDYTdQeiF1H7OrPYT1NTIT7Ceskt
 IrY5G7s=" | openssl des-ecb -K 6162636461626364 -a -d
 echo "jL/B1KNMV6rI6G3AKgbftOk2+6Lvm7gU2YWNg
 l7QuDYTdQeiF1H7OrPYT1NTIT7CUOMBlcJmD1lZRVckRPL/6DDE2DehuEx/" | ./ft_ssl des-ecb -k 6162636461626364 -a -d
-echo
 echo "jL/B1KNMV6rI6G3AKgbftOk2+6Lvm7gU2YWNg
 l7QuDYTdQeiF1H7OrPYT1NTIT7CUOMBlcJmD1lZRVckRPL/6DDE2DehuEx/" | openssl des-ecb -K 6162636461626364 -a -d
 echo "jL/B1KNMV6rI6G3AKgbftOk2+6Lvm7gU2YWNgl7QuDYTdQeiF1H7OrPYT1NTIT7C
 UOMBlcJmD1mESFVfCOdd25c9BaKm75kM" | ./ft_ssl des-ecb -k 6162636461626364 -a -d
-echo
 echo "jL/B1KNMV6rI6G3AKgbftOk2+6Lvm7gU2YWNgl7QuDYTdQeiF1H7OrPYT1
 NTIT7CUOMBlcJmD1mESFVfCOdd25c9BaKm75kM" | openssl des-ecb -K 6162636461626364 -a -d
 echo "jL/B1KNMV6rI6G3AKgbftOk2+6Lvm7gU2YWNgl7QuDYTdQeiF1H7OrPYT1NTIT7C
 UOMBlcJmD1k8/NKBt9K74G5YvzOY6b3W" | ./ft_ssl des-ecb -k 6162636461626364 -a -d
-echo
 echo "jL/B1KNMV6rI6G3AKgbftOk2+6Lvm7gU2YWNgl7QuDYTdQeiF1H7OrPYT1
 NTIT7CUOMBlcJmD1k8/NKBt9K74G5YvzOY6b3W" | openssl des-ecb -K 6162636461626364 -a -d
 
 echo
 echo "des-cbc -d -a"
 echo "EWTdOkhUA+13TDvLz1hl9Q==" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
-echo
 echo "EWTdOkhUA+13TDvLz1hl9Q==" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a -d
 echo "qeQUVZ0EcrY=" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
-echo
 echo "qeQUVZ0EcrY=" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a -d
 echo "MXoVnAkSsCQ=" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
-echo
 echo "MXoVnAkSsCQ=" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a -d
 echo "5MzwpYAFZMc=" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
-echo
 echo "5MzwpYAFZMc=" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a -d
 echo "3mAdCHPboWU=" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
-echo
 echo "3mAdCHPboWU=" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a -d
 echo "xZ6cnwcDXoM=" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
-echo
 echo "xZ6cnwcDXoM=" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a -d
 echo "sP/NxOTS3/g=" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
-echo
 echo "sP/NxOTS3/g=" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a -d
 echo "Fnx5gIOloSA=" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
-echo
 echo "Fnx5gIOloSA=" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a -d
 echo "9W/EzMuq+rqux7tk+BKAOA==" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
-echo
 echo "9W/EzMuq+rqux7tk+BKAOA==" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a -d
 echo "gr3roSQMp9+YynDvaDEbNA==" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
-echo
 echo "gr3roSQMp9+YynDvaDEbNA==" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a -d
 echo "nGuSM/dZp0Ospi5BABViQA==" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
-echo
 echo "nGuSM/dZp0Ospi5BABViQA==" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a -d
 echo "Ffmdlmn7jsC251bTcNVfWA7nhdV9gwcFTOhh+mq4RrNQO+sWG/zuH5Zz6KQTZ2M
 NaojY9ObiANlwd/3r0fa2dQSvVmc5C1PQ" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
-echo
 echo "Ffmdlmn7jsC251bTcNVfWA7nhdV9gwcFTOhh+mq4RrNQO+sWG/zuH5Zz6KQTZ2M
 NaojY9ObiANlwd/3r0fa2dQSvVmc5C1PQ" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a -d
 echo "Ffmdlmn7jsC251bTcNVfWA7nhdV9gwcFTOhh+mq4RrNQO+sWG/zuH5Zz6KQTZ2M
 NkuKHsVRre3c=" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
-echo
 echo "Ffmdlmn7jsC251bTcNVfWA7nhdV9gwcFTOhh+mq4RrNQO+sWG/zuH5Zz6KQTZ2M
 NkuKHsVRre3c=" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a -d
 echo "Ffmdlmn7jsC251bTcNVfWA7nhdV9gwcFTOhh+mq4RrNQO+sWG/zuH5Zz6KQTZ2M
 NINHxCIWxPgs=" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
-echo
 echo "Ffmdlmn7jsC251bTcNVfWA7nhdV9gwcFTOhh+mq4RrNQO+sWG/zuH5Zz6KQTZ2M
 NINHxCIWxPgs=" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a -d
 echo "Ffmdlmn7jsC251bTcNVfWA7nhdV9gwcFTOhh+mq4RrNQO+sWG/zuH5Zz6KQTZ2M
 NZ6p7rNhHzLjzAsuJLAbULi6m0kpMU5L4" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
-echo
 echo "Ffmdlmn7jsC251bTcNVfWA7nhdV9gwcFTOhh+mq4RrNQO+sWG/zuH5Zz6KQTZ2M
 NZ6p7rNhHzLjzAsuJLAbULi6m0kpMU5L4" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a -d
 echo "Ffmdlmn7jsC251bTcNVfWA7nhdV9gwcFTOhh+mq4RrNQO+sWG/zuH5Zz6KQTZ2M
 NZ6p7rNhHzLhXIAI8VxhZG7Xp6ONS5AS1" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
-echo
 echo "Ffmdlmn7jsC251bTcNVfWA7nhdV9gwcFTOhh+mq4RrNQO+sWG/zuH5Zz6KQTZ2M
 NZ6p7rNhHzLhXIAI8VxhZG7Xp6ONS5AS1" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a -d
 echo "Ffmdlmn7jsC251bTcNVfWA7nhdV9gwcFTOhh+mq4RrNQO+sWG/zuH5Zz6KQTZ2M
 NZ6p7rNhHzLhLGh2jJcfeAZ8M7BtcYqkl" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
-echo
 echo "Ffmdlmn7jsC251bTcNVfWA7nhdV9gwcFTOhh+mq4RrNQO+sWG/zuH5Zz6KQTZ2M
 NZ6p7rNhHzLhLGh2jJcfeAZ8M7BtcYqkl" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a -d
-
 echo "1nYgZBJozqiOvchnGpqTS7Nlm0cjGpzz/S2on2ulHeAAJXZzGJvuHaIe7EfW2O/M
 2xPYBnqaTYGXzfv+7yxibg==" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
-echo
 echo "1nYgZBJozqiOvchnGpqTS7Nlm0cjGpzz/S2on2ulHeAAJXZzGJvuHaIe7EfW2O/M
 2xPYBnqaTYGXzfv+7yxibg==" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a -d
 echo "1nYgZBJozqiOvchnGpqTS7Nlm0cjGpzz/S2on2ulHeAAJXZzGJvuHaIe7EfW2O/M
 2xPYBnqaTYHolex4gAFBmXShQOlbBWZl" | ./ft_ssl des-cbc -k 6162636461626364 -v 0011223344556677 -a -d
-echo
 echo "1nYgZBJozqiOvchnGpqTS7Nlm0cjGpzz/S2on2ulHeAAJXZzGJvuHaIe7EfW2O/M
 2xPYBnqaTYHolex4gAFBmXShQOlbBWZl" | openssl des-cbc -K 6162636461626364 -iv 0011223344556677 -a -d

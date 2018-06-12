@@ -136,8 +136,7 @@ typedef struct		s_sha512_vars
 void				base64_enc(unsigned char *buf, t_args *params, int j);
 void				base64_dec(unsigned char *buf, t_args *params);
 int					check_b64_flags(int argc, char **argv, t_args *params);
-int					check_des_flags(int argc, char **argv, t_args *params,
-						t_addition iters);
+int					check_des_flags(int argc, char **argv, t_args *params);
 void				des_reading(int fd, t_args *params, int len);
 void				des_enc(t_args *params, int count, int *l);
 void				to_binary(int **res, int nbr, int base);
@@ -211,6 +210,9 @@ void				make_des_output(t_des_enc *des_params, t_args *params,
 						int *l);
 void				ignore_newline(t_args *params, int fd, int ret, int j);
 void				add_padding(t_args *params, int *ret, int len);
+int					if_hex(char *hex_str, char *print_str);
+void				ignore_whitespaces(t_args *params, int fd, int ret, int j);
+void				b64_remove_whitespaces(t_args *params, int len, int fd, int ret);
 
 /*
 ** md5

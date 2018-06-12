@@ -107,23 +107,19 @@ void	ignore_newline(t_args *params, int fd, int ret, int j)
 	t_addition iters;
 
 	clear_iterators(&iters);
-	if (j == -1)
-		j = 0;
-	while ((*params).des_48_read[iters.i] != '\0' && iters.i < ret)
+	while (iters.i < ret)
 	{
 		if ((*params).des_48_read[iters.i] != '\n')
-		{
 			(*params).tmpad[j++] = (*params).des_48_read[iters.i++];
-		}
 		else
 			iters.i++;
 	}
+	(*params).tmpad[j] = 0;
 	if (iters.i != ret && ret == 64)
 	{
-		iters.m = 0;
 		while (iters.m < ret)
 			(*params).des_48_read[iters.m++] = 0;
-		iters.k = read(fd, params, ret - iters.i);
+		iters.k = read(fd, params, ret - iters.j);
 		ignore_newline(params, fd, iters.k, j);
 	}
 	else

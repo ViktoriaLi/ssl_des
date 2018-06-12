@@ -102,59 +102,6 @@ void	make_short_blocks(t_args *params, int ret, int len, unsigned char *str)
 	}
 }
 
-void	ignore_whitespaces(t_args *params, int fd, int ret, int j)
-{
-	t_addition iters;
-
-	clear_iterators(&iters);
-	if (j == -1)
-		j = 0;
-	while ((*params).b64_buf[iters.i] != '\0' && iters.i < ret)
-	{
-		if ((*params).b64_buf[iters.i] != ' ')
-		{
-			(*params).tmpad[j++] = (*params).b64_buf[iters.i++];
-		}
-		else
-			iters.i++;
-	}
-	(*params).tmpad[j++] = 0;
-	if (iters.i != ret && ret == 64)
-	{
-		iters.m = 0;
-		while (iters.m < ret)
-			(*params).b64_buf[iters.m++] = 0;
-		iters.k = read(fd, params, ret - iters.i);
-		ignore_whitespaces(params, fd, iters.k, j);
-	}
-	else
-		return ;
-}
-
-void	b64_remove_whitespaces(t_args *params, int len, int fd, int ret)
-{
-	int i;
-
-	i = 0;
-	if (len == 64)
-	{
-		ignore_whitespaces(params, fd, ret, 0);
-		if ((*params).tmpad[0] != 0)
-		{
-			while ((*params).tmpad[i])
-			{
-				(*params).b64_buf[i] = (*params).tmpad[i];
-				i++;
-			}
-			while (i < len)
-				(*params).b64_buf[i++] = 0;
-			i = 0;
-			while (i < len)
-				(*params).tmpad[i++] = 0;
-		}
-	}
-}
-
 void	base64_reading(int fd, t_args *params, int len)
 {
 	t_addition				iters;
@@ -163,7 +110,7 @@ void	base64_reading(int fd, t_args *params, int len)
 	while ((iters.k = read(fd, &params->b64_buf, len)) > 0)
 	{
 		iters.i = 0;
-		(*params).b64_buf[64] = 0;
+		(*params).b64_buf[iters.k] = 0;
 		b64_remove_whitespaces(params, len, fd, iters.k);
 		iters.k = ft_strlen((const char *)(*params).b64_buf);
 		if (find_symb((*params).flags, 'd', FLAG_LEN) >= 0)
@@ -178,6 +125,8 @@ void	base64_reading(int fd, t_args *params, int len)
 			write((*params).ofd, "\n", 1);
 		else if (iters.k == 64 && (find_symb((*params).flags, 'd', FLAG_LEN))
 		< 0 && (find_symb((*params).flags, 'o', FLAG_LEN)) < 0)
+			write(1, "\n", 1);
+		else if (iters.k < 48 && find_symb((*params).flags, 'd', FLAG_LEN) < 0)
 			write(1, "\n", 1);
 	}
 }

@@ -1,53 +1,38 @@
 echo "base64 -e"
 echo toto | ./ft_ssl base64
-echo
 echo toto | base64
 echo a | ./ft_ssl base64
-echo
 echo a | base64
 echo bc | ./ft_ssl base64
-echo
 echo bc | base64
 echo efd | ./ft_ssl base64
-echo
 echo efd | base64
 echo hijk | ./ft_ssl base64
-echo
 echo hijk | base64
 echo lmnop | ./ft_ssl base64
-echo
 echo lmnop | base64
 echo qrstyv | ./ft_ssl base64
-echo
 echo qrstyv | base64
 echo wxwz123 | ./ft_ssl base64
-echo
 echo wxwz123 | base64
 echo 4567890Q | ./ft_ssl base64
-echo
 echo 4567890Q | base64
 echo tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiuyouyityuhtyhuty | ./ft_ssl base64
-echo
 echo tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiuyouyityuhtyhuty | base64
 echo tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtyti | ./ft_ssl base64
-echo
 echo tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtyti | base64
 echo tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytig | ./ft_ssl base64
-echo
 echo tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytig | base64
 echo tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiqwertyuiopjhgfd | ./ft_ssl base64
-echo
 echo tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiqwertyuiopjhgfd | base64
 echo tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiqwertyuiopjhgfdg | ./ft_ssl base64
-echo
 echo tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiqwertyuiopjhgfdg | base64
 echo tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiqwertyuiopjhgfdkk | ./ft_ssl base64
-echo
 echo tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiqwertyuiopjhgfdkk | base64
-echo tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiqwertyuiopjhgfdkk123 | ./ft_ssl base64
-echo
-echo tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiqwertyuiopjhgfdkk123 | base64
-echo tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiqwertyuiopjhgfd
+echo "tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiqw
+ertyuiopjhgfdkk123" | ./ft_ssl base64
+echo "tfhfgjghkhjktyfnurtyniuyoiuyibtutyinuyomiuibtytiqw
+ertyuiopjhgfdkk123" | base64
 
 echo
 echo "base64 -d"
@@ -66,22 +51,17 @@ echo bG1ub3AK | base64 -D
 echo cXJzdHl2Cg== | ./ft_ssl base64 -d
 echo cXJzdHl2Cg== | base64 -D
 echo d3h3ejEyMwo= | ./ft_ssl base64 -d
-echo
 echo d3h3ejEyMwo= | base64 -D
 echo NDU2Nzg5MFEK | ./ft_ssl base64 -d
 echo NDU2Nzg5MFEK | base64 -D
-echo dGZoZmdqZ2hraGprdHlmbnVydHluaXV5b2l1eWlidHV0eWludXlvbWl1aWJ0eXRpdXlvdXlpdHl1aHR5aHV0eQo= | ./ft_ssl base64 -d
-echo
 echo dGZoZmdqZ2hraGprdHlmbnVydHluaXV5b2l1eWlidHV0eWludXlvbWl1aWJ0eXRpdXlvdXlpdHl1aHR5aHV0eQo= | base64 -D
 echo dGZoZmdqZ2hraGprdHlmbnVydHluaXV5b2l1eWlidHV0eWludXlvbWl1aWJ0eXRpCg== | ./ft_ssl base64 -d
 echo dGZoZmdqZ2hraGprdHlmbnVydHluaXV5b2l1eWlidHV0eWludXlvbWl1aWJ0eXRpCg== | base64 -D
 echo dGZoZmdqZ2hraGprdHlmbnVydHluaXV5b2l1eWlidHV0eWludXlvbWl1aWJ0eXRpZwo= | ./ft_ssl base64 -d
-echo
 echo dGZoZmdqZ2hraGprdHlmbnVydHluaXV5b2l1eWlidHV0eWludXlvbWl1aWJ0eXRpZwo= | base64 -D
 echo dGZoZmdqZ2hraGprdHlmbnVydHluaXV5b2l1eWlidHV0eWludXlvbWl1aWJ0eXRpcXdlcnR5dWlvcGpoZ2ZkCg== | ./ft_ssl base64 -d
 echo dGZoZmdqZ2hraGprdHlmbnVydHluaXV5b2l1eWlidHV0eWludXlvbWl1aWJ0eXRpcXdlcnR5dWlvcGpoZ2ZkCg== | base64 -D
 echo dGZoZmdqZ2hraGprdHlmbnVydHluaXV5b2l1eWlidHV0eWludXlvbWl1aWJ0eXRpcXdlcnR5dWlvcGpoZ2ZkZwo= | ./ft_ssl base64 -d
-echo
 echo dGZoZmdqZ2hraGprdHlmbnVydHluaXV5b2l1eWlidHV0eWludXlvbWl1aWJ0eXRpcXdlcnR5dWlvcGpoZ2ZkZwo= | base64 -D
 echo dGZoZmdqZ2hraGprdHlmbnVydHluaXV5b2l1eWlidHV0eWludXlvbWl1aWJ0eXRpcXdlcnR5dWlvcGpoZ2Zka2sK| ./ft_ssl base64 -d
 echo dGZoZmdqZ2hraGprdHlmbnVydHluaXV5b2l1eWlidHV0eWludXlvbWl1aWJ0eXRpcXdlcnR5dWlvcGpoZ2Zka2sK | base64 -D

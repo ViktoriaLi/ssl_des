@@ -17,6 +17,7 @@ void	if_decr_block(t_args *params, int len, int fd, int ret)
 	int i;
 
 	i = 0;
+	(*params).des_48_read[ret] = 0;
 	if (len == 64)
 	{
 		ignore_newline(params, fd, ret, 0);
@@ -111,7 +112,6 @@ void	des_reading(int fd, t_args *params, int len)
 	clear_iterators(&iters);
 	while ((ret = read(fd, params->des_48_read, len)) > 0)
 	{
-		(*params).des_48_read[64] = 0;
 		if_decr_block(params, len, fd, ret);
 		ret = ft_strlen((const char *)(*params).des_48_read);
 		if (ret == len && (find_symb((*params).flags, 'd', FLAG_LEN)) < 0)
